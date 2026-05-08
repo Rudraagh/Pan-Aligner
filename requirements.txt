@@ -1,0 +1,4 @@
+biopython>=1.84
+matplotlib>=3.8
+networkx>=3.3
+

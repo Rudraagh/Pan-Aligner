@@ -1,0 +1,63 @@
+{
+  "query_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_1.fa",
+  "selected_gene": "APP",
+  "prediction": "HEALTHY",
+  "confidence": 0.0,
+  "healthy_score": 0.9999012359635379,
+  "unhealthy_score": 0.9999012359635379,
+  "tie_like": true,
+  "gene_detection": {},
+  "combined_alignment": {
+    "available": true,
+    "query_name": "APP_U_1",
+    "normalized_score": 0.999810722729447,
+    "identity": 0.9997694353920115,
+    "coverage": 1.0000412968590298,
+    "mapping_quality": 60,
+    "path": "ref|NC_000021.9|:25880550-26171128",
+    "traversed_nodes": [
+      "ref|NC_000021.9|:25880550-26171128"
+    ],
+    "path_span": 290558,
+    "alignment_score": 290524.0
+  },
+  "class_alignments": {
+    "HEALTHY": {
+      "available": true,
+      "query_name": "APP_U_1",
+      "normalized_score": 0.999810722729447,
+      "identity": 0.9997694353920115,
+      "coverage": 1.0000412968590298,
+      "mapping_quality": 60,
+      "path": "ref|NC_000021.9|:25880550-26171128",
+      "traversed_nodes": [
+        "ref|NC_000021.9|:25880550-26171128"
+      ],
+      "path_span": 290558,
+      "alignment_score": 290524.0
+    },
+    "UNHEALTHY": {
+      "available": true,
+      "query_name": "APP_U_1",
+      "normalized_score": 0.999810722729447,
+      "identity": 0.9997694353920115,
+      "coverage": 1.0000412968590298,
+      "mapping_quality": 60,
+      "path": "ref|NC_000021.9|:25880550-26171128",
+      "traversed_nodes": [
+        "ref|NC_000021.9|:25880550-26171128"
+      ],
+      "path_span": 290558,
+      "alignment_score": 290524.0
+    }
+  },
+  "matched_regions": {
+    "predicted_class_nodes": [
+      "ref|NC_000021.9|:25880550-26171128"
+    ],
+    "combined_graph_nodes": [
+      "ref|NC_000021.9|:25880550-26171128"
+    ]
+  },
+  "explanation": "Gene inference selected APP, but the healthy and unhealthy graph alignments are effectively indistinguishable (healthy=0.9999, unhealthy=0.9999). This suggests the current graph pair does not separate the query clearly."
+}
