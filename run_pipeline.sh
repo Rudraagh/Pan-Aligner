@@ -37,6 +37,14 @@ fi
 QUERY_FASTA="$1"
 GENE_ARG="${2:-}"
 
+if [[ ! -f "$QUERY_FASTA" ]]; then
+  echo "Query FASTA not found: $QUERY_FASTA"
+  echo "Use an existing FASTA file, for example:"
+  echo "  $0 data/unhealthy/app/APP_U_1.fa APP"
+  echo "  $0 data/healthy/psen1/PSEN1_H_1.fa PSEN1"
+  exit 1
+fi
+
 if [[ -n "$GENE_ARG" ]]; then
   GENE_FLAGS=(--gene "$GENE_ARG")
 else
@@ -52,4 +60,3 @@ fi
   --panaligner-bin "$PANALIGNER_BIN" \
   --minigraph-bin "$MINIGRAPH_BIN" \
   "${GENE_FLAGS[@]}"
-

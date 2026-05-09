@@ -9,7 +9,16 @@ from common import GRAPHS_DIR, METADATA_DIR, ensure_dir, read_json, resolve_bina
 def build_gene_graph(reference_fasta: Path, sample_fastas: list[Path], output_gfa: Path, minigraph_bin: Path, threads: int) -> None:
     if not sample_fastas:
         raise ValueError(f"No sample FASTA files provided for graph output {output_gfa}")
-    command = [str(minigraph_bin), "-t", str(threads), "-cxggs", str(reference_fasta), *[str(path) for path in sample_fastas]]
+    command = [
+        str(minigraph_bin),
+        "-t",
+        str(threads),
+        "-cxggs",
+        "-l1k",
+        "-L1",
+        str(reference_fasta),
+        *[str(path) for path in sample_fastas],
+    ]
     run_command(command, stdout_path=output_gfa)
 
 
@@ -67,4 +76,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

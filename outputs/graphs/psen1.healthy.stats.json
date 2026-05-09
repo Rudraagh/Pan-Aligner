@@ -1,0 +1,10 @@
+{
+  "node_count": 219,
+  "edge_count": 289,
+  "weakly_connected_components": 1,
+  "strongly_connected_components": 219,
+  "largest_component_size": 219,
+  "largest_scc_size": 1,
+  "cycle_detected": false,
+  "self_loops": 0
+}

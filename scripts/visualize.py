@@ -90,8 +90,8 @@ def draw_graph(graph: nx.DiGraph, output_path: Path, highlighted_nodes: set[str]
 def visualize_graph(gfa_path: Path, output_prefix: Path) -> dict:
     graph = parse_gfa(gfa_path)
     stats = graph_statistics(graph)
-    write_json(output_prefix.with_suffix(".stats.json"), stats)
-    draw_graph(graph, output_prefix.with_suffix(".png"), title=output_prefix.stem)
+    write_json(output_prefix.parent / f"{output_prefix.name}.stats.json", stats)
+    draw_graph(graph, output_prefix.parent / f"{output_prefix.name}.png", title=output_prefix.name)
     return stats
 
 
@@ -146,4 +146,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

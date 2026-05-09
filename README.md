@@ -6,8 +6,8 @@ This project is a research-oriented prototype that builds Alzheimer’s Disease 
 
 - Real PanAligner integration using the official command shape:
   - `./PanAligner -cx lr graph.gfa query.fa > out.gaf`
-- Real minigraph-based graph construction:
-  - `minigraph -cxggs reference.fa sample1.fa sample2.fa ... > graph.gfa`
+- Real minigraph-based graph construction tuned for this gene-sized dataset:
+  - `minigraph -cxggs -l1k -L1 reference.fa sample1.fa sample2.fa ... > graph.gfa`
 - Python orchestration for preprocessing, graph building, alignment, parsing, scoring, and visualization
 - A Linux/WSL shell runner for reproducible end-to-end execution
 
@@ -23,7 +23,7 @@ FINAL YEAR PROJECT PHASE/
 ├── data/
 │   ├── healthy/
 │   ├── unhealthy/
-│   ├── queries/
+│   ├── queries/                     # optional; create this only if you want separate query FASTAs
 │   ├── raw/
 │   └── metadata/
 ├── graphs/
@@ -129,10 +129,12 @@ python3 scripts/preprocess.py
 
 It uses the locus reference as the base and then adds each labeled sample FASTA as a separate minigraph input, which is important because minigraph graph construction works best when each input assembly/sample is its own file.
 
+This project uses `-l1k -L1` when calling minigraph. The default minigraph graph-generation thresholds are aimed more at large structural variants and can collapse these gene datasets into a single reference segment. Lowering the minimum alignment and variant length lets APP/PSEN1/PSEN2 small variants create graph branches.
+
 Run:
 
 ```bash
-python3 scripts/build_graph.py --threads 8 --minigraph-bin ./minigraph/minigraph
+python3 scripts/build_graph.py --threads 4 --minigraph-bin ./minigraph/minigraph
 ```
 
 ### 3. Graph analysis and visualization
@@ -148,12 +150,18 @@ python3 scripts/build_graph.py --threads 8 --minigraph-bin ./minigraph/minigraph
   - self loops
   - cycle detection
 - saves graph statistics JSON and PNG figures under `outputs/graphs/`
+- writes separate files for each gene/class graph, for example:
+  - `outputs/graphs/app.healthy.png`
+  - `outputs/graphs/app.unhealthy.png`
+  - `outputs/graphs/app.combined.png`
 
 Run:
 
 ```bash
-python3 scripts/visualize.py
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 scripts/visualize.py
 ```
+
+The `MPLCONFIGDIR` value avoids warnings on systems where Matplotlib cannot write to the default user config directory.
 
 ### 4. Sequence alignment with PanAligner
 
@@ -162,7 +170,7 @@ python3 scripts/visualize.py
 ```bash
 python3 scripts/align.py \
   --graph graphs/app.combined.gfa \
-  --query data/queries/query.fa \
+  --query data/unhealthy/app/APP_U_1.fa \
   --panaligner-bin ./PanAligner/PanAligner \
   --output-gaf outputs/alignments/app_query.gaf
 ```
@@ -170,7 +178,7 @@ python3 scripts/align.py \
 This ultimately executes the real PanAligner-style command:
 
 ```bash
-./PanAligner/PanAligner -t 4 -cx lr graphs/app.combined.gfa data/queries/query.fa > outputs/alignments/app_query.gaf
+./PanAligner/PanAligner -t 4 -cx lr graphs/app.combined.gfa data/unhealthy/app/APP_U_1.fa > outputs/alignments/app_query.gaf
 ```
 
 ### 5. GAF parsing
@@ -207,16 +215,17 @@ Run:
 
 ```bash
 python3 scripts/predictor.py \
-  --query-fasta data/queries/query.fa \
+  --query-fasta data/unhealthy/app/APP_U_1.fa \
+  --gene APP \
   --panaligner-bin ./PanAligner/PanAligner \
-  --threads 8
+  --threads 4
 ```
 
 If you already generated GAFs externally, you can score them directly without rerunning alignment:
 
 ```bash
 python3 scripts/predictor.py \
-  --query-fasta data/queries/query.fa \
+  --query-fasta data/unhealthy/app/APP_U_1.fa \
   --gene APP \
   --healthy-gaf outputs/alignments/app_vs_healthy.gaf \
   --unhealthy-gaf outputs/alignments/app_vs_unhealthy.gaf \
@@ -232,14 +241,17 @@ Output:
 ### 7. End-to-end run
 
 ```bash
-./run_pipeline.sh data/queries/query.fa
+./run_pipeline.sh data/unhealthy/app/APP_U_1.fa APP
 ```
 
-Optional explicit gene:
+Other examples:
 
 ```bash
-./run_pipeline.sh data/queries/query.fa APP
+./run_pipeline.sh data/healthy/psen1/PSEN1_H_1.fa PSEN1
+./run_pipeline.sh data/healthy/psen2/PSEN2_H_1.fa PSEN2
 ```
+
+The query FASTA must already exist. If the file path is wrong, `run_pipeline.sh` now stops early with an example command instead of failing later inside PanAligner.
 
 ## Why there are class-specific graphs and combined graphs
 
@@ -266,6 +278,8 @@ The predictor returns:
 - `matched_regions`
 - `combined_graph_nodes`
 - a plain-language explanation
+
+The confidence value is based on the score gap between healthy and unhealthy graph alignments. If both class graphs align almost equally well, confidence will be close to `0.0`; this means the graph evidence is weak or tied, not that the command failed.
 
 ## Viva / report explanation
 
@@ -309,26 +323,25 @@ That separation is useful in a project review because you can clearly explain wh
 - `outputs/alignments/prediction.json`
 - `outputs/alignments/*.png`
 
-## Current environment note
-
-PanAligner was cloned into this workspace, but the current Windows PowerShell session does not have a working GNU `make` toolchain for the repository’s default Linux build, and direct WSL invocation from this session returned an access-denied error. The provided scripts and README therefore target Linux/WSL explicitly, which is also the platform you requested for reproducible execution.
-
 ## Sample walkthrough
 
 ```bash
-# 1. Build tools
+# 1. Build tools if needed
 ./scripts/setup_tools.sh
 
-# 2. Create a query FASTA
-cat > data/queries/query.fa <<'EOF'
->query_1
-ACGTACGTACGTACGTACGT
-EOF
+# 2. Preprocess the three combined gene FASTA files
+python3 scripts/preprocess.py --input-fastas app_combined.fasta psen1_combined.fasta psen2_combined.fasta
 
-# 3. Run the full pipeline
-./run_pipeline.sh data/queries/query.fa
+# 3. Build graph files with the small-variant thresholds
+python3 scripts/build_graph.py --threads 4 --minigraph-bin ./minigraph/minigraph
 
-# 4. Inspect the prediction
+# 4. Generate graph visualizations
+MPLCONFIGDIR=/tmp/matplotlib-cache python3 scripts/visualize.py
+
+# 5. Run the full pipeline on an existing APP query sample
+./run_pipeline.sh data/unhealthy/app/APP_U_1.fa APP
+
+# 6. Inspect the prediction
 cat outputs/alignments/prediction.json
 ```
 
