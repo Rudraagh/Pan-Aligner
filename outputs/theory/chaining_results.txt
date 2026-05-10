@@ -1,0 +1,17 @@
+Simplified Co-linear Chaining DP
+================================
+DP recurrence: dp[j] = max score of a chain ending at anchor j.
+
+A1 (s17, [1..1]): score=1.00
+A2 (s18, [3..3]): score=1.00
+A3 (s19, [4..4]): score=1.00
+A4 (s20, [6..6]): score=1.00
+A5 (s21, [7..7]): score=1.00
+A6 (s10, [9..16]): score=8.00
+A7 (s11, [17..17]): score=6.00
+A8 (s12, [19..26]): score=12.00
+N2 (s5, [22..22]): score=3.00
+N1 (s3, [26..31]): score=4.00
+
+Best chain: A6 -> A7 -> A8
+Best chain score: 12.00

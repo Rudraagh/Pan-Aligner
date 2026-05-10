@@ -1,0 +1,36 @@
+{
+  "random_seed": 42,
+  "test_fraction": 0.2,
+  "genes": {
+    "APP": {
+      "total_healthy": 23,
+      "total_unhealthy": 23,
+      "train_healthy": 18,
+      "test_healthy": 5,
+      "train_unhealthy": 18,
+      "test_unhealthy": 5,
+      "train_fraction": 0.8,
+      "test_fraction": 0.2
+    },
+    "PSEN1": {
+      "total_healthy": 78,
+      "total_unhealthy": 78,
+      "train_healthy": 62,
+      "test_healthy": 16,
+      "train_unhealthy": 62,
+      "test_unhealthy": 16,
+      "train_fraction": 0.8,
+      "test_fraction": 0.2
+    },
+    "PSEN2": {
+      "total_healthy": 9,
+      "total_unhealthy": 9,
+      "train_healthy": 7,
+      "test_healthy": 2,
+      "train_unhealthy": 7,
+      "test_unhealthy": 2,
+      "train_fraction": 0.8,
+      "test_fraction": 0.2
+    }
+  }
+}

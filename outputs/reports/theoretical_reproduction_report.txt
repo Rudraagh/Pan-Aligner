@@ -1,0 +1,34 @@
+Theoretical Reproduction Report
+===============================
+This report documents the simplified educational reproductions of PanAligner paper concepts implemented alongside the real PanAligner integration.
+
+1. SCC logic
+- Tarjan SCC detection was applied to the educational cyclic graph derived from APP combined.
+- SCC count in the demo graph: 18.
+
+2. DAG conversion
+- A DFS traversal identifies back edges and removes them only in the educational copy of the graph.
+- This mirrors the paper's idea of removing back edges inside SCCs to obtain a DAG-like structure for downstream analysis.
+
+3. Path cover concept
+- A simplified greedy path cover was generated on the DAG approximation with 3 paths.
+- This is an educational analogue of the paper's width-aware path-cover preprocessing.
+
+4. Anchor representation
+- Anchors are represented as (vertex, [x..y], [c..d], weight).
+- The demo anchor set includes walk-consistent anchors plus distractor anchors to illustrate chaining decisions.
+
+5. Precedence relation
+- A precedes B when query order increases and graph reachability exists.
+- Same-vertex precedence is additionally allowed in cyclic situations in the simplified model.
+
+6. Chaining DP
+- The project includes a simplified dynamic programming recurrence for best chain score ending at each anchor.
+- Best chain recovered in the current run: A6 -> A7 -> A8.
+
+7. Iterative convergence
+- An iterative score-propagation demonstration is included to mirror the paper's convergence-oriented algorithms conceptually.
+
+8. Relation to the PanAligner paper
+- The real PanAligner binary remains the production alignment engine.
+- The theory layer is a pedagogical reproduction of concepts from the paper, not a reimplementation of PanAligner's optimized internals.

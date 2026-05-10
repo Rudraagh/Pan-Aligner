@@ -1,0 +1,35 @@
+Final Project Summary
+=====================
+Architecture
+- Real PanAligner implementation for graph alignment.
+- Simplified theoretical reproductions for educational explanation of the paper.
+- Train/test graph-alignment evaluation pipeline with plots and reports.
+
+Implementation summary
+- FASTA preprocessing, stratified train/test split, graph construction, GAF parsing, theory demonstrations, evaluation, and plotting remain intact.
+- A new main.py now acts as the single project entry point.
+
+Reproduced paper components
+- SCC detection
+- DFS-based back-edge removal
+- Cyclic graph to DAG approximation
+- Path cover generation
+- Anchor representation
+- Precedence relation
+- Simplified co-linear chaining DP
+- Gap cost demonstration
+- Iterative chaining convergence demo
+- Reachability analysis
+
+Strengths
+- The project now separates production alignment from theoretical understanding clearly.
+- The theory modules make the PanAligner paper easier to defend during viva without interfering with the real binary.
+
+Limitations
+- The theory modules are simplified educational reproductions and do not match PanAligner's optimized internal data structures or asymptotic performance.
+- Some current locus graphs are DAG-like, so cyclic behavior is demonstrated on a representative educational augmentation of the real graph.
+
+Future work
+- Add richer anchor generation from real seed hits.
+- Compare educational chaining outputs directly against PanAligner alignment traces for selected reads.
+- Extend evaluation to larger cyclic pangenome datasets closer to the full paper-scale setup.

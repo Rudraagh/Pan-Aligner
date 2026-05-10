@@ -1,0 +1,7 @@
+Back-edge Removal Demo
+======================
+Back edges identified: 0
+
+No back edges were detected. The representative graph was already acyclic.
+
+DAG verification: True

@@ -1,0 +1,47 @@
+Graph Analysis Demo
+===================
+Source graph: APP combined
+Source path: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\graphs\app.combined.gfa
+
+Original graph summary
+- nodes: 115
+- edges: 154
+- SCC count: 115
+- largest SCC size: 1
+- cycle detected: False
+
+Representative subgraph summary
+- nodes: 18
+- edges: 17
+- cycle detected: False
+
+Educational cyclic demo graph summary
+- nodes: 18
+- edges: 19
+- cycle detected: False
+- synthetic back edges added: [('s15', 's1'), ('s21', 's10')]
+
+Interpretation
+The real minigraph-derived graphs in this project are mostly DAG-like for the current APP/PSEN1/PSEN2 loci.
+To demonstrate the PanAligner paper's cyclic graph algorithms without altering the real graphs, the theory layer builds a small representative subgraph and optionally adds synthetic back edges only inside the educational copy.
+
+Reachability analysis
+---------------------
+s1 -> s1, s2, s3, s4, s5, s75, s86
+s10 -> s1, s10, s11, s12, s13, s14, s15, s2, s3, s4, s5, s75, s86
+s11 -> s1, s11, s12, s13, s14, s15, s2, s3, s4, s5, s75, s86
+s12 -> s1, s12, s13, s14, s15, s2, s3, s4, s5, s75, s86
+s13 -> s1, s13, s14, s15, s2, s3, s4, s5, s75, s86
+s14 -> s1, s14, s15, s2, s3, s4, s5, s75, s86
+s15 -> s1, s15, s2, s3, s4, s5, s75, s86
+s17 -> s1, s10, s11, s12, s13, s14, s15, s17, s18, s19, s2, s20, s21, s3, s4, s5, s75, s86
+s18 -> s1, s10, s11, s12, s13, s14, s15, s18, s19, s2, s20, s21, s3, s4, s5, s75, s86
+s19 -> s1, s10, s11, s12, s13, s14, s15, s19, s2, s20, s21, s3, s4, s5, s75, s86
+s2 -> s2, s3, s4, s5, s86
+s20 -> s1, s10, s11, s12, s13, s14, s15, s2, s20, s21, s3, s4, s5, s75, s86
+s21 -> s1, s10, s11, s12, s13, s14, s15, s2, s21, s3, s4, s5, s75, s86
+s3 -> s3, s4, s5, s86
+s4 -> s4, s5
+s5 -> s5
+s75 -> s3, s4, s5, s75, s86
+s86 -> s5, s86

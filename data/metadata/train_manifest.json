@@ -1,0 +1,1262 @@
+{
+  "split_name": "train",
+  "genes": {
+    "APP": {
+      "reference": {
+        "id": "ref|NC_000021.9|:25880550-26171128",
+        "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\app_reference.fa",
+        "length": 290579
+      },
+      "healthy": [
+        {
+          "id": "APP_H_1",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_1.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_1.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_2.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_2.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_4",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_4.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_4.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_5",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_5.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_5.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_7.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_7.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_8",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_8.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_8.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_9.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_9.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_10",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_10.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_10.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_11",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_11.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_11.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_12",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_12.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_12.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_13",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_13.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_13.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_14",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_14.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_14.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_18",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_18.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_18.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_19",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_19.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_19.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_20",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_20.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_20.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_21",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_21.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_21.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_22",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_22.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_22.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "APP_H_23",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app\\APP_H_23.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\app\\APP_H_23.fa",
+          "label": "HEALTHY"
+        }
+      ],
+      "unhealthy": [
+        {
+          "id": "APP_U_1",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_1.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_1.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_2.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_2.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_3",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_3.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_3.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_5",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_5.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_5.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_6",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_6.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_6.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_7.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_7.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_8",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_8.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_8.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_9.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_9.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_12",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_12.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_12.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_13",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_13.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_13.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_14",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_14.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_14.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_15",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_15.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_15.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_18",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_18.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_18.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_19",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_19.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_19.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_20",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_20.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_20.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_21",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_21.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_21.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_22",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_22.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_22.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "APP_U_23",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app\\APP_U_23.fa",
+          "length": 290579,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\app\\APP_U_23.fa",
+          "label": "UNHEALTHY"
+        }
+      ],
+      "healthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\app_healthy.fa",
+      "unhealthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\app_unhealthy.fa"
+    },
+    "PSEN1": {
+      "reference": {
+        "id": "ref|NC_000014.9|:73136417-73223691",
+        "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\psen1_reference.fa",
+        "length": 87275
+      },
+      "healthy": [
+        {
+          "id": "PSEN1_H_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_2.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_2.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_3",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_3.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_3.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_5",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_5.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_5.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_6",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_6.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_6.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_7.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_7.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_8",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_8.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_8.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_9.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_9.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_11",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_11.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_11.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_13",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_13.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_13.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_14",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_14.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_14.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_15",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_15.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_15.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_16",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_16.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_16.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_18",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_18.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_18.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_19",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_19.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_19.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_21",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_21.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_21.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_23",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_23.fa",
+          "length": 87279,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_23.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_24",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_24.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_24.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_25",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_25.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_25.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_27",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_27.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_27.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_28",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_28.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_28.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_29",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_29.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_29.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_30",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_30.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_30.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_32",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_32.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_32.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_34",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_34.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_34.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_35",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_35.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_35.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_36",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_36.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_36.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_37",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_37.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_37.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_38",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_38.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_38.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_39",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_39.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_39.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_40",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_40.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_40.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_41",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_41.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_41.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_42",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_42.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_42.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_43",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_43.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_43.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_44",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_44.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_44.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_45",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_45.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_45.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_46",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_46.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_46.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_47",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_47.fa",
+          "length": 87274,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_47.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_49",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_49.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_49.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_50",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_50.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_50.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_51",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_51.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_51.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_52",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_52.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_52.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_53",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_53.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_53.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_54",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_54.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_54.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_55",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_55.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_55.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_56",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_56.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_56.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_57",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_57.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_57.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_58",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_58.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_58.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_59",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_59.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_59.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_60",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_60.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_60.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_62",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_62.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_62.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_64",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_64.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_64.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_65",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_65.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_65.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_66",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_66.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_66.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_67",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_67.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_67.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_69",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_69.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_69.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_70",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_70.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_70.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_72",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_72.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_72.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_73",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_73.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_73.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_74",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_74.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_74.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_75",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_75.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_75.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_77",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_77.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_77.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN1_H_78",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1\\PSEN1_H_78.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen1\\PSEN1_H_78.fa",
+          "label": "HEALTHY"
+        }
+      ],
+      "unhealthy": [
+        {
+          "id": "PSEN1_U_1",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_1.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_1.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_2.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_2.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_3",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_3.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_3.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_4",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_4.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_4.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_7.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_7.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_8",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_8.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_8.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_9.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_9.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_10",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_10.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_10.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_11",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_11.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_11.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_12",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_12.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_12.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_13",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_13.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_13.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_15",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_15.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_15.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_16",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_16.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_16.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_17",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_17.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_17.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_18",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_18.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_18.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_19",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_19.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_19.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_20",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_20.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_20.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_21",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_21.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_21.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_22",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_22.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_22.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_24",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_24.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_24.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_26",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_26.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_26.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_27",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_27.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_27.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_28",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_28.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_28.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_30",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_30.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_30.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_31",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_31.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_31.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_32",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_32.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_32.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_33",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_33.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_33.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_34",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_34.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_34.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_35",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_35.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_35.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_36",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_36.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_36.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_37",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_37.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_37.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_39",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_39.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_39.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_40",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_40.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_40.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_41",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_41.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_41.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_42",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_42.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_42.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_43",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_43.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_43.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_44",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_44.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_44.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_45",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_45.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_45.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_47",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_47.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_47.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_49",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_49.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_49.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_50",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_50.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_50.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_51",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_51.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_51.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_52",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_52.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_52.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_55",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_55.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_55.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_57",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_57.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_57.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_59",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_59.fa",
+          "length": 82719,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_59.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_60",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_60.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_60.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_61",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_61.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_61.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_62",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_62.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_62.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_63",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_63.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_63.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_64",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_64.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_64.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_65",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_65.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_65.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_66",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_66.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_66.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_67",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_67.fa",
+          "length": 87274,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_67.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_68",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_68.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_68.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_71",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_71.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_71.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_72",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_72.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_72.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_74",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_74.fa",
+          "length": 87281,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_74.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_75",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_75.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_75.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_76",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_76.fa",
+          "length": 87272,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_76.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_77",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_77.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_77.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN1_U_78",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1\\PSEN1_U_78.fa",
+          "length": 87275,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen1\\PSEN1_U_78.fa",
+          "label": "UNHEALTHY"
+        }
+      ],
+      "healthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen1_healthy.fa",
+      "unhealthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen1_unhealthy.fa"
+    },
+    "PSEN2": {
+      "reference": {
+        "id": "ref|NC_000001.11|:226870184-226927726",
+        "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\psen2_reference.fa",
+        "length": 57543
+      },
+      "healthy": [
+        {
+          "id": "PSEN2_H_1",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_1.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_1.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_2.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_2.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_5",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_5.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_5.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_6",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_6.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_6.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_7.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_7.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_8",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_8.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_8.fa",
+          "label": "HEALTHY"
+        },
+        {
+          "id": "PSEN2_H_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2\\PSEN2_H_9.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\healthy\\psen2\\PSEN2_H_9.fa",
+          "label": "HEALTHY"
+        }
+      ],
+      "unhealthy": [
+        {
+          "id": "PSEN2_U_1",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_1.fa",
+          "length": 43831,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_1.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_2",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_2.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_2.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_3",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_3.fa",
+          "length": 57541,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_3.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_4",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_4.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_4.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_5",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_5.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_5.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_7",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_7.fa",
+          "length": 57543,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_7.fa",
+          "label": "UNHEALTHY"
+        },
+        {
+          "id": "PSEN2_U_9",
+          "path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2\\PSEN2_U_9.fa",
+          "length": 57540,
+          "source_file": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_9.fa",
+          "label": "UNHEALTHY"
+        }
+      ],
+      "healthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\healthy\\psen2_healthy.fa",
+      "unhealthy_combined_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\train\\unhealthy\\psen2_unhealthy.fa"
+    }
+  }
+}

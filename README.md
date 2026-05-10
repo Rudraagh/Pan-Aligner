@@ -1,72 +1,117 @@
-# Alzheimer’s Disease Prediction with PanAligner and Pangenome Graphs
+# Implementation and Reproduction of the PanAligner Paper
 
-This project is a research-oriented prototype that builds Alzheimer’s Disease (AD) sequence classification on top of the real [PanAligner](https://github.com/at-cg/PanAligner) graph aligner and a real [minigraph](https://github.com/lh3/minigraph) GFA construction workflow. It uses three AD-related gene FASTA files (`APP`, `PSEN1`, `PSEN2`), preprocesses healthy and disease-associated sequences, builds pangenome graphs, aligns new queries with PanAligner, analyzes graph topology, and predicts `HEALTHY` vs `UNHEALTHY`.
+This repository is organized as a paper-reproduction project centered on the real [PanAligner](https://github.com/at-cg/PanAligner) aligner and [minigraph](https://github.com/lh3/minigraph) graph construction workflow.
 
-## What this repository contains
+The final project focus is:
 
-- Real PanAligner integration using the official command shape:
-  - `./PanAligner -cx lr graph.gfa query.fa > out.gaf`
-- Real minigraph-based graph construction tuned for this gene-sized dataset:
-  - `minigraph -cxggs -l1k -L1 reference.fa sample1.fa sample2.fa ... > graph.gfa`
-- Python orchestration for preprocessing, graph building, alignment, parsing, scoring, and visualization
-- A Linux/WSL shell runner for reproducible end-to-end execution
+- pangenome graph construction
+- cyclic graph handling
+- co-linear chaining concepts
+- graph alignment with PanAligner
+- theoretical reproductions of paper ideas
+- held-out alignment evaluation
+
+The repository is intentionally presented as a PanAligner paper implementation project, not as a prediction or machine-learning system.
+
+## Core scope
+
+The main workflow now focuses only on paper-relevant components:
+
+1. FASTA preprocessing
+2. stratified train/test split
+3. pangenome graph construction with minigraph
+4. graph visualization and topology analysis
+5. SCC detection
+6. DFS-based back-edge removal
+7. cyclic graph to DAG approximation
+8. path cover generation
+9. anchor representation
+10. precedence relation
+11. simplified co-linear chaining DP
+12. gap-cost analysis
+13. reachability analysis
+14. iterative chaining and convergence demonstration
+15. real PanAligner execution
+16. GAF parsing
+17. held-out alignment evaluation
+18. theory and paper-reproduction reports
+
+## Important distinction
+
+The project has two clearly separated layers:
+
+- `Real PanAligner implementation`
+  This uses the actual PanAligner binary for sequence-to-graph alignment.
+
+- `Simplified theoretical reproduction`
+  This adds educational Python modules that demonstrate the main algorithmic ideas from the PanAligner paper for viva explanation, visualization, and reporting.
+
+The theory modules do not replace, modify, or compete with the real PanAligner internals.
 
 ## Project structure
 
 ```text
 FINAL YEAR PROJECT PHASE/
+├── main.py
 ├── app_combined.fasta
 ├── psen1_combined.fasta
 ├── psen2_combined.fasta
 ├── PanAligner/
-├── minigraph/                       # clone separately with setup_tools.sh or git clone
+├── minigraph/
 ├── data/
 │   ├── healthy/
 │   ├── unhealthy/
-│   ├── queries/                     # optional; create this only if you want separate query FASTAs
 │   ├── raw/
 │   └── metadata/
 ├── graphs/
 ├── outputs/
 │   ├── graphs/
-│   └── alignments/
+│   ├── alignments/
+│   ├── evaluation/
+│   ├── theory/
+│   └── reports/
 ├── scripts/
 │   ├── common.py
 │   ├── preprocess.py
+│   ├── split_dataset.py
 │   ├── build_graph.py
 │   ├── align.py
 │   ├── parse_gaf.py
-│   ├── predictor.py
 │   ├── visualize.py
-│   ├── pipeline.py
-│   └── setup_tools.sh
+│   ├── paper_evaluation.py
+│   └── theory/
+│       ├── common.py
+│       ├── graph_analysis_demo.py
+│       ├── scc_demo.py
+│       ├── dag_converter_demo.py
+│       ├── path_cover_demo.py
+│       ├── anchors_demo.py
+│       ├── precedence_demo.py
+│       ├── chaining_demo.py
+│       └── visualization_demo.py
 ├── requirements.txt
 ├── run_pipeline.sh
 └── README.md
 ```
 
-## Data assumptions
+Note:
 
-Your FASTA headers already contain class labels:
-
-- `APP_H_*`, `PSEN1_H_*`, `PSEN2_H_*` -> healthy
-- `APP_U_*`, `PSEN1_U_*`, `PSEN2_U_*` -> unhealthy
-- `ref|...` -> locus reference sequence
-
-The preprocessing step uses these headers directly and does not invent labels.
+- Some older exploratory scripts may still remain in the repository for archival reasons.
+- They are not part of the main paper-reproduction workflow.
+- `main.py` is the authoritative entry point.
 
 ## Setup
 
-This pipeline is intended for Linux or WSL, which matches your requirement that the project be runnable on Linux/WSL.
+This project is intended for Linux or WSL.
 
-### Option 1: automated setup
+### Automated setup
 
 ```bash
 chmod +x scripts/setup_tools.sh run_pipeline.sh
 ./scripts/setup_tools.sh
 ```
 
-### Option 2: manual setup
+### Manual setup
 
 ```bash
 sudo apt-get update
@@ -97,254 +142,233 @@ minigraph:
 ./minigraph/minigraph --version
 ```
 
-## Pipeline overview
+## Single entry point
+
+`main.py` is the master driver for the project.
+
+Supported modes:
+
+```bash
+python3 main.py --full-pipeline
+python3 main.py --theory-only
+python3 main.py --evaluate
+```
+
+Meaning:
+
+- `--full-pipeline`: preprocess, split, build graphs, run theory modules, execute PanAligner on held-out queries, generate evaluation outputs, and write final reports
+- `--theory-only`: run only the educational reproductions of paper concepts
+- `--evaluate`: run the held-out PanAligner alignment evaluation without rerunning the theory suite
+
+## Workflow overview
 
 ### 1. FASTA preprocessing
 
 `scripts/preprocess.py`:
 
-- parses all gene FASTA files with Biopython
-- validates DNA alphabet (`A/C/G/T/N`)
-- normalizes uppercase sequences
-- removes duplicates within each gene/class bucket
-- writes split FASTA files to:
-  - `data/healthy/<gene>/`
-  - `data/unhealthy/<gene>/`
-  - `data/raw/`
-- writes `data/metadata/preprocess_manifest.json`
+- parses the gene FASTA files
+- validates DNA sequences
+- normalizes sequence formatting
+- separates reference and labeled sequences
+- writes processed FASTA files and `preprocess_manifest.json`
 
-Run:
+### 2. Train/test split
 
-```bash
-python3 scripts/preprocess.py
-```
+`scripts/split_dataset.py`:
 
-### 2. Pangenome graph construction
+- creates a reproducible stratified split
+- preserves the current project’s existing train/test structure
+- writes:
+  - `data/metadata/train_manifest.json`
+  - `data/metadata/test_manifest.json`
+  - `data/metadata/split_manifest.json`
+  - `data/metadata/split_summary.txt`
 
-`scripts/build_graph.py` builds three graphs per gene:
+The split is retained because it is useful for held-out PanAligner evaluation even though classification is no longer the project focus.
 
-- `graphs/<gene>.healthy.gfa`
-- `graphs/<gene>.unhealthy.gfa`
-- `graphs/<gene>.combined.gfa`
+### 3. Pangenome graph construction
 
-It uses the locus reference as the base and then adds each labeled sample FASTA as a separate minigraph input, which is important because minigraph graph construction works best when each input assembly/sample is its own file.
+`scripts/build_graph.py`:
 
-This project uses `-l1k -L1` when calling minigraph. The default minigraph graph-generation thresholds are aimed more at large structural variants and can collapse these gene datasets into a single reference segment. Lowering the minimum alignment and variant length lets APP/PSEN1/PSEN2 small variants create graph branches.
+- builds healthy-only, unhealthy-only, and combined graphs per gene
+- uses the locus reference as the graph base
+- uses minigraph with parameters suitable for this dataset
 
-Run:
+Although the directory names still reflect the original labeled FASTA organization, the paper-reproduction workflow focuses on the graph construction and alignment behavior rather than label prediction.
 
-```bash
-python3 scripts/build_graph.py --threads 4 --minigraph-bin ./minigraph/minigraph
-```
-
-### 3. Graph analysis and visualization
+### 4. Graph analysis and visualization
 
 `scripts/visualize.py`:
 
-- parses `S` and `L` records from GFA
-- computes:
-  - node count
-  - edge count
-  - weakly connected components
-  - strongly connected components
-  - self loops
-  - cycle detection
-- saves graph statistics JSON and PNG figures under `outputs/graphs/`
-- writes separate files for each gene/class graph, for example:
-  - `outputs/graphs/app.healthy.png`
-  - `outputs/graphs/app.unhealthy.png`
-  - `outputs/graphs/app.combined.png`
+- parses GFA structure
+- computes graph statistics
+- renders graph visualizations
 
-Run:
+Generated outputs go under `outputs/graphs/`.
 
-```bash
-MPLCONFIGDIR=/tmp/matplotlib-cache python3 scripts/visualize.py
-```
+### 5. Educational theory modules
 
-The `MPLCONFIGDIR` value avoids warnings on systems where Matplotlib cannot write to the default user config directory.
+The folder `scripts/theory/` provides simplified conceptual reproductions of major PanAligner paper ideas:
 
-### 4. Sequence alignment with PanAligner
+- `graph_analysis_demo.py`
+  representative graph extraction, reachability context, cyclic demo graph preparation
+- `scc_demo.py`
+  Tarjan SCC detection
+- `dag_converter_demo.py`
+  DFS back-edge detection and DAG approximation
+- `path_cover_demo.py`
+  simplified greedy path cover on the DAG approximation
+- `anchors_demo.py`
+  simplified anchor representation `(vertex, [x..y], [c..d], weight)`
+- `precedence_demo.py`
+  simplified precedence relation
+- `chaining_demo.py`
+  simplified co-linear chaining DP, gap costs, chain reconstruction, convergence demo
+- `visualization_demo.py`
+  wrapper to generate all theory visuals
+
+These modules produce educational outputs under `outputs/theory/`.
+
+### 6. Real PanAligner execution
 
 `scripts/align.py` wraps the real PanAligner binary:
 
 ```bash
 python3 scripts/align.py \
   --graph graphs/app.combined.gfa \
-  --query data/unhealthy/app/APP_U_1.fa \
+  --query data/test/healthy/app/APP_H_3.fa \
   --panaligner-bin ./PanAligner/PanAligner \
   --output-gaf outputs/alignments/app_query.gaf
 ```
 
-This ultimately executes the real PanAligner-style command:
+This executes the actual PanAligner command shape:
 
 ```bash
-./PanAligner/PanAligner -t 4 -cx lr graphs/app.combined.gfa data/unhealthy/app/APP_U_1.fa > outputs/alignments/app_query.gaf
+./PanAligner/PanAligner -t 4 -cx lr graph.gfa query.fa > out.gaf
 ```
 
-### 5. GAF parsing
+### 7. GAF parsing
 
-`scripts/parse_gaf.py` converts GAF output into structured Python objects.
+`scripts/parse_gaf.py` extracts alignment information such as:
 
-Extracted fields include:
-
-- alignment score (`AS` if present, otherwise residue matches)
+- alignment score
 - query span
 - path span
-- mapping quality
-- traversed graph nodes
 - identity
 - coverage
-- normalized score
+- mapping quality
+- traversed graph nodes
 
-### 6. Healthy vs unhealthy prediction
+### 8. Held-out alignment evaluation
 
-`scripts/predictor.py` uses a graph-based evidence comparison:
+`scripts/paper_evaluation.py` evaluates the reproduction pipeline by:
 
-1. Infer the most likely gene by aligning the query to each gene’s combined graph.
-2. Align the same query to that gene’s healthy graph and unhealthy graph.
-3. Compute a composite class score from:
-   - identity
-   - coverage
-   - mapping quality
-   - normalized alignment score
-4. Predict the class with the stronger graph alignment evidence.
+- aligning held-out test sequences against the train-derived combined graphs
+- collecting best-alignment summaries
+- reporting:
+  - alignment rate
+  - mean identity
+  - mean coverage
+  - mean MAPQ
+  - mean alignment score
+  - per-gene summaries
 
-This keeps the disease layer on top of the real graph aligner instead of replacing it with a synthetic classifier.
+This evaluation is paper-aligned because it focuses on sequence-to-graph alignment behavior rather than downstream classification.
 
-Run:
+## Output directories
+
+The main workflow produces:
+
+- `outputs/graphs/`
+  graph visualizations and graph statistics
+- `outputs/alignments/`
+  GAF files and alignment overlays
+- `outputs/evaluation/`
+  held-out PanAligner evaluation summaries
+- `outputs/theory/`
+  educational theory outputs and plots
+- `outputs/reports/`
+  final written reports
+
+## Key generated files
+
+Examples of final artifacts:
+
+- `outputs/theory/scc_analysis.txt`
+- `outputs/theory/scc_graph.png`
+- `outputs/theory/back_edges.txt`
+- `outputs/theory/dag_graph.png`
+- `outputs/theory/path_cover.txt`
+- `outputs/theory/path_cover_graph.png`
+- `outputs/theory/anchors.csv`
+- `outputs/theory/precedence_analysis.txt`
+- `outputs/theory/chaining_results.txt`
+- `outputs/theory/chaining_graph.png`
+- `outputs/theory/iteration_log.txt`
+- `outputs/theory/convergence_plot.png`
+- `outputs/theory/gap_cost_analysis.txt`
+- `outputs/evaluation/alignment_metrics.json`
+- `outputs/evaluation/alignment_records.json`
+- `outputs/evaluation/evaluation_report.txt`
+- `outputs/reports/theoretical_reproduction_report.txt`
+- `outputs/reports/final_project_summary.txt`
+
+## Sample usage
+
+### Run everything
 
 ```bash
-python3 scripts/predictor.py \
-  --query-fasta data/unhealthy/app/APP_U_1.fa \
-  --gene APP \
-  --panaligner-bin ./PanAligner/PanAligner \
-  --threads 4
+./run_pipeline.sh
 ```
 
-If you already generated GAFs externally, you can score them directly without rerunning alignment:
+### Run only the theory layer
 
 ```bash
-python3 scripts/predictor.py \
-  --query-fasta data/unhealthy/app/APP_U_1.fa \
-  --gene APP \
-  --healthy-gaf outputs/alignments/app_vs_healthy.gaf \
-  --unhealthy-gaf outputs/alignments/app_vs_unhealthy.gaf \
-  --combined-gaf outputs/alignments/app_vs_combined.gaf
+python3 main.py --theory-only
 ```
 
-Output:
-
-- `outputs/alignments/prediction.json`
-- class-specific GAF files
-- combined-graph alignment PNG
-
-### 7. End-to-end run
+### Run only the held-out alignment evaluation
 
 ```bash
-./run_pipeline.sh data/unhealthy/app/APP_U_1.fa APP
+python3 main.py --evaluate
 ```
-
-Other examples:
-
-```bash
-./run_pipeline.sh data/healthy/psen1/PSEN1_H_1.fa PSEN1
-./run_pipeline.sh data/healthy/psen2/PSEN2_H_1.fa PSEN2
-```
-
-The query FASTA must already exist. If the file path is wrong, `run_pipeline.sh` now stops early with an example command instead of failing later inside PanAligner.
-
-## Why there are class-specific graphs and combined graphs
-
-The project produces both:
-
-- combined per-gene graphs for topology analysis and visualization
-- healthy-only and unhealthy-only graphs for prediction
-
-This is deliberate. In practice, PanAligner gives alignment evidence on graph paths and segments, but the easiest reproducible way to convert that into disease classification without modifying PanAligner internals is to compare the same query against class-specific pangenome graphs built from the same locus. That preserves a real graph-alignment workflow while making the classification step explainable and reproducible.
-
-## Alzheimer’s disease prediction logic
-
-The disease layer is intentionally simple and defendable for a final-year prototype:
-
-- each gene has a healthy graph and an unhealthy graph
-- the same query is aligned to both
-- the better-supported class wins
-
-The predictor returns:
-
-- `prediction`
-- `confidence`
-- `selected_gene`
-- `matched_regions`
-- `combined_graph_nodes`
-- a plain-language explanation
-
-The confidence value is based on the score gap between healthy and unhealthy graph alignments. If both class graphs align almost equally well, confidence will be close to `0.0`; this means the graph evidence is weak or tied, not that the command failed.
 
 ## Viva / report explanation
 
-### How PanAligner works
+### What the project reproduces
 
-PanAligner is a sequence-to-graph aligner for cyclic and acyclic pangenome graphs. It follows a seed-chain-extend strategy:
+The project reproduces the PanAligner paper at two levels:
 
-1. find seed matches between the query and graph
-2. chain anchors across graph structure
-3. perform extension/alignment along promising graph paths
-
-The project uses PanAligner as-is and does not reimplement its chaining or alignment core.
+- practical workflow reproduction using the real PanAligner binary
+- conceptual reproduction using simplified educational graph algorithms
 
 ### What co-linear chaining means here
 
-Co-linear chaining selects a high-quality ordered chain of anchors so that a read can be mapped through a graph in a biologically consistent order. In pangenome graphs, this is harder than linear genomes because variants create branches and some graphs can contain cycles. PanAligner’s contribution is that it supports exact co-linear chaining generalized to cyclic graphs.
+Co-linear chaining selects an ordered set of anchors that is consistent in query order and graph reachability, while balancing anchor weights and gap costs. The theory layer demonstrates this idea using a simplified dynamic programming implementation.
 
-### How cyclic pangenome graphs are handled
+### How cyclic graphs are handled
 
-The GFA/rGFA graph is constructed with minigraph, and PanAligner then aligns reads directly to that graph. Because PanAligner supports cyclic graphs, it can reason over loops and revisited graph structure rather than requiring the graph to be flattened into a single linear reference.
+The theory modules explicitly demonstrate:
 
-### How the disease predictor is layered on top
+- SCC identification
+- back-edge removal
+- conversion of a cyclic graph into a DAG approximation
+- path cover generation on the DAG approximation
 
-The predictor is separate from the aligner:
+This mirrors the paper’s graph-preprocessing logic conceptually, while keeping the real PanAligner alignment engine untouched.
 
-- minigraph builds healthy/unhealthy graph references
-- PanAligner computes graph alignments
-- Python parses GAF and compares graph alignment quality
-- the final label is assigned from alignment evidence
+### Why the theory modules are separate
 
-That separation is useful in a project review because you can clearly explain which part is established research software and which part is your disease-classification contribution.
+PanAligner’s internal implementation is optimized and more sophisticated than a classroom-scale Python script. The theory modules are therefore intentionally educational reproductions rather than replacements.
 
-## Expected outputs
+## Final framing
 
-- `data/metadata/preprocess_manifest.json`
-- `data/metadata/graph_manifest.json`
-- `graphs/*.gfa`
-- `outputs/graphs/*.png`
-- `outputs/graphs/*.stats.json`
-- `outputs/alignments/*.gaf`
-- `outputs/alignments/prediction.json`
-- `outputs/alignments/*.png`
+The repository should be understood as:
 
-## Sample walkthrough
+**Implementation and Reproduction of the PanAligner Paper**
 
-```bash
-# 1. Build tools if needed
-./scripts/setup_tools.sh
+not as:
 
-# 2. Preprocess the three combined gene FASTA files
-python3 scripts/preprocess.py --input-fastas app_combined.fasta psen1_combined.fasta psen2_combined.fasta
-
-# 3. Build graph files with the small-variant thresholds
-python3 scripts/build_graph.py --threads 4 --minigraph-bin ./minigraph/minigraph
-
-# 4. Generate graph visualizations
-MPLCONFIGDIR=/tmp/matplotlib-cache python3 scripts/visualize.py
-
-# 5. Run the full pipeline on an existing APP query sample
-./run_pipeline.sh data/unhealthy/app/APP_U_1.fa APP
-
-# 6. Inspect the prediction
-cat outputs/alignments/prediction.json
-```
-
-## Suggested next enhancement
-
-If you want to improve biological interpretability after the baseline pipeline is running, the next best extension is to annotate known AD-associated variant coordinates per gene and project the PanAligner path hits onto those loci so the explanation can mention specific disease-associated regions instead of only graph-support scores.
+- a machine learning project
+- a disease prediction framework
+- an AI pipeline

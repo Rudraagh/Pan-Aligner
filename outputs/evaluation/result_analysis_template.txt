@@ -1,0 +1,28 @@
+Result Analysis Template
+========================
+1. Quantitative analysis
+- Report accuracy, precision, recall, F1-score, and confusion matrix trends.
+
+2. Comparative analysis
+- Compare gene-wise performance and healthy vs unhealthy prediction behavior.
+
+3. Strengths
+- Highlight where graph-based alignment produced stable and interpretable classifications.
+
+4. Weaknesses
+- Note cases where healthy and unhealthy graphs were not well separated.
+
+5. Robustness
+- Discuss reproducibility under the fixed random split and consistency across genes.
+
+6. Computational efficiency
+- Summarize alignment runtime, graph size, and resource usage observations.
+
+7. Generalization capability
+- Explain how well the train-derived graph references handled unseen test sequences.
+
+8. Limitations
+- Describe class ambiguity, limited sample count for some genes, and graph collapse risks.
+
+9. Failure cases
+- Document misclassifications, tie-like predictions, and low-confidence examples.

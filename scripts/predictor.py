@@ -5,7 +5,7 @@ from dataclasses import asdict
 from pathlib import Path
 
 from align import run_panaligner
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, run_command, write_json, write_wrapped_fasta
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, write_json, write_wrapped_fasta
 from parse_gaf import AlignmentResult, best_alignment, parse_gaf_file
 
 
@@ -129,11 +129,12 @@ def predict_health_state(
     panaligner_bin: Path,
     threads: int,
     gene: str | None = None,
+    output_dir: Path | None = None,
 ) -> dict:
     graph_manifest = read_json(graph_manifest_path)
-    output_dir = ensure_dir(OUTPUTS_DIR / "alignments")
+    resolved_output_dir = ensure_dir(output_dir or (OUTPUTS_DIR / "alignments"))
 
-    selected_gene, gene_detection = infer_gene(query_fasta, graph_manifest, panaligner_bin, threads, output_dir) if gene is None else (gene.upper(), {})
+    selected_gene, gene_detection = infer_gene(query_fasta, graph_manifest, panaligner_bin, threads, resolved_output_dir) if gene is None else (gene.upper(), {})
     if selected_gene not in graph_manifest["graphs"]:
         raise ValueError(f"Unknown gene '{selected_gene}'. Available genes: {', '.join(sorted(graph_manifest['graphs']))}")
 
@@ -141,13 +142,13 @@ def predict_health_state(
     class_results: dict[str, AlignmentResult | None] = {}
 
     for label, graph_key in (("HEALTHY", "healthy_graph"), ("UNHEALTHY", "unhealthy_graph"), ("COMBINED", "combined_graph")):
-        gaf_path = output_dir / f"{selected_gene.lower()}.{label.lower()}.gaf"
+        gaf_path = resolved_output_dir / f"{selected_gene.lower()}.{label.lower()}.gaf"
         results = run_panaligner(Path(gene_entry[graph_key]), query_fasta, gaf_path, panaligner_bin, threads)
         class_results[label] = best_alignment(results)
 
     prediction = build_prediction_payload(query_fasta, selected_gene, class_results, gene_detection)
 
-    prediction_path = OUTPUTS_DIR / "alignments" / "prediction.json"
+    prediction_path = resolved_output_dir / "prediction.json"
     write_json(prediction_path, prediction)
     return prediction
 
@@ -158,6 +159,7 @@ def predict_from_existing_gafs(
     healthy_gaf: Path,
     unhealthy_gaf: Path,
     combined_gaf: Path,
+    output_dir: Path | None = None,
 ) -> dict:
     class_results = {
         "HEALTHY": best_alignment(parse_gaf_file(healthy_gaf.resolve())),
@@ -165,7 +167,7 @@ def predict_from_existing_gafs(
         "COMBINED": best_alignment(parse_gaf_file(combined_gaf.resolve())),
     }
     prediction = build_prediction_payload(query_fasta, selected_gene.upper(), class_results, {})
-    prediction_path = OUTPUTS_DIR / "alignments" / "prediction.json"
+    prediction_path = ensure_dir(output_dir or (OUTPUTS_DIR / "alignments")) / "prediction.json"
     write_json(prediction_path, prediction)
     return prediction
 
@@ -178,6 +180,7 @@ def main() -> None:
     parser.add_argument("--healthy-gaf", type=Path, default=None, help="Existing healthy-graph GAF for score-only mode.")
     parser.add_argument("--unhealthy-gaf", type=Path, default=None, help="Existing unhealthy-graph GAF for score-only mode.")
     parser.add_argument("--combined-gaf", type=Path, default=None, help="Existing combined-graph GAF for score-only mode.")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Directory where prediction outputs should be written.")
     parser.add_argument("--threads", type=int, default=4, help="Thread count passed to PanAligner.")
     parser.add_argument(
         "--graph-manifest",
@@ -205,10 +208,18 @@ def main() -> None:
             args.healthy_gaf,
             args.unhealthy_gaf,
             args.combined_gaf,
+            args.output_dir.resolve() if args.output_dir else None,
         )
     else:
         panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])
-        prediction = predict_health_state(query_fasta, args.graph_manifest.resolve(), panaligner_bin, args.threads, args.gene)
+        prediction = predict_health_state(
+            query_fasta,
+            args.graph_manifest.resolve(),
+            panaligner_bin,
+            args.threads,
+            args.gene,
+            args.output_dir.resolve() if args.output_dir else None,
+        )
     print(f"Prediction: {prediction['prediction']}")
     print(f"Selected gene: {prediction['selected_gene']}")
     print(f"Confidence: {prediction['confidence']:.4f}")

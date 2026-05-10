@@ -1,0 +1,37 @@
+PanAligner AD Pipeline Dataset Split Summary
+===========================================
+Random seed: 42
+Test fraction: 0.20
+Train fraction: 0.80
+
+APP
+  Total sequences: 46
+  Healthy train count: 18
+  Healthy test count: 5
+  Unhealthy train count: 18
+  Unhealthy test count: 5
+  Split percentage: 80.00% train / 20.00% test
+
+PSEN1
+  Total sequences: 156
+  Healthy train count: 62
+  Healthy test count: 16
+  Unhealthy train count: 62
+  Unhealthy test count: 16
+  Split percentage: 80.00% train / 20.00% test
+
+PSEN2
+  Total sequences: 18
+  Healthy train count: 7
+  Healthy test count: 2
+  Unhealthy train count: 7
+  Unhealthy test count: 2
+  Split percentage: 80.00% train / 20.00% test
+
+Overall
+  Total sequences: 220
+  Healthy train count: 87
+  Healthy test count: 23
+  Unhealthy train count: 87
+  Unhealthy test count: 23
+  Split percentage: 80.00% train / 20.00% test

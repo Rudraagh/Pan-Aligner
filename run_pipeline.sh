@@ -4,6 +4,8 @@ set -euo pipefail
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 PYTHON_BIN="${PYTHON_BIN:-python3}"
 THREADS="${THREADS:-4}"
+SPLIT_SEED="${SPLIT_SEED:-42}"
+TEST_FRACTION="${TEST_FRACTION:-0.20}"
 PANALIGNER_BIN="${PANALIGNER_BIN:-$ROOT_DIR/PanAligner/PanAligner}"
 MINIGRAPH_BIN="${MINIGRAPH_BIN:-$ROOT_DIR/minigraph/minigraph}"
 
@@ -28,35 +30,13 @@ if [[ ! -x "$MINIGRAPH_BIN" ]]; then
   (cd "$ROOT_DIR/minigraph" && make -j"$(nproc)")
 fi
 
-if [[ $# -lt 1 ]]; then
-  echo "Usage: $0 <query_fasta> [gene]"
-  echo "Example: $0 data/queries/query.fa APP"
-  exit 1
-fi
-
-QUERY_FASTA="$1"
-GENE_ARG="${2:-}"
-
-if [[ ! -f "$QUERY_FASTA" ]]; then
-  echo "Query FASTA not found: $QUERY_FASTA"
-  echo "Use an existing FASTA file, for example:"
-  echo "  $0 data/unhealthy/app/APP_U_1.fa APP"
-  echo "  $0 data/healthy/psen1/PSEN1_H_1.fa PSEN1"
-  exit 1
-fi
-
-if [[ -n "$GENE_ARG" ]]; then
-  GENE_FLAGS=(--gene "$GENE_ARG")
-else
-  GENE_FLAGS=()
-fi
-
 "$PYTHON_BIN" -m pip install -r "$ROOT_DIR/requirements.txt"
 
-"$PYTHON_BIN" "$ROOT_DIR/scripts/pipeline.py" \
+"$PYTHON_BIN" "$ROOT_DIR/main.py" \
+  --full-pipeline \
   --input-fastas "$ROOT_DIR/app_combined.fasta" "$ROOT_DIR/psen1_combined.fasta" "$ROOT_DIR/psen2_combined.fasta" \
-  --query-fasta "$QUERY_FASTA" \
   --threads "$THREADS" \
+  --split-seed "$SPLIT_SEED" \
+  --test-fraction "$TEST_FRACTION" \
   --panaligner-bin "$PANALIGNER_BIN" \
-  --minigraph-bin "$MINIGRAPH_BIN" \
-  "${GENE_FLAGS[@]}"
+  --minigraph-bin "$MINIGRAPH_BIN"

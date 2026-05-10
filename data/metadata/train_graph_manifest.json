@@ -1,0 +1,22 @@
+{
+  "graphs": {
+    "APP": {
+      "reference_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\app_reference.fa",
+      "healthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\app.healthy.gfa",
+      "unhealthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\app.unhealthy.gfa",
+      "combined_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\app.combined.gfa"
+    },
+    "PSEN1": {
+      "reference_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\psen1_reference.fa",
+      "healthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen1.healthy.gfa",
+      "unhealthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen1.unhealthy.gfa",
+      "combined_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen1.combined.gfa"
+    },
+    "PSEN2": {
+      "reference_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\raw\\psen2_reference.fa",
+      "healthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen2.healthy.gfa",
+      "unhealthy_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen2.unhealthy.gfa",
+      "combined_graph": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\psen2.combined.gfa"
+    }
+  }
+}

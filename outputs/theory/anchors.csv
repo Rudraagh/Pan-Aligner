@@ -1,0 +1,11 @@
+anchor_id,vertex,x,y,c,d,weight,note
+A1,s17,1,1,1,1,1,walk anchor
+A2,s18,1,1,3,3,1,walk anchor
+A3,s19,1,1,4,4,1,walk anchor
+A4,s20,1,1,6,6,1,walk anchor
+A5,s21,1,1,7,7,1,walk anchor
+A6,s10,1,8,9,16,8,walk anchor
+A7,s11,1,1,17,17,1,walk anchor
+A8,s12,1,8,19,26,8,walk anchor
+N2,s5,1,1,22,22,3,synthetic distractor anchor
+N1,s3,1,6,26,31,4,synthetic distractor anchor

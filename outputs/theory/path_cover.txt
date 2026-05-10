@@ -1,0 +1,9 @@
+Path Cover Demo
+===============
+DAG node count: 18
+Path count: 3
+All nodes covered: True
+
+Path 1: s17 -> s18 -> s19 -> s20 -> s21 -> s10 -> s11 -> s12 -> s13 -> s14 -> s15 -> s1 -> s2 -> s3 -> s4 -> s5
+Path 2: s75
+Path 3: s86
