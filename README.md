@@ -162,6 +162,29 @@ Meaning:
 - `--evaluate`: run the held-out PanAligner alignment evaluation without rerunning the theory suite
 - `--custom-query-analysis`: accept a custom query FASTA or inline DNA sequence, check whether it aligns to the current graphs, compute healthy/unhealthy scores, and generate a score plot plus JSON summary
 
+## Desktop GUI
+
+The repository now also includes a desktop GUI built with Tkinter:
+
+```bash
+python3 gui_app.py
+```
+
+On Windows you can also start it with:
+
+```bat
+run_gui.bat
+```
+
+GUI features:
+
+- run `full-pipeline`, `theory-only`, and `evaluate` modes without typing commands
+- run custom query analysis from either an inline DNA sequence or a FASTA file
+- attach a custom argument/note to query analysis runs
+- watch live console output in the app
+- preview the generated custom query score graph directly in the GUI
+- open generated output files and folders quickly
+
 ## Workflow overview
 
 ### 1. FASTA preprocessing
