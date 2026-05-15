@@ -4,8 +4,21 @@ import argparse
 from dataclasses import asdict
 from pathlib import Path
 
+import matplotlib.pyplot as plt
+
 from align import run_panaligner
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, write_json, write_wrapped_fasta
+from common import (
+    METADATA_DIR,
+    OUTPUTS_DIR,
+    ROOT,
+    ensure_dir,
+    normalize_sequence,
+    read_json,
+    resolve_binary,
+    validate_dna,
+    write_json,
+    write_wrapped_fasta,
+)
 from parse_gaf import AlignmentResult, best_alignment, parse_gaf_file
 
 
@@ -14,7 +27,10 @@ def prepare_query_fasta(query_sequence: str | None, query_fasta: Path | None, ou
         return query_fasta.resolve()
     if not query_sequence:
         raise ValueError("Provide either --query-fasta or --query-sequence.")
-    write_wrapped_fasta([("query", query_sequence.upper())], output_path)
+    normalized_sequence = normalize_sequence(query_sequence)
+    if not validate_dna(normalized_sequence):
+        raise ValueError("Query sequence must contain only DNA bases A/C/G/T/N.")
+    write_wrapped_fasta([("query", normalized_sequence)], output_path)
     return output_path.resolve()
 
 
@@ -52,6 +68,28 @@ def composite_score(result: AlignmentResult | None) -> float:
         + 0.15 * min(result.mapping_quality / 60.0, 1.0)
         + 0.05 * min(result.normalized_score, 1.0)
     )
+
+
+def score_breakdown(result: AlignmentResult | None) -> dict[str, float]:
+    if result is None:
+        return {
+            "identity_component": 0.0,
+            "coverage_component": 0.0,
+            "mapping_quality_component": 0.0,
+            "normalized_score_component": 0.0,
+            "composite_score": 0.0,
+        }
+    identity_component = 0.45 * result.identity
+    coverage_component = 0.35 * result.coverage
+    mapping_quality_component = 0.15 * min(result.mapping_quality / 60.0, 1.0)
+    normalized_score_component = 0.05 * min(result.normalized_score, 1.0)
+    return {
+        "identity_component": identity_component,
+        "coverage_component": coverage_component,
+        "mapping_quality_component": mapping_quality_component,
+        "normalized_score_component": normalized_score_component,
+        "composite_score": identity_component + coverage_component + mapping_quality_component + normalized_score_component,
+    }
 
 
 def build_prediction_payload(
@@ -93,6 +131,11 @@ def build_prediction_payload(
         "class_alignments": {
             "HEALTHY": summarize_alignment(class_results["HEALTHY"]),
             "UNHEALTHY": summarize_alignment(class_results["UNHEALTHY"]),
+        },
+        "score_breakdown": {
+            "HEALTHY": score_breakdown(class_results["HEALTHY"]),
+            "UNHEALTHY": score_breakdown(class_results["UNHEALTHY"]),
+            "COMBINED": score_breakdown(class_results["COMBINED"]),
         },
         "matched_regions": {
             "predicted_class_nodes": summarize_alignment(class_results[predicted_label])["traversed_nodes"],
@@ -172,10 +215,102 @@ def predict_from_existing_gafs(
     return prediction
 
 
+def plot_custom_query_scores(prediction: dict, output_dir: Path) -> Path:
+    resolved_output_dir = ensure_dir(output_dir)
+    plot_path = resolved_output_dir / "custom_query_scores.png"
+
+    class_labels = ["HEALTHY", "UNHEALTHY", "COMBINED"]
+    composite_values = [prediction["score_breakdown"][label]["composite_score"] for label in class_labels]
+    identity_values = []
+    coverage_values = []
+    for label in class_labels:
+        if label == "COMBINED":
+            alignment_summary = prediction["combined_alignment"]
+        else:
+            alignment_summary = prediction["class_alignments"][label]
+        identity_values.append(alignment_summary["identity"])
+        coverage_values.append(alignment_summary["coverage"])
+
+    gene_labels = list(prediction["gene_detection"].keys())
+    gene_scores = [prediction["gene_detection"][gene]["normalized_score"] for gene in gene_labels]
+
+    figure, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    axes[0].bar(class_labels, composite_values, color=["#5B8FF9", "#F08A5D", "#7BC96F"])
+    axes[0].set_ylim(0, max(1.0, max(composite_values, default=0.0) + 0.1))
+    axes[0].set_title("Alignment Composite Scores")
+    axes[0].set_ylabel("Score")
+    for index, value in enumerate(composite_values):
+        axes[0].text(index, value + 0.02, f"{value:.3f}", ha="center", va="bottom", fontsize=9)
+
+    axes[1].plot(class_labels, identity_values, marker="o", linewidth=2, label="Identity", color="#6A4C93")
+    axes[1].plot(class_labels, coverage_values, marker="o", linewidth=2, label="Coverage", color="#1982C4")
+    if gene_labels:
+        best_gene_scores = sorted(zip(gene_labels, gene_scores), key=lambda item: item[1], reverse=True)[:3]
+        gene_text = "\n".join(f"{gene}: {score:.3f}" for gene, score in best_gene_scores)
+        axes[1].text(
+            1.02,
+            0.95,
+            f"Top inferred genes\n{gene_text}",
+            transform=axes[1].transAxes,
+            va="top",
+            fontsize=9,
+            bbox={"facecolor": "#F7F7F7", "edgecolor": "#CCCCCC", "boxstyle": "round,pad=0.4"},
+        )
+    axes[1].set_ylim(0, 1.05)
+    axes[1].set_title("Identity and Coverage")
+    axes[1].set_ylabel("Fraction")
+    axes[1].legend()
+
+    argument_suffix = ""
+    if prediction.get("query_argument"):
+        argument_suffix = f" | argument: {prediction['query_argument']}"
+    figure.suptitle(f"Custom Query Analysis for {prediction['selected_gene']}{argument_suffix}", fontsize=12)
+    figure.tight_layout()
+    figure.savefig(plot_path, dpi=220, bbox_inches="tight")
+    plt.close(figure)
+    return plot_path
+
+
+def analyze_custom_query(
+    query_fasta: Path,
+    graph_manifest_path: Path,
+    panaligner_bin: Path,
+    threads: int,
+    gene: str | None = None,
+    output_dir: Path | None = None,
+    query_argument: str | None = None,
+) -> dict:
+    resolved_output_dir = ensure_dir(output_dir or (OUTPUTS_DIR / "alignments" / "custom_query"))
+    prediction = predict_health_state(
+        query_fasta,
+        graph_manifest_path,
+        panaligner_bin,
+        threads,
+        gene,
+        resolved_output_dir,
+    )
+    prediction["query_argument"] = query_argument.strip() if query_argument else ""
+    prediction["alignment_detected"] = any(
+        alignment_summary["available"]
+        for alignment_summary in (
+            prediction["combined_alignment"],
+            prediction["class_alignments"]["HEALTHY"],
+            prediction["class_alignments"]["UNHEALTHY"],
+        )
+    )
+    plot_path = plot_custom_query_scores(prediction, resolved_output_dir)
+    prediction["score_plot"] = str(plot_path.resolve())
+    prediction_path = resolved_output_dir / "prediction.json"
+    write_json(prediction_path, prediction)
+    return prediction
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Predict healthy vs unhealthy status for a query using PanAligner class-specific graphs.")
     parser.add_argument("--query-fasta", type=Path, default=None, help="Existing query FASTA.")
     parser.add_argument("--query-sequence", type=str, default=None, help="Inline query sequence.")
+    parser.add_argument("--query-argument", type=str, default=None, help="Optional free-text argument or note to store with the custom query analysis.")
     parser.add_argument("--gene", type=str, default=None, help="Optional gene override (APP, PSEN1, PSEN2).")
     parser.add_argument("--healthy-gaf", type=Path, default=None, help="Existing healthy-graph GAF for score-only mode.")
     parser.add_argument("--unhealthy-gaf", type=Path, default=None, help="Existing unhealthy-graph GAF for score-only mode.")
@@ -212,17 +347,21 @@ def main() -> None:
         )
     else:
         panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])
-        prediction = predict_health_state(
+        prediction = analyze_custom_query(
             query_fasta,
             args.graph_manifest.resolve(),
             panaligner_bin,
             args.threads,
             args.gene,
             args.output_dir.resolve() if args.output_dir else None,
+            args.query_argument,
         )
     print(f"Prediction: {prediction['prediction']}")
     print(f"Selected gene: {prediction['selected_gene']}")
     print(f"Confidence: {prediction['confidence']:.4f}")
+    print(f"Alignment detected: {prediction.get('alignment_detected', False)}")
+    if prediction.get("score_plot"):
+        print(f"Score plot: {prediction['score_plot']}")
     print(prediction["explanation"])
 
 

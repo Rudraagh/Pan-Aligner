@@ -14,6 +14,7 @@ from build_graph import build_graphs
 from common import METADATA_DIR, OUTPUTS_DIR, ROOT as PROJECT_ROOT, ensure_dir, resolve_binary
 from paper_evaluation import evaluate_panaligner_workflow
 from preprocess import preprocess_fasta_files
+from predictor import analyze_custom_query, prepare_query_fasta
 from split_dataset import split_dataset
 from theory.anchors_demo import run_anchors_demo
 from theory.chaining_demo import run_chaining_demo
@@ -218,6 +219,7 @@ def main() -> None:
     mode.add_argument("--full-pipeline", action="store_true", help="Run preprocessing, graph construction, theory modules, PanAligner execution, evaluation, and report generation.")
     mode.add_argument("--theory-only", action="store_true", help="Run only the educational PanAligner theory reproductions.")
     mode.add_argument("--evaluate", action="store_true", help="Run the held-out PanAligner evaluation workflow on the current train/test split.")
+    mode.add_argument("--custom-query-analysis", action="store_true", help="Analyze a custom query sequence or FASTA against the current graphs and generate score outputs.")
     parser.add_argument("--theory-graph", type=Path, default=None, help="Optional graph GFA for theory-only mode.")
     parser.add_argument("--input-fastas", nargs="+", type=Path, default=default_fasta_inputs(), help="Input FASTA files.")
     parser.add_argument("--threads", type=int, default=4, help="Thread count for minigraph and PanAligner.")
@@ -225,6 +227,12 @@ def main() -> None:
     parser.add_argument("--test-fraction", type=float, default=0.20, help="Fraction reserved for test data.")
     parser.add_argument("--minigraph-bin", type=str, default=None, help="Path to the minigraph binary.")
     parser.add_argument("--panaligner-bin", type=str, default=None, help="Path to the PanAligner binary.")
+    parser.add_argument("--graph-manifest", type=Path, default=METADATA_DIR / "graph_manifest.json", help="Graph manifest used by custom query analysis.")
+    parser.add_argument("--query-fasta", type=Path, default=None, help="Custom query FASTA for custom-query-analysis mode.")
+    parser.add_argument("--query-sequence", type=str, default=None, help="Inline DNA query for custom-query-analysis mode.")
+    parser.add_argument("--query-argument", type=str, default=None, help="Optional note or argument to include in custom query outputs.")
+    parser.add_argument("--gene", type=str, default=None, help="Optional gene override for custom query analysis.")
+    parser.add_argument("--output-dir", type=Path, default=None, help="Output directory for custom query analysis artifacts.")
     args = parser.parse_args()
 
     if args.theory_only:
@@ -236,6 +244,38 @@ def main() -> None:
                 "mode": "theory-only",
                 "theory_report": str(theory_report.resolve()),
                 "final_report": str(final_report.resolve()),
+            }
+        )
+        return
+
+    if args.custom_query_analysis:
+        if args.query_fasta is None and args.query_sequence is None:
+            raise ValueError("Pass --query-fasta or --query-sequence with --custom-query-analysis.")
+        panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])
+        query_fasta = prepare_query_fasta(
+            args.query_sequence,
+            args.query_fasta,
+            ROOT / "data" / "queries" / "custom_query.fa",
+        )
+        prediction = analyze_custom_query(
+            query_fasta,
+            args.graph_manifest.resolve(),
+            panaligner_bin,
+            args.threads,
+            args.gene,
+            args.output_dir.resolve() if args.output_dir else None,
+            args.query_argument,
+        )
+        print_json_summary(
+            {
+                "mode": "custom-query-analysis",
+                "query_fasta": prediction["query_fasta"],
+                "selected_gene": prediction["selected_gene"],
+                "prediction": prediction["prediction"],
+                "confidence": prediction["confidence"],
+                "alignment_detected": prediction["alignment_detected"],
+                "score_plot": prediction["score_plot"],
+                "prediction_json": str((Path(prediction["score_plot"]).parent / "prediction.json").resolve()),
             }
         )
         return

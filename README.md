@@ -152,6 +152,7 @@ Supported modes:
 python3 main.py --full-pipeline
 python3 main.py --theory-only
 python3 main.py --evaluate
+python3 main.py --custom-query-analysis --query-sequence ACGTACGT --query-argument "sample check"
 ```
 
 Meaning:
@@ -159,6 +160,7 @@ Meaning:
 - `--full-pipeline`: preprocess, split, build graphs, run theory modules, execute PanAligner on held-out queries, generate evaluation outputs, and write final reports
 - `--theory-only`: run only the educational reproductions of paper concepts
 - `--evaluate`: run the held-out PanAligner alignment evaluation without rerunning the theory suite
+- `--custom-query-analysis`: accept a custom query FASTA or inline DNA sequence, check whether it aligns to the current graphs, compute healthy/unhealthy scores, and generate a score plot plus JSON summary
 
 ## Workflow overview
 
@@ -332,6 +334,21 @@ python3 main.py --theory-only
 ```bash
 python3 main.py --evaluate
 ```
+
+### Analyze a custom query and generate scores
+
+```bash
+python3 main.py \
+  --custom-query-analysis \
+  --query-sequence ACGTACGTACGT \
+  --query-argument "manual validation run"
+```
+
+This writes a custom query analysis bundle under `outputs/alignments/custom_query/` including:
+
+- `prediction.json`
+- `custom_query_scores.png`
+- the generated GAF files used for scoring
 
 ## Viva / report explanation
 
