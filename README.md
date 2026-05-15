@@ -182,7 +182,9 @@ GUI features:
 - run custom query analysis from either an inline DNA sequence or a FASTA file
 - attach a custom argument/note to query analysis runs
 - watch live console output in the app
-- preview the generated custom query score graph directly in the GUI
+- preview generated PNG graphs directly in the GUI
+- inspect evaluation scores and per-gene metrics in dedicated panels
+- browse generated reports, JSON outputs, GAF files, and text artifacts inside the GUI
 - open generated output files and folders quickly
 
 ## Workflow overview

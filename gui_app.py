@@ -13,8 +13,9 @@ from tkinter import filedialog, messagebox, ttk
 
 ROOT = Path(__file__).resolve().parent
 MAIN_SCRIPT = ROOT / "main.py"
+OUTPUTS_DIR = ROOT / "outputs"
 DEFAULT_GRAPH_MANIFEST = ROOT / "data" / "metadata" / "graph_manifest.json"
-DEFAULT_CUSTOM_OUTPUT = ROOT / "outputs" / "alignments" / "custom_query"
+DEFAULT_CUSTOM_OUTPUT = OUTPUTS_DIR / "alignments" / "custom_query"
 
 
 def open_path(target: Path) -> None:
@@ -32,14 +33,16 @@ class PanAlignerGUI:
     def __init__(self, root: tk.Tk) -> None:
         self.root = root
         self.root.title("PanAligner Project Console")
-        self.root.geometry("1280x860")
-        self.root.minsize(1100, 760)
+        self.root.geometry("1480x930")
+        self.root.minsize(1240, 780)
 
         self.process: subprocess.Popen[str] | None = None
         self.output_queue: queue.Queue[tuple[str, str]] = queue.Queue()
         self.output_buffer: list[str] = []
         self.preview_image: tk.PhotoImage | None = None
         self.last_summary: dict | None = None
+        self.image_paths: list[Path] = []
+        self.file_paths: list[Path] = []
 
         self.pipeline_mode = tk.StringVar(value="--custom-query-analysis")
         self.query_source = tk.StringVar(value="sequence")
@@ -58,10 +61,10 @@ class PanAlignerGUI:
         self.graph_manifest_var = tk.StringVar(value=str(DEFAULT_GRAPH_MANIFEST))
 
         self.status_var = tk.StringVar(value="Ready.")
-        self.summary_var = tk.StringVar(value="Run a pipeline mode or custom query analysis to view a summary here.")
 
         self._configure_style()
         self._build_layout()
+        self._refresh_outputs()
         self.root.after(150, self._poll_output)
 
     def _configure_style(self) -> None:
@@ -81,7 +84,7 @@ class PanAlignerGUI:
         ttk.Label(header, text="PanAligner Project Console", style="Title.TLabel").pack(anchor="w")
         ttk.Label(
             header,
-            text="Run the core project pipeline, execute custom query alignment checks, and review outputs from one place.",
+            text="Run the pipeline, inspect evaluation scores, read reports, and preview generated graphs in one dashboard.",
             background="#F5EFE6",
             foreground="#5A4A42",
         ).pack(anchor="w", pady=(4, 0))
@@ -91,8 +94,8 @@ class PanAlignerGUI:
 
         controls = ttk.Frame(body, padding=8)
         results = ttk.Frame(body, padding=8)
-        body.add(controls, weight=5)
-        body.add(results, weight=6)
+        body.add(controls, weight=4)
+        body.add(results, weight=7)
 
         self._build_controls(controls)
         self._build_results(results)
@@ -140,6 +143,7 @@ class PanAlignerGUI:
         actions.pack(fill="x", pady=(4, 0))
         ttk.Button(actions, text="Run Selected Mode", style="Primary.TButton", command=self.run_pipeline_mode).pack(side="left")
         ttk.Button(actions, text="Stop Current Run", command=self.stop_run).pack(side="left", padx=8)
+        ttk.Button(actions, text="Refresh Outputs", command=self._refresh_outputs).pack(side="left")
 
     def _build_custom_tab(self, parent: ttk.Frame) -> None:
         source_frame = ttk.LabelFrame(parent, text="Query Source", style="Section.TLabelframe", padding=12)
@@ -182,23 +186,136 @@ class PanAlignerGUI:
         status_frame = ttk.Frame(parent)
         status_frame.pack(fill="x", pady=(0, 10))
         ttk.Label(status_frame, textvariable=self.status_var, style="Status.TLabel").pack(side="left")
+        ttk.Button(status_frame, text="Refresh Dashboard", command=self._refresh_outputs).pack(side="right")
 
-        summary_frame = ttk.LabelFrame(parent, text="Run Summary", style="Section.TLabelframe", padding=12)
-        summary_frame.pack(fill="x", pady=(0, 10))
-        ttk.Label(summary_frame, textvariable=self.summary_var, wraplength=520, justify="left").pack(anchor="w")
+        notebook = ttk.Notebook(parent)
+        notebook.pack(fill="both", expand=True)
 
-        preview_actions = ttk.Frame(summary_frame)
-        preview_actions.pack(fill="x", pady=(8, 0))
-        ttk.Button(preview_actions, text="Open Referenced Output", command=self._open_primary_output).pack(side="left")
+        overview_tab = ttk.Frame(notebook, padding=10)
+        metrics_tab = ttk.Frame(notebook, padding=10)
+        visuals_tab = ttk.Frame(notebook, padding=10)
+        files_tab = ttk.Frame(notebook, padding=10)
+        logs_tab = ttk.Frame(notebook, padding=10)
 
-        preview_frame = ttk.LabelFrame(parent, text="Plot Preview", style="Section.TLabelframe", padding=12)
-        preview_frame.pack(fill="both", expand=False, pady=(0, 10))
-        self.preview_label = ttk.Label(preview_frame, text="Custom query score plots will appear here after a successful run.", anchor="center", justify="center")
-        self.preview_label.pack(fill="both", expand=True)
+        notebook.add(overview_tab, text="Overview")
+        notebook.add(metrics_tab, text="Evaluation Scores")
+        notebook.add(visuals_tab, text="Graphs")
+        notebook.add(files_tab, text="Reports & Files")
+        notebook.add(logs_tab, text="Console")
 
+        self._build_overview_tab(overview_tab)
+        self._build_metrics_tab(metrics_tab)
+        self._build_visuals_tab(visuals_tab)
+        self._build_files_tab(files_tab)
+        self._build_logs_tab(logs_tab)
+
+    def _build_overview_tab(self, parent: ttk.Frame) -> None:
+        top = ttk.Panedwindow(parent, orient="vertical")
+        top.pack(fill="both", expand=True)
+
+        summary_frame = ttk.LabelFrame(top, text="Run Summary", style="Section.TLabelframe", padding=10)
+        artifacts_frame = ttk.LabelFrame(top, text="Detected Artifacts", style="Section.TLabelframe", padding=10)
+        top.add(summary_frame, weight=3)
+        top.add(artifacts_frame, weight=2)
+
+        self.summary_text = tk.Text(summary_frame, wrap="word", font=("Segoe UI", 10), height=12, bg="#FCFBF8")
+        self.summary_text.pack(fill="both", expand=True)
+
+        actions = ttk.Frame(summary_frame)
+        actions.pack(fill="x", pady=(8, 0))
+        ttk.Button(actions, text="Open Primary Output", command=self._open_primary_output).pack(side="left")
+
+        artifact_columns = ("path", "kind")
+        self.artifacts_tree = ttk.Treeview(artifacts_frame, columns=artifact_columns, show="headings", height=10)
+        self.artifacts_tree.heading("path", text="Artifact")
+        self.artifacts_tree.heading("kind", text="Type")
+        self.artifacts_tree.column("path", width=520, anchor="w")
+        self.artifacts_tree.column("kind", width=120, anchor="center")
+        self.artifacts_tree.pack(side="left", fill="both", expand=True)
+        self.artifacts_tree.bind("<Double-1>", lambda _event: self._open_selected_artifact())
+        artifact_scroll = ttk.Scrollbar(artifacts_frame, orient="vertical", command=self.artifacts_tree.yview)
+        artifact_scroll.pack(side="right", fill="y")
+        self.artifacts_tree.configure(yscrollcommand=artifact_scroll.set)
+
+    def _build_metrics_tab(self, parent: ttk.Frame) -> None:
+        upper = ttk.LabelFrame(parent, text="Overall Evaluation", style="Section.TLabelframe", padding=10)
+        upper.pack(fill="x", pady=(0, 10))
+        self.metrics_overall_text = tk.Text(upper, wrap="word", font=("Consolas", 10), height=8, bg="#FCFBF8")
+        self.metrics_overall_text.pack(fill="x")
+
+        lower = ttk.LabelFrame(parent, text="Per-Gene Scores", style="Section.TLabelframe", padding=10)
+        lower.pack(fill="both", expand=True)
+
+        columns = ("gene", "queries", "aligned", "identity", "coverage", "mapq", "score")
+        self.metrics_tree = ttk.Treeview(lower, columns=columns, show="headings")
+        headings = {
+            "gene": "Gene",
+            "queries": "Queries",
+            "aligned": "Aligned",
+            "identity": "Mean Identity",
+            "coverage": "Mean Coverage",
+            "mapq": "Mean MAPQ",
+            "score": "Mean Score",
+        }
+        widths = {"gene": 90, "queries": 80, "aligned": 80, "identity": 110, "coverage": 110, "mapq": 95, "score": 120}
+        for key in columns:
+            self.metrics_tree.heading(key, text=headings[key])
+            self.metrics_tree.column(key, width=widths[key], anchor="center")
+        self.metrics_tree.pack(side="left", fill="both", expand=True)
+        tree_scroll = ttk.Scrollbar(lower, orient="vertical", command=self.metrics_tree.yview)
+        tree_scroll.pack(side="right", fill="y")
+        self.metrics_tree.configure(yscrollcommand=tree_scroll.set)
+
+    def _build_visuals_tab(self, parent: ttk.Frame) -> None:
+        paned = ttk.Panedwindow(parent, orient="horizontal")
+        paned.pack(fill="both", expand=True)
+
+        left = ttk.LabelFrame(paned, text="Available Graphs", style="Section.TLabelframe", padding=10)
+        right = ttk.LabelFrame(paned, text="Preview", style="Section.TLabelframe", padding=10)
+        paned.add(left, weight=2)
+        paned.add(right, weight=5)
+
+        self.images_listbox = tk.Listbox(left, exportselection=False)
+        self.images_listbox.pack(side="left", fill="both", expand=True)
+        self.images_listbox.bind("<<ListboxSelect>>", self._on_image_select)
+        image_scroll = ttk.Scrollbar(left, orient="vertical", command=self.images_listbox.yview)
+        image_scroll.pack(side="right", fill="y")
+        self.images_listbox.configure(yscrollcommand=image_scroll.set)
+
+        controls = ttk.Frame(right)
+        controls.pack(fill="x", pady=(0, 8))
+        ttk.Button(controls, text="Open Image", command=self._open_selected_image).pack(side="left")
+
+        self.image_label = ttk.Label(right, text="Select a generated PNG to preview it here.", anchor="center", justify="center")
+        self.image_label.pack(fill="both", expand=True)
+
+    def _build_files_tab(self, parent: ttk.Frame) -> None:
+        paned = ttk.Panedwindow(parent, orient="horizontal")
+        paned.pack(fill="both", expand=True)
+
+        left = ttk.LabelFrame(paned, text="Generated Files", style="Section.TLabelframe", padding=10)
+        right = ttk.LabelFrame(paned, text="File Viewer", style="Section.TLabelframe", padding=10)
+        paned.add(left, weight=2)
+        paned.add(right, weight=5)
+
+        self.files_listbox = tk.Listbox(left, exportselection=False)
+        self.files_listbox.pack(side="left", fill="both", expand=True)
+        self.files_listbox.bind("<<ListboxSelect>>", self._on_file_select)
+        files_scroll = ttk.Scrollbar(left, orient="vertical", command=self.files_listbox.yview)
+        files_scroll.pack(side="right", fill="y")
+        self.files_listbox.configure(yscrollcommand=files_scroll.set)
+
+        actions = ttk.Frame(right)
+        actions.pack(fill="x", pady=(0, 8))
+        ttk.Button(actions, text="Open File", command=self._open_selected_file).pack(side="left")
+
+        self.file_viewer = tk.Text(right, wrap="word", font=("Consolas", 10), bg="#FCFBF8")
+        self.file_viewer.pack(fill="both", expand=True)
+
+    def _build_logs_tab(self, parent: ttk.Frame) -> None:
         log_frame = ttk.LabelFrame(parent, text="Live Console Output", style="Section.TLabelframe", padding=10)
         log_frame.pack(fill="both", expand=True)
-        self.log_text = tk.Text(log_frame, height=18, wrap="word", font=("Consolas", 10), bg="#FAFAFA")
+        self.log_text = tk.Text(log_frame, wrap="word", font=("Consolas", 10), bg="#FAFAFA")
         self.log_text.pack(side="left", fill="both", expand=True)
         scrollbar = ttk.Scrollbar(log_frame, orient="vertical", command=self.log_text.yview)
         scrollbar.pack(side="right", fill="y")
@@ -237,14 +354,18 @@ class PanAlignerGUI:
 
     def _toggle_query_source(self) -> None:
         use_sequence = self.query_source.get() == "sequence"
-        text_state = "normal" if use_sequence else "disabled"
-        entry_state = "disabled" if use_sequence else "normal"
-        self.query_sequence_text.configure(state=text_state)
-        self.query_fasta_entry.configure(state=entry_state)
+        self.query_sequence_text.configure(state="normal" if use_sequence else "disabled")
+        self.query_fasta_entry.configure(state="disabled" if use_sequence else "normal")
 
     def _append_log(self, text: str) -> None:
         self.log_text.insert("end", text)
         self.log_text.see("end")
+
+    def _set_text_widget(self, widget: tk.Text, content: str) -> None:
+        widget.configure(state="normal")
+        widget.delete("1.0", "end")
+        widget.insert("1.0", content)
+        widget.configure(state="disabled")
 
     def _build_common_args(self) -> list[str]:
         args = []
@@ -318,8 +439,8 @@ class PanAlignerGUI:
         self.output_buffer.clear()
         self.last_summary = None
         self.preview_image = None
-        self.preview_label.configure(image="", text="Run started. Waiting for generated outputs...")
-        self.summary_var.set("Working...")
+        self.image_label.configure(image="", text="Run started. Waiting for generated visuals...")
+        self._set_text_widget(self.summary_text, "Working...\n")
         self.status_var.set(label)
 
         self._append_log("Command:\n")
@@ -340,7 +461,7 @@ class PanAlignerGUI:
                     self.output_queue.put(("line", line))
                 return_code = self.process.wait()
                 self.output_queue.put(("done", str(return_code)))
-            except Exception as exc:  # pragma: no cover - GUI fallback path
+            except Exception as exc:  # pragma: no cover
                 self.output_queue.put(("error", str(exc)))
 
         threading.Thread(target=worker, daemon=True).start()
@@ -372,15 +493,11 @@ class PanAlignerGUI:
 
     def _handle_completion(self, return_code: int) -> None:
         output_text = "".join(self.output_buffer).strip()
-        if return_code == 0:
-            self.status_var.set("Run completed successfully.")
-        else:
-            self.status_var.set(f"Run failed with exit code {return_code}.")
-
-        summary = self._extract_json_summary(output_text)
-        self.last_summary = summary
-        self._render_summary(summary, return_code, output_text)
-        self._render_preview(summary)
+        self.status_var.set("Run completed successfully." if return_code == 0 else f"Run failed with exit code {return_code}.")
+        self.last_summary = self._extract_json_summary(output_text)
+        self._refresh_outputs()
+        self._render_summary(self.last_summary, return_code, output_text)
+        self._render_preview(self.last_summary)
 
     def _extract_json_summary(self, output_text: str) -> dict | None:
         stripped = output_text.strip()
@@ -396,52 +513,231 @@ class PanAlignerGUI:
             return None
 
     def _render_summary(self, summary: dict | None, return_code: int, output_text: str) -> None:
+        lines: list[str] = []
         if summary:
-            lines = [f"{key.replace('_', ' ').title()}: {value}" for key, value in summary.items()]
-            self.summary_var.set("\n".join(lines))
-            return
-        if return_code == 0:
-            self.summary_var.set("Run completed. No JSON summary was returned, so review the console output and generated files.")
-            return
-        trimmed = output_text[-600:] if output_text else "No console output captured."
-        self.summary_var.set(f"Run failed.\n\n{trimmed}")
+            lines.append("Latest Run Summary")
+            lines.append("===================")
+            for key, value in summary.items():
+                lines.append(f"{key.replace('_', ' ').title()}: {value}")
+            lines.append("")
+
+        metrics = self._load_json(OUTPUTS_DIR / "evaluation" / "alignment_metrics.json")
+        if isinstance(metrics, dict) and "overall" in metrics:
+            overall = metrics["overall"]
+            lines.append("Current Evaluation Snapshot")
+            lines.append("===========================")
+            lines.append(f"Queries: {overall.get('query_count', 0)}")
+            lines.append(f"Aligned: {overall.get('aligned_query_count', 0)}")
+            lines.append(f"Alignment rate: {overall.get('alignment_rate', 0.0):.4f}")
+            lines.append(f"Mean identity: {overall.get('mean_identity', 0.0):.4f}")
+            lines.append(f"Mean coverage: {overall.get('mean_coverage', 0.0):.4f}")
+            lines.append(f"Mean MAPQ: {overall.get('mean_mapq', 0.0):.4f}")
+            lines.append(f"Mean score: {overall.get('mean_alignment_score', 0.0):.4f}")
+            lines.append("")
+
+        prediction_path = Path(summary["prediction_json"]) if summary and "prediction_json" in summary else DEFAULT_CUSTOM_OUTPUT / "prediction.json"
+        prediction = self._load_json(prediction_path)
+        if isinstance(prediction, dict):
+            lines.append("Custom Query Snapshot")
+            lines.append("=====================")
+            lines.append(f"Selected gene: {prediction.get('selected_gene', '')}")
+            lines.append(f"Prediction: {prediction.get('prediction', '')}")
+            lines.append(f"Confidence: {prediction.get('confidence', 0.0):.4f}")
+            lines.append(f"Healthy score: {prediction.get('healthy_score', 0.0):.4f}")
+            lines.append(f"Unhealthy score: {prediction.get('unhealthy_score', 0.0):.4f}")
+            lines.append(f"Alignment detected: {prediction.get('alignment_detected', False)}")
+            lines.append(f"Argument: {prediction.get('query_argument', '')}")
+            explanation = prediction.get("explanation")
+            if explanation:
+                lines.append("")
+                lines.append(explanation)
+
+        if not lines:
+            if return_code == 0:
+                lines = ["Run completed. Refresh outputs or open the generated files to inspect details."]
+            else:
+                trimmed = output_text[-800:] if output_text else "No console output captured."
+                lines = ["Run failed.", "", trimmed]
+
+        self._set_text_widget(self.summary_text, "\n".join(lines) + "\n")
 
     def _render_preview(self, summary: dict | None) -> None:
         self.preview_image = None
-        plot_path = None
+        preferred_paths: list[Path] = []
         if summary and isinstance(summary.get("score_plot"), str):
-            plot_path = Path(summary["score_plot"])
-        if not plot_path or not plot_path.exists():
-            self.preview_label.configure(image="", text="No plot preview available for this run.")
+            preferred_paths.append(Path(summary["score_plot"]))
+        preferred_paths.extend(self.image_paths[:1])
+        selected = next((path for path in preferred_paths if path.exists()), None)
+        if not selected:
+            self.image_label.configure(image="", text="No graph preview available yet.")
+            return
+        self._show_image(selected)
+
+    def _show_image(self, image_path: Path) -> None:
+        try:
+            image = tk.PhotoImage(file=str(image_path))
+        except tk.TclError:
+            self.image_label.configure(image="", text=f"Unable to preview {image_path.name} in Tk.")
+            self.preview_image = None
+            return
+        scale = max(1, image.width() // 760, image.height() // 540)
+        self.preview_image = image.subsample(scale, scale) if scale > 1 else image
+        self.image_label.configure(image=self.preview_image, text="")
+
+    def _refresh_outputs(self) -> None:
+        self._refresh_metrics()
+        self._refresh_images()
+        self._refresh_files()
+        self._refresh_artifacts()
+
+    def _refresh_metrics(self) -> None:
+        metrics = self._load_json(OUTPUTS_DIR / "evaluation" / "alignment_metrics.json")
+        if not isinstance(metrics, dict):
+            self._set_text_widget(self.metrics_overall_text, "No evaluation metrics found yet.\nRun evaluation or full pipeline to populate this panel.\n")
+            self._clear_tree(self.metrics_tree)
             return
 
-        image = tk.PhotoImage(file=str(plot_path))
-        scale = max(1, image.width() // 520, image.height() // 320)
-        self.preview_image = image.subsample(scale, scale) if scale > 1 else image
-        self.preview_label.configure(image=self.preview_image, text="")
+        overall = metrics.get("overall", {})
+        overall_lines = [
+            "Overall Evaluation Metrics",
+            "==========================",
+            f"Query count: {overall.get('query_count', 0)}",
+            f"Aligned query count: {overall.get('aligned_query_count', 0)}",
+            f"Alignment rate: {overall.get('alignment_rate', 0.0):.4f}",
+            f"Mean identity: {overall.get('mean_identity', 0.0):.4f}",
+            f"Mean coverage: {overall.get('mean_coverage', 0.0):.4f}",
+            f"Mean MAPQ: {overall.get('mean_mapq', 0.0):.4f}",
+            f"Mean alignment score: {overall.get('mean_alignment_score', 0.0):.4f}",
+        ]
+        self._set_text_widget(self.metrics_overall_text, "\n".join(overall_lines) + "\n")
+
+        self._clear_tree(self.metrics_tree)
+        for gene, summary in sorted(metrics.get("per_gene", {}).items()):
+            self.metrics_tree.insert(
+                "",
+                "end",
+                values=(
+                    gene,
+                    summary.get("sequence_count", 0),
+                    summary.get("aligned_sequences", 0),
+                    f"{summary.get('mean_identity', 0.0):.4f}",
+                    f"{summary.get('mean_coverage', 0.0):.4f}",
+                    f"{summary.get('mean_mapq', 0.0):.4f}",
+                    f"{summary.get('mean_alignment_score', 0.0):.4f}",
+                ),
+            )
+
+    def _refresh_images(self) -> None:
+        self.image_paths = sorted(OUTPUTS_DIR.rglob("*.png"))
+        self.images_listbox.delete(0, "end")
+        for path in self.image_paths:
+            self.images_listbox.insert("end", str(path.relative_to(ROOT)))
+        if self.image_paths:
+            self.images_listbox.selection_set(0)
+            self.images_listbox.event_generate("<<ListboxSelect>>")
+        else:
+            self.image_label.configure(image="", text="No generated graphs found yet.")
+
+    def _refresh_files(self) -> None:
+        wanted_suffixes = {".txt", ".json", ".csv", ".gaf"}
+        self.file_paths = sorted(path for path in OUTPUTS_DIR.rglob("*") if path.is_file() and path.suffix.lower() in wanted_suffixes)
+        self.files_listbox.delete(0, "end")
+        for path in self.file_paths:
+            self.files_listbox.insert("end", str(path.relative_to(ROOT)))
+        if self.file_paths:
+            self.files_listbox.selection_set(0)
+            self.files_listbox.event_generate("<<ListboxSelect>>")
+        else:
+            self._set_text_widget(self.file_viewer, "No generated text or JSON outputs found yet.\n")
+
+    def _refresh_artifacts(self) -> None:
+        self._clear_tree(self.artifacts_tree)
+        artifact_paths: list[Path] = []
+        if self.last_summary:
+            for value in self.last_summary.values():
+                if isinstance(value, str):
+                    candidate = Path(value)
+                    if candidate.exists():
+                        artifact_paths.append(candidate)
+        for path in artifact_paths:
+            kind = path.suffix.lower().lstrip(".") or "file"
+            self.artifacts_tree.insert("", "end", values=(str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path), kind))
+
+    def _clear_tree(self, tree: ttk.Treeview) -> None:
+        for item in tree.get_children():
+            tree.delete(item)
+
+    def _load_json(self, path: Path) -> dict | list | None:
+        if not path.exists():
+            return None
+        try:
+            return json.loads(path.read_text(encoding="utf-8"))
+        except (OSError, json.JSONDecodeError):
+            return None
+
+    def _on_image_select(self, _event: object) -> None:
+        selection = self.images_listbox.curselection()
+        if not selection:
+            return
+        image_path = self.image_paths[selection[0]]
+        self._show_image(image_path)
+
+    def _on_file_select(self, _event: object) -> None:
+        selection = self.files_listbox.curselection()
+        if not selection:
+            return
+        file_path = self.file_paths[selection[0]]
+        try:
+            content = file_path.read_text(encoding="utf-8")
+        except OSError as exc:
+            content = f"Unable to read file:\n{exc}\n"
+        self._set_text_widget(self.file_viewer, content)
 
     def _open_primary_output(self) -> None:
-        if not self.last_summary:
-            messagebox.showinfo("No output yet", "Run something first so the GUI knows which result to open.")
+        preferred: list[Path] = []
+        if self.last_summary:
+            for key in ("score_plot", "prediction_json", "final_report", "theory_report"):
+                value = self.last_summary.get(key)
+                if isinstance(value, str):
+                    preferred.append(Path(value))
+        preferred.extend([OUTPUTS_DIR / "reports" / "final_project_summary.txt", OUTPUTS_DIR / "evaluation" / "alignment_metrics.json"])
+        target = next((path for path in preferred if path.exists()), None)
+        if target is None:
+            messagebox.showinfo("No output yet", "Run something first so there is an output artifact to open.")
             return
-        for key in ("score_plot", "prediction_json", "final_report", "theory_report"):
-            value = self.last_summary.get(key)
-            if isinstance(value, str) and value:
-                target = Path(value)
-                if target.exists():
-                    open_path(target)
-                    return
-        messagebox.showinfo("No file output", "The latest run did not expose a directly openable result path.")
+        open_path(target)
 
     def _open_output_dir(self) -> None:
         output_dir = Path(self.query_output_var.get().strip() or DEFAULT_CUSTOM_OUTPUT)
         output_dir.mkdir(parents=True, exist_ok=True)
         open_path(output_dir)
 
+    def _open_selected_image(self) -> None:
+        selection = self.images_listbox.curselection()
+        if not selection:
+            return
+        open_path(self.image_paths[selection[0]])
+
+    def _open_selected_file(self) -> None:
+        selection = self.files_listbox.curselection()
+        if not selection:
+            return
+        open_path(self.file_paths[selection[0]])
+
+    def _open_selected_artifact(self) -> None:
+        selection = self.artifacts_tree.selection()
+        if not selection:
+            return
+        artifact_path = Path(self.artifacts_tree.item(selection[0], "values")[0])
+        if not artifact_path.is_absolute():
+            artifact_path = ROOT / artifact_path
+        if artifact_path.exists():
+            open_path(artifact_path)
+
 
 def main() -> None:
     root = tk.Tk()
-    app = PanAlignerGUI(root)
+    PanAlignerGUI(root)
     root.mainloop()
 
 
