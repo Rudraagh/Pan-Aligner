@@ -1,7 +1,7 @@
 Back-edge Removal Demo
 ======================
-Back edges identified: 0
+Back edges identified: 1
 
-No back edges were detected. The representative graph was already acyclic.
+s15 -> s16
 
 DAG verification: True

@@ -1,31 +1,32 @@
 {
-  "source_graph_path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\app.combined.gfa",
-  "source_label": "APP combined",
-  "original_graph_nodes": 115,
-  "original_graph_edges": 154,
+  "source_graph_path": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\graphs\\train\\app.combined.gfa",
+  "source_label": "app.combined",
+  "original_graph_nodes": 96,
+  "original_graph_edges": 130,
   "representative_graph_nodes": 18,
-  "representative_graph_edges": 17,
+  "representative_graph_edges": 18,
   "cyclic_demo_nodes": 18,
-  "cyclic_demo_edges": 19,
+  "cyclic_demo_edges": 20,
   "synthetic_back_edges": [
     [
-      "s15",
-      "s1"
+      "s20",
+      "s11"
     ],
     [
-      "s21",
-      "s10"
+      "s19",
+      "s1"
     ]
   ],
   "walk_nodes": [
+    "s16",
     "s17",
     "s18",
     "s19",
     "s20",
-    "s21",
-    "s10",
     "s11",
-    "s12"
+    "s12",
+    "s13",
+    "s14"
   ],
-  "query_sequence": "GNATNCANTCAACCTGAAANAGAGGAGAGC"
+  "query_sequence": "GNATNCANAGAGGAGAGCTNGATGA"
 }

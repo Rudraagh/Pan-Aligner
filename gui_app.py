@@ -16,6 +16,11 @@ MAIN_SCRIPT = ROOT / "main.py"
 OUTPUTS_DIR = ROOT / "outputs"
 DEFAULT_GRAPH_MANIFEST = ROOT / "data" / "metadata" / "graph_manifest.json"
 DEFAULT_CUSTOM_OUTPUT = OUTPUTS_DIR / "alignments" / "custom_query"
+PAPER_COVERAGE_REPORT = ROOT / "docs" / "paper_coverage_audit.md"
+PAFTOOLS_READINESS_REPORT = OUTPUTS_DIR / "evaluation" / "paftools_readiness_report.txt"
+DATASET_REPRODUCTION_REPORT = OUTPUTS_DIR / "evaluation" / "dataset_specific_reproduction_report.txt"
+DEFAULT_MINIGRAPH_BIN = ROOT / "tools" / "minigraph_wsl.cmd"
+DEFAULT_PANALIGNER_BIN = ROOT / "tools" / "panaligner_wsl.cmd"
 
 
 def open_path(target: Path) -> None:
@@ -49,8 +54,9 @@ class PanAlignerGUI:
         self.threads_var = tk.StringVar(value="4")
         self.split_seed_var = tk.StringVar(value="42")
         self.test_fraction_var = tk.StringVar(value="0.20")
-        self.minigraph_var = tk.StringVar(value="")
-        self.panaligner_var = tk.StringVar(value="")
+        self.hybrid_var = tk.BooleanVar(value=False)
+        self.minigraph_var = tk.StringVar(value=str(DEFAULT_MINIGRAPH_BIN) if DEFAULT_MINIGRAPH_BIN.exists() else "")
+        self.panaligner_var = tk.StringVar(value=str(DEFAULT_PANALIGNER_BIN) if DEFAULT_PANALIGNER_BIN.exists() else "")
         self.theory_graph_var = tk.StringVar(value="")
         self.input_fastas_var = tk.StringVar(value="")
 
@@ -132,6 +138,11 @@ class PanAlignerGUI:
         self._labeled_file_row(settings, "Minigraph Binary", self.minigraph_var, 3, filetypes=[("Executable", "*")])
         self._labeled_file_row(settings, "PanAligner Binary", self.panaligner_var, 4, filetypes=[("Executable", "*")])
         self._labeled_file_row(settings, "Theory Graph", self.theory_graph_var, 5, filetypes=[("GFA Files", "*.gfa"), ("All Files", "*.*")])
+        ttk.Checkbutton(
+            settings,
+            text="Use local hybrid approximation (Minigraph first, PanAligner fallback)",
+            variable=self.hybrid_var,
+        ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(8, 2))
 
         input_frame = ttk.LabelFrame(parent, text="Optional Input FASTAs", style="Section.TLabelframe", padding=12)
         input_frame.pack(fill="x", pady=(0, 10))
@@ -193,18 +204,21 @@ class PanAlignerGUI:
 
         overview_tab = ttk.Frame(notebook, padding=10)
         metrics_tab = ttk.Frame(notebook, padding=10)
+        cheatsheet_tab = ttk.Frame(notebook, padding=10)
         visuals_tab = ttk.Frame(notebook, padding=10)
         files_tab = ttk.Frame(notebook, padding=10)
         logs_tab = ttk.Frame(notebook, padding=10)
 
         notebook.add(overview_tab, text="Overview")
         notebook.add(metrics_tab, text="Evaluation Scores")
+        notebook.add(cheatsheet_tab, text="Cheatsheet")
         notebook.add(visuals_tab, text="Graphs")
         notebook.add(files_tab, text="Reports & Files")
         notebook.add(logs_tab, text="Console")
 
         self._build_overview_tab(overview_tab)
         self._build_metrics_tab(metrics_tab)
+        self._build_cheatsheet_tab(cheatsheet_tab)
         self._build_visuals_tab(visuals_tab)
         self._build_files_tab(files_tab)
         self._build_logs_tab(logs_tab)
@@ -288,6 +302,35 @@ class PanAlignerGUI:
 
         self.image_label = ttk.Label(right, text="Select a generated PNG to preview it here.", anchor="center", justify="center")
         self.image_label.pack(fill="both", expand=True)
+
+    def _build_cheatsheet_tab(self, parent: ttk.Frame) -> None:
+        paned = ttk.Panedwindow(parent, orient="vertical")
+        paned.pack(fill="both", expand=True)
+
+        metrics_frame = ttk.LabelFrame(paned, text="Metric Formulas", style="Section.TLabelframe", padding=10)
+        local_frame = ttk.LabelFrame(paned, text="Local Reproduction Summary", style="Section.TLabelframe", padding=10)
+        audit_frame = ttk.LabelFrame(paned, text="Paper Coverage Audit", style="Section.TLabelframe", padding=10)
+        paned.add(metrics_frame, weight=3)
+        paned.add(local_frame, weight=3)
+        paned.add(audit_frame, weight=4)
+
+        self.cheatsheet_metrics_text = tk.Text(metrics_frame, wrap="word", font=("Consolas", 10), bg="#FCFBF8")
+        self.cheatsheet_metrics_text.pack(fill="both", expand=True)
+
+        local_actions = ttk.Frame(local_frame)
+        local_actions.pack(fill="x", pady=(0, 8))
+        ttk.Button(local_actions, text="Open Local Report", command=self._open_dataset_reproduction_report).pack(side="left")
+        ttk.Button(local_actions, text="Open PafTools Report", command=self._open_paftools_readiness_report).pack(side="left", padx=8)
+
+        self.cheatsheet_local_text = tk.Text(local_frame, wrap="word", font=("Consolas", 10), bg="#FCFBF8")
+        self.cheatsheet_local_text.pack(fill="both", expand=True)
+
+        audit_actions = ttk.Frame(audit_frame)
+        audit_actions.pack(fill="x", pady=(0, 8))
+        ttk.Button(audit_actions, text="Open Audit File", command=self._open_paper_coverage_report).pack(side="left")
+
+        self.cheatsheet_audit_text = tk.Text(audit_frame, wrap="word", font=("Consolas", 10), bg="#FCFBF8")
+        self.cheatsheet_audit_text.pack(fill="both", expand=True)
 
     def _build_files_tab(self, parent: ttk.Frame) -> None:
         paned = ttk.Panedwindow(parent, orient="horizontal")
@@ -375,6 +418,8 @@ class PanAlignerGUI:
             args.extend(["--minigraph-bin", self.minigraph_var.get().strip()])
         if self.panaligner_var.get().strip():
             args.extend(["--panaligner-bin", self.panaligner_var.get().strip()])
+        if self.hybrid_var.get():
+            args.append("--hybrid-approximation")
         return args
 
     def run_pipeline_mode(self) -> None:
@@ -586,6 +631,7 @@ class PanAlignerGUI:
 
     def _refresh_outputs(self) -> None:
         self._refresh_metrics()
+        self._refresh_cheatsheet()
         self._refresh_images()
         self._refresh_files()
         self._refresh_artifacts()
@@ -626,6 +672,201 @@ class PanAlignerGUI:
                     f"{summary.get('mean_alignment_score', 0.0):.4f}",
                 ),
             )
+
+    def _refresh_cheatsheet(self) -> None:
+        metrics = self._load_json(OUTPUTS_DIR / "evaluation" / "alignment_metrics.json")
+        paper_style_results = self._load_json(OUTPUTS_DIR / "evaluation" / "paper_style_results.json")
+        paftools_readiness = self._load_json(OUTPUTS_DIR / "evaluation" / "paftools_readiness.json")
+        metrics_text = self._build_metrics_cheatsheet(metrics if isinstance(metrics, dict) else None)
+        local_text = self._build_local_reproduction_summary(
+            paper_style_results if isinstance(paper_style_results, dict) else None,
+            paftools_readiness if isinstance(paftools_readiness, dict) else None,
+        )
+        audit_text = self._build_paper_coverage_audit()
+        self._set_text_widget(self.cheatsheet_metrics_text, metrics_text)
+        self._set_text_widget(self.cheatsheet_local_text, local_text)
+        self._set_text_widget(self.cheatsheet_audit_text, audit_text)
+        self._write_paper_coverage_report(audit_text)
+
+    def _build_metrics_cheatsheet(self, metrics: dict | None) -> str:
+        lines = [
+            "Evaluation Metrics Cheatsheet",
+            "=============================",
+            "",
+            "GAF-derived per-alignment values",
+            "coverage = alignment_block_length / query_length",
+            "identity = residue_matches / alignment_block_length",
+            "alignment_score = AS tag if present, otherwise residue_matches",
+            "normalized_score = alignment_score / query_length",
+            "path_span = max(0, path_end - path_start)",
+            "matched_nodes = len(traversed_nodes)",
+            "",
+            "Best alignment selection",
+            "best_alignment(...) picks the max tuple:",
+            "(normalized_score, identity, coverage, mapping_quality)",
+            "",
+            "Per-gene summary in scripts/paper_evaluation.py",
+            "sequence_count = total held-out queries for that gene",
+            "aligned_sequences = count where best_alignment is not None",
+            "mean_identity = sum(identity of aligned reads) / aligned_sequences",
+            "mean_coverage = sum(coverage of aligned reads) / aligned_sequences",
+            "mean_mapq = sum(mapping_quality of aligned reads) / aligned_sequences",
+            "mean_alignment_score = sum(alignment_score of aligned reads) / aligned_sequences",
+            "",
+            "Overall summary in scripts/paper_evaluation.py",
+            "query_count = total held-out queries across all genes",
+            "aligned_query_count = count where alignment_found is True",
+            "alignment_rate = aligned_query_count / query_count",
+            "mean_identity = sum(identity over aligned queries) / aligned_query_count",
+            "mean_coverage = sum(coverage over aligned queries) / aligned_query_count",
+            "mean_mapq = sum(mapping_quality over aligned queries) / aligned_query_count",
+            "mean_alignment_score = sum(alignment_score over aligned queries) / aligned_query_count",
+            "",
+            "Important note",
+            "The means ignore unaligned queries; unaligned reads only affect query counts and alignment rate.",
+        ]
+        if metrics and "overall" in metrics:
+            overall = metrics["overall"]
+            lines.extend(
+                [
+                    "",
+                    "Current loaded values",
+                    f"query_count = {overall.get('query_count', 0)}",
+                    f"aligned_query_count = {overall.get('aligned_query_count', 0)}",
+                    f"alignment_rate = {overall.get('alignment_rate', 0.0):.4f}",
+                    f"mean_identity = {overall.get('mean_identity', 0.0):.4f}",
+                    f"mean_coverage = {overall.get('mean_coverage', 0.0):.4f}",
+                    f"mean_mapq = {overall.get('mean_mapq', 0.0):.4f}",
+                    f"mean_alignment_score = {overall.get('mean_alignment_score', 0.0):.4f}",
+                ]
+            )
+        else:
+            lines.extend(
+                [
+                    "",
+                    "No alignment_metrics.json is loaded yet.",
+                    "Run Evaluate or Full Pipeline to populate live values.",
+                ]
+            )
+        return "\n".join(lines) + "\n"
+
+    def _build_paper_coverage_audit(self) -> str:
+        lines = [
+            "Paper Coverage Audit",
+            "====================",
+            "Paper checked: Rajput et al. (2024), 'Co-linear chaining on pangenome graphs'",
+            "",
+            "Implemented or reasonably reproduced in this project",
+            "- Real minigraph graph construction and real PanAligner execution are wired into the pipeline.",
+            "- GAF parsing is implemented, including identity, coverage, mapping quality, normalized score, traversed nodes, and best-alignment selection.",
+            "- Held-out evaluation is implemented for the local gene datasets and writes alignment_metrics.json, alignment_records.json, and evaluation_report.txt.",
+            "- Dataset-specific paper-style local artifacts are now generated: local graph property tables, mapping-quality cutoff sweep CSV/PNG outputs, and a local reproduction report.",
+            "- Graph statistics and PNG visualizations are implemented for built graphs and example alignments.",
+            "- Educational reproductions exist for SCCs, DFS back-edge removal, DAG approximation, path cover, anchors, precedence, chaining, gap-cost analysis, and convergence plots.",
+            "",
+            "Partially reproduced",
+            "- The paper's algorithmic ideas are demonstrated, but several graph-theory stages are implemented as simplified educational demos rather than the exact PanAligner preprocessing pipeline from the paper.",
+            "- The project evaluates held-out alignments on APP/PSEN1/PSEN2 locus data, not the paper's whole-genome 10H/40H/80H/95H benchmark suite.",
+            "- The GUI and reports expose alignment-rate, identity, coverage, MAPQ, and score, but they do not reproduce the paper's exact correctness pipeline based on simulated reads and paftools truth checking.",
+            "",
+            "Missing compared with the paper's reported results and outputs",
+            "- Table 1 graph-scale benchmark properties for 10H, 40H, 80H, and 95H are not generated by this project.",
+            "- Table 2 path-cover ranges, anchor-count statistics, and iteration counts for last2reach, D, and chaining are not computed on the real graphs here.",
+            "- Figure 5 lower-bound vs computed-path-cover comparison is not implemented for the real graphs.",
+            "- Tables 3 and 4 runtime, memory, unaligned-read, and incorrectly-aligned-read comparisons versus Minigraph and GraphAligner are not implemented.",
+            "- The exact Fig. 6 paper comparison against multiple aligners and correctness percentages is not implemented, although local MQ cutoff sweep plots are now generated for this dataset.",
+            "- Table 5 DAG benchmarking versus Minichain, GraphChainer, Minigraph, and GraphAligner is not implemented.",
+            "- A local approximation of the hybrid Minigraph-PanAligner idea is implemented for this dataset, but it is not the paper's full benchmarked hybrid workflow.",
+            "- The paper's benchmark data generation with PBSIM2 and correctness evaluation with paftools are not implemented in the current workflow.",
+            "",
+            "Bottom line",
+            "This repo reproduces the paper at a workflow-and-concepts level, but not at the paper's full benchmark/results level. It is accurate to present it as a partial practical reproduction plus a theory/demo layer, not as a complete reimplementation of every experiment, table, and figure in the paper.",
+        ]
+        return "\n".join(lines) + "\n"
+
+    def _build_local_reproduction_summary(self, paper_style_results: dict | None, paftools_readiness: dict | None) -> str:
+        lines = [
+            "Current Dataset Reproduction",
+            "===========================",
+        ]
+        if paper_style_results and "overall" in paper_style_results:
+            overall = paper_style_results["overall"]
+            per_bucket = paper_style_results.get("per_bucket", {})
+            graph_rows = paper_style_results.get("local_graph_properties", [])
+            lines.extend(
+                [
+                    "",
+                    "Local paper-style outputs generated",
+                    "- alignment_metrics.json / paper_style_results.json",
+                    "- mq_cutoff_sweep.csv and mq_cutoff_sweep.png",
+                    "- per-gene MQ sweep plots",
+                    "- local_graph_properties.csv",
+                    "- dataset_specific_reproduction_report.txt",
+                    "",
+                    "Overall",
+                    f"- query count: {overall.get('query_count', 0)}",
+                    f"- aligned query count: {overall.get('aligned_query_count', 0)}",
+                    f"- alignment rate: {overall.get('alignment_rate', 0.0):.4f}",
+                    f"- mean identity: {overall.get('mean_identity', 0.0):.4f}",
+                    f"- mean coverage: {overall.get('mean_coverage', 0.0):.4f}",
+                    f"- mean MAPQ: {overall.get('mean_mapq', 0.0):.4f}",
+                    f"- mean normalized score: {overall.get('mean_normalized_score', 0.0):.4f}",
+                ]
+            )
+            if per_bucket:
+                lines.extend(["", "Per-bucket"])
+                for bucket_name, summary in sorted(per_bucket.items()):
+                    lines.append(
+                        f"- {bucket_name}: queries={summary.get('query_count', 0)} "
+                        f"alignment_rate={summary.get('alignment_rate', 0.0):.4f} "
+                        f"identity={summary.get('mean_identity', 0.0):.4f}"
+                    )
+            hybrid_summary = paper_style_results.get("hybrid_summary", {})
+            if hybrid_summary:
+                lines.extend(
+                    [
+                        "",
+                        "Hybrid approximation",
+                        f"- enabled: {hybrid_summary.get('enabled', False)}",
+                        f"- minigraph-selected queries: {hybrid_summary.get('minigraph_selected_count', 0)}",
+                        f"- PanAligner-selected queries: {hybrid_summary.get('panaligner_selected_count', 0)}",
+                        f"- easy-case queries: {hybrid_summary.get('easy_case_count', 0)}",
+                    ]
+                )
+            if graph_rows:
+                lines.extend(["", "Local graph properties"])
+                for row in graph_rows:
+                    lines.append(
+                        f"- {row.get('gene', '')}: nodes={row.get('node_count', 0)} "
+                        f"edges={row.get('edge_count', 0)} cycle_detected={row.get('cycle_detected', False)}"
+                    )
+        else:
+            lines.extend(
+                [
+                    "",
+                    "No local paper-style results are loaded yet.",
+                    "Run Evaluate or Full Pipeline to populate this section.",
+                ]
+            )
+
+        lines.extend(["", "PafTools status"])
+        if paftools_readiness:
+            lines.extend(
+                [
+                    f"- runnable: {paftools_readiness.get('paftools_runnable', False)}",
+                    f"- exact paper-style correctness eval possible: {paftools_readiness.get('exact_paper_style_paftools_correctness_eval_possible', False)}",
+                ]
+            )
+            limitation = paftools_readiness.get("why_not_possible", "")
+            if limitation:
+                lines.extend(["", "Why exact paftools scoring is left out", limitation])
+        else:
+            lines.append("- readiness report not found yet")
+        return "\n".join(lines) + "\n"
+
+    def _write_paper_coverage_report(self, content: str) -> None:
+        PAPER_COVERAGE_REPORT.parent.mkdir(parents=True, exist_ok=True)
+        PAPER_COVERAGE_REPORT.write_text(content, encoding="utf-8")
 
     def _refresh_images(self) -> None:
         self.image_paths = sorted(OUTPUTS_DIR.rglob("*.png"))
@@ -733,6 +974,19 @@ class PanAlignerGUI:
             artifact_path = ROOT / artifact_path
         if artifact_path.exists():
             open_path(artifact_path)
+
+    def _open_paper_coverage_report(self) -> None:
+        if not PAPER_COVERAGE_REPORT.exists():
+            self._write_paper_coverage_report(self._build_paper_coverage_audit())
+        open_path(PAPER_COVERAGE_REPORT)
+
+    def _open_paftools_readiness_report(self) -> None:
+        if PAFTOOLS_READINESS_REPORT.exists():
+            open_path(PAFTOOLS_READINESS_REPORT)
+
+    def _open_dataset_reproduction_report(self) -> None:
+        if DATASET_REPRODUCTION_REPORT.exists():
+            open_path(DATASET_REPRODUCTION_REPORT)
 
 
 def main() -> None:

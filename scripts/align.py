@@ -14,11 +14,19 @@ def run_panaligner(graph_gfa: Path, query_fasta: Path, output_gaf: Path, panalig
     return parse_gaf_file(output_gaf)
 
 
+def run_minigraph(graph_gfa: Path, query_fasta: Path, output_gaf: Path, minigraph_bin: Path, threads: int) -> list[AlignmentResult]:
+    ensure_dir(output_gaf.parent)
+    command = [str(minigraph_bin), "-t", str(threads), "-cx", "lr", str(graph_gfa), str(query_fasta)]
+    run_command(command, stdout_path=output_gaf)
+    return parse_gaf_file(output_gaf)
+
+
 def main() -> None:
     parser = argparse.ArgumentParser(description="Run PanAligner on a graph/query pair and summarize the best alignment.")
     parser.add_argument("--graph", required=True, type=Path, help="Input graph in GFA/rGFA format.")
     parser.add_argument("--query", required=True, type=Path, help="Query FASTA file.")
     parser.add_argument("--threads", type=int, default=4, help="Thread count passed to PanAligner.")
+    parser.add_argument("--minigraph-bin", type=str, default=None, help="Optional minigraph binary for heuristic alignment.")
     parser.add_argument(
         "--panaligner-bin",
         type=str,
@@ -48,4 +56,3 @@ def main() -> None:
 
 if __name__ == "__main__":
     main()
-

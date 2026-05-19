@@ -21,6 +21,14 @@ Reproduced paper components
 - Iterative chaining convergence demo
 - Reachability analysis
 
+Evaluation pipeline
+- query count: 46
+- aligned query count: 46
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+
 Strengths
 - The project now separates production alignment from theoretical understanding clearly.
 - The theory modules make the PanAligner paper easier to defend during viva without interfering with the real binary.
