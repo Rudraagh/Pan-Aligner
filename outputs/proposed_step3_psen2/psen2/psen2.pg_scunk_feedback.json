@@ -1,0 +1,60 @@
+{
+  "accepted": true,
+  "final_parameters": {
+    "k": 11,
+    "window_size": 4,
+    "min_node_support": 2,
+    "max_anchors": 8,
+    "min_anchor_spacing": 4.0,
+    "anchor_alpha": 0.4,
+    "anchor_beta": 0.3,
+    "anchor_gamma": 0.3
+  },
+  "best_quality": {
+    "node_count": 21913,
+    "edge_count": 22447,
+    "mean_node_consistency": 0.9800841928474776,
+    "mean_edge_consistency": 0.9686595090657995,
+    "mean_path_consistency": 0.98639775779475,
+    "graph_path_consistency": 0.978550857197156,
+    "low_consistency_node_fraction": 0.0,
+    "low_consistency_edge_fraction": 0.0001781975319641823,
+    "mean_node_support_ratio": 0.9399899602975402,
+    "anchor_count": 8,
+    "anchor_coverage_ratio": 1.0,
+    "branching_node_ratio": 0.02140282024369096,
+    "overall_quality_score": 0.9755708257145038
+  },
+  "round_summaries": [
+    {
+      "round_index": 1,
+      "selected_parameters": {
+        "k": 11,
+        "window_size": 4,
+        "min_node_support": 2,
+        "max_anchors": 8,
+        "min_anchor_spacing": 4.0,
+        "anchor_alpha": 0.4,
+        "anchor_beta": 0.3,
+        "anchor_gamma": 0.3
+      },
+      "quality": {
+        "node_count": 21913,
+        "edge_count": 22447,
+        "mean_node_consistency": 0.9800841928474776,
+        "mean_edge_consistency": 0.9686595090657995,
+        "mean_path_consistency": 0.98639775779475,
+        "graph_path_consistency": 0.978550857197156,
+        "low_consistency_node_fraction": 0.0,
+        "low_consistency_edge_fraction": 0.0001781975319641823,
+        "mean_node_support_ratio": 0.9399899602975402,
+        "anchor_count": 8,
+        "anchor_coverage_ratio": 1.0,
+        "branching_node_ratio": 0.02140282024369096,
+        "overall_quality_score": 0.9755708257145038
+      },
+      "accepted": true,
+      "decision": "accepted"
+    }
+  ]
+}

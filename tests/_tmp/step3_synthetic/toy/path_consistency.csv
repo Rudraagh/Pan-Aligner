@@ -1,0 +1,5 @@
+assembly_id,haplotype_label,path_length,valid_transition_count,transition_fraction,mean_node_consistency,mean_edge_consistency,rescued_node_count,questionable_node_count,consistency_score
+toy_hap1,HEALTHY,5,4,1.0,0.8083333333333333,0.8125,0,0,0.8862500000000001
+toy_hap2,HEALTHY,5,4,1.0,0.8138888888888889,0.8125,0,0,0.8879166666666667
+toy_hap3,UNHEALTHY,6,5,1.0,0.7986111111111112,0.7083333333333333,0,0,0.8520833333333333
+toy_hap4,UNHEALTHY,5,4,1.0,0.8194444444444444,0.6979166666666666,0,0,0.8552083333333333

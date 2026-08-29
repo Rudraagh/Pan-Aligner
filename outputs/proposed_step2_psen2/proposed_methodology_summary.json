@@ -1,0 +1,42 @@
+{
+  "dataset_manifest": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\metadata\\train_manifest.json",
+  "backend_requested": "cpu",
+  "genes": {
+    "PSEN2": {
+      "assembly_count": 4,
+      "graph_quality": {
+        "node_count": 21913,
+        "edge_count": 22447,
+        "mean_node_consistency": 0.9800841928474776,
+        "mean_edge_consistency": 0.9686595090657995,
+        "mean_path_consistency": 0.98639775779475,
+        "graph_path_consistency": 0.978550857197156,
+        "low_consistency_node_fraction": 0.0,
+        "low_consistency_edge_fraction": 0.0001781975319641823,
+        "mean_node_support_ratio": 0.9399899602975402,
+        "anchor_count": 8,
+        "anchor_coverage_ratio": 1.0,
+        "branching_node_ratio": 0.02140282024369096,
+        "overall_quality_score": 0.9755708257145038
+      },
+      "final_parameters": {
+        "k": 11,
+        "window_size": 4,
+        "min_node_support": 2,
+        "max_anchors": 8,
+        "min_anchor_spacing": 4.0
+      },
+      "backend_used": "cpu",
+      "accepted": true,
+      "graph_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\psen2.proposed_graph.json",
+      "graph_gfa": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\psen2.proposed_graph.gfa",
+      "anchors_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\psen2.selected_anchors.json",
+      "quality_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\psen2.quality.json",
+      "node_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\node_consistency.csv",
+      "edge_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\edge_consistency.csv",
+      "path_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\path_consistency.csv",
+      "graph_consistency_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\graph_consistency.json",
+      "feedback_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step2_psen2\\psen2\\psen2.pg_scunk_feedback.json"
+    }
+  }
+}

@@ -1,0 +1,230 @@
+[
+  {
+    "anchor_id": "a12037",
+    "minimizer": "ACTTTAGACTG",
+    "support": 1,
+    "mean_position": 149.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_1"
+    ],
+    "node_id": "n12037",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a1051",
+    "minimizer": "AAAATTACTTT",
+    "support": 1,
+    "mean_position": 196.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_12"
+    ],
+    "node_id": "n1051",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a14511",
+    "minimizer": "AGCGGCATCAA",
+    "support": 1,
+    "mean_position": 1210.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_19"
+    ],
+    "node_id": "n14511",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10595",
+    "minimizer": "ACGAGAGGAGA",
+    "support": 1,
+    "mean_position": 1229.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_20"
+    ],
+    "node_id": "n10595",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a18832",
+    "minimizer": "ATCACCAAGGG",
+    "support": 1,
+    "mean_position": 11218.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_U_1"
+    ],
+    "node_id": "n18832",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10571",
+    "minimizer": "ACGAACACTGT",
+    "support": 1,
+    "mean_position": 11233.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_U_21"
+    ],
+    "node_id": "n10571",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a19336",
+    "minimizer": "ATCGCTATGAC",
+    "support": 1,
+    "mean_position": 11242.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_U_3"
+    ],
+    "node_id": "n19336",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10068",
+    "minimizer": "ACCCACCATGA",
+    "support": 1,
+    "mean_position": 11259.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_23"
+    ],
+    "node_id": "n10068",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a17155",
+    "minimizer": "AGTTTTGATGA",
+    "support": 1,
+    "mean_position": 17025.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_U_13"
+    ],
+    "node_id": "n17155",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a15389",
+    "minimizer": "AGGCCGAACTC",
+    "support": 1,
+    "mean_position": 31256.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_4"
+    ],
+    "node_id": "n15389",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a13191",
+    "minimizer": "AGAGCATCATT",
+    "support": 1,
+    "mean_position": 31322.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_8"
+    ],
+    "node_id": "n13191",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  },
+  {
+    "anchor_id": "a1000",
+    "minimizer": "AAAATGCTGCC",
+    "support": 1,
+    "mean_position": 94673.0,
+    "consistency_score": 0.7569444444444444,
+    "informativeness": 0.5674942922374429,
+    "haplotypes": [
+      "APP_H_13"
+    ],
+    "node_id": "n1000",
+    "uniqueness": 0.9722222222222222,
+    "depth": 0.000380517503805175,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5674942922374429,
+    "selected": true
+  }
+]

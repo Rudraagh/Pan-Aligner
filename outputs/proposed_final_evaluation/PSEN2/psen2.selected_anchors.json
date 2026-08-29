@@ -1,0 +1,243 @@
+[
+  {
+    "anchor_id": "a10227",
+    "minimizer": "GGGTCCGGCTG",
+    "support": 1,
+    "mean_position": 406.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_H_1"
+    ],
+    "node_id": "n10227",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a9280",
+    "minimizer": "GCTGGGATTAC",
+    "support": 14,
+    "mean_position": 3362.0,
+    "consistency_score": 0.7745098039215685,
+    "informativeness": 0.5823529411764705,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_H_5",
+      "PSEN2_H_6",
+      "PSEN2_H_7",
+      "PSEN2_H_8",
+      "PSEN2_H_9",
+      "PSEN2_U_1",
+      "PSEN2_U_2",
+      "PSEN2_U_3",
+      "PSEN2_U_4",
+      "PSEN2_U_5",
+      "PSEN2_U_7",
+      "PSEN2_U_9"
+    ],
+    "node_id": "n9280",
+    "uniqueness": 0.0,
+    "depth": 1.0,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5823529411764705,
+    "selected": true
+  },
+  {
+    "anchor_id": "a12238",
+    "minimizer": "TCAGACCTTTC",
+    "support": 1,
+    "mean_position": 5336.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_H_5"
+    ],
+    "node_id": "n12238",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a1088",
+    "minimizer": "ACACAGCCCAG",
+    "support": 1,
+    "mean_position": 11851.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_H_7"
+    ],
+    "node_id": "n1088",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10335",
+    "minimizer": "GGTCCCACCGG",
+    "support": 1,
+    "mean_position": 11868.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_H_9"
+    ],
+    "node_id": "n10335",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a1514",
+    "minimizer": "ACGGAGTGAAG",
+    "support": 1,
+    "mean_position": 13627.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_2"
+    ],
+    "node_id": "n1514",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a11626",
+    "minimizer": "TACACAGAAGA",
+    "support": 1,
+    "mean_position": 13713.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_3"
+    ],
+    "node_id": "n11626",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a11649",
+    "minimizer": "TACAGGCCATT",
+    "support": 1,
+    "mean_position": 15358.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_5"
+    ],
+    "node_id": "n11649",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10980",
+    "minimizer": "GTGCGCTCGTG",
+    "support": 1,
+    "mean_position": 18785.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_7"
+    ],
+    "node_id": "n10980",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a11047",
+    "minimizer": "GTGGCCCTAGT",
+    "support": 1,
+    "mean_position": 18793.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_7"
+    ],
+    "node_id": "n11047",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a11717",
+    "minimizer": "TACTCATGGTG",
+    "support": 1,
+    "mean_position": 19943.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_9"
+    ],
+    "node_id": "n11717",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  },
+  {
+    "anchor_id": "a10383",
+    "minimizer": "GGTGAGCCCCC",
+    "support": 1,
+    "mean_position": 19950.0,
+    "consistency_score": 0.7678571428571428,
+    "informativeness": 0.5576447245564893,
+    "haplotypes": [
+      "PSEN2_U_9"
+    ],
+    "node_id": "n10383",
+    "uniqueness": 0.9285714285714286,
+    "depth": 0.006535947712418301,
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3,
+    "final_score": 0.5576447245564893,
+    "selected": true
+  }
+]

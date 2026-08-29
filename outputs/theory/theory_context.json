@@ -10,23 +10,23 @@
   "synthetic_back_edges": [
     [
       "s20",
-      "s11"
+      "s1"
     ],
     [
       "s19",
-      "s1"
+      "s11"
     ]
   ],
   "walk_nodes": [
-    "s16",
     "s17",
     "s18",
     "s19",
-    "s20",
     "s11",
     "s12",
     "s13",
-    "s14"
+    "s14",
+    "s15",
+    "s16"
   ],
-  "query_sequence": "GNATNCANAGAGGAGAGCTNGATGA"
+  "query_sequence": "ANTCNAGAGGAGAGCTNGATGANCG"
 }

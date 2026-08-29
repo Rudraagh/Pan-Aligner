@@ -1,0 +1,37 @@
+{
+  "experiment_type": "controlled_pg_scunk_stress_experiment",
+  "label": "DEMONSTRATION ONLY \u2014 not a biological benchmark",
+  "dataset_manifest": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\tests\\data\\proposed\\toy_manifest.json",
+  "assembly_count": 4,
+  "dataset_design": "Four short haplotypes with controlled substitutions; they retain shared sequence while inducing private/shared minimizer nodes and branching.",
+  "initial_configuration": {
+    "k": 6,
+    "window_size": 5,
+    "min_node_support": 2,
+    "max_anchors": 8,
+    "min_anchor_spacing": 2.0,
+    "anchor_alpha": 0.35,
+    "anchor_beta": 0.35,
+    "anchor_gamma": 0.3
+  },
+  "target_quality_threshold": 0.99,
+  "initial_quality": 0.6779687499999999,
+  "initial_below_target": true,
+  "all_candidates_rebuilt_with_real_graph_constructor": true,
+  "quality_scores_recomputed_from_graph": true,
+  "winning_configuration_not_hard_coded": true,
+  "best_configuration": {
+    "k": 4,
+    "window_size": 4,
+    "min_node_support": 2,
+    "max_anchors": 8,
+    "min_anchor_spacing": 2.0,
+    "anchor_alpha": 0.35,
+    "anchor_beta": 0.35,
+    "anchor_gamma": 0.3
+  },
+  "best_quality": 0.8034114583333333,
+  "final_quality": 0.7695924479166667,
+  "unique_configurations_evaluated": 7,
+  "stopping_reason": "max_rounds_reached"
+}

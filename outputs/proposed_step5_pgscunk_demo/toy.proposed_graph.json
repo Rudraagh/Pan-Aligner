@@ -1,0 +1,376 @@
+{
+  "gene": "TOY",
+  "assembly_count": 4,
+  "parameters": {
+    "k": 4,
+    "window_size": 4,
+    "min_node_support": 2,
+    "max_anchors": 8,
+    "min_anchor_spacing": 2.0,
+    "anchor_alpha": 0.35,
+    "anchor_beta": 0.35,
+    "anchor_gamma": 0.3
+  },
+  "backend_used": "cpu",
+  "nodes": [
+    {
+      "node_id": "n1",
+      "sequence": "ACGT",
+      "support": 4,
+      "mean_position": 0.0,
+      "consistency_score": 0.85,
+      "haplotypes": [
+        "toy_hap1",
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "is_rescued": false,
+      "path_coverage": 1.0,
+      "predecessor_consistency": 0.8,
+      "successor_consistency": 0.6,
+      "local_path_consistency": 1.0
+    },
+    {
+      "node_id": "n2",
+      "sequence": "TACG",
+      "support": 1,
+      "mean_position": 7.0,
+      "consistency_score": 0.8125,
+      "haplotypes": [
+        "toy_hap3"
+      ],
+      "is_rescued": true,
+      "path_coverage": 0.25,
+      "predecessor_consistency": 1.0,
+      "successor_consistency": 1.0,
+      "local_path_consistency": 1.0
+    },
+    {
+      "node_id": "n3",
+      "sequence": "TTCG",
+      "support": 3,
+      "mean_position": 4.333333333333333,
+      "consistency_score": 0.8541666666666666,
+      "haplotypes": [
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "is_rescued": false,
+      "path_coverage": 0.75,
+      "predecessor_consistency": 1.0,
+      "successor_consistency": 0.6666666666666666,
+      "local_path_consistency": 1.0
+    }
+  ],
+  "edges": [
+    {
+      "source": "n1",
+      "target": "n3",
+      "support": 3,
+      "consistency_score": 0.75,
+      "haplotypes": [
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "path_coverage": 0.75,
+      "transition_consistency": 0.75
+    },
+    {
+      "source": "n2",
+      "target": "n1",
+      "support": 1,
+      "consistency_score": 0.625,
+      "haplotypes": [
+        "toy_hap3"
+      ],
+      "path_coverage": 0.25,
+      "transition_consistency": 1.0
+    },
+    {
+      "source": "n3",
+      "target": "n2",
+      "support": 1,
+      "consistency_score": 0.29166666666666663,
+      "haplotypes": [
+        "toy_hap3"
+      ],
+      "path_coverage": 0.25,
+      "transition_consistency": 0.3333333333333333
+    }
+  ],
+  "paths": [
+    {
+      "assembly_id": "toy_hap1",
+      "haplotype_label": "HEALTHY",
+      "node_ids": [
+        "n1"
+      ],
+      "positions": [
+        0
+      ],
+      "valid_transition_count": 0,
+      "transition_fraction": 1.0,
+      "mean_node_consistency": 0.85,
+      "mean_edge_consistency": 1.0,
+      "rescued_node_count": 0,
+      "questionable_node_count": 0,
+      "consistency_score": 0.9550000000000001
+    },
+    {
+      "assembly_id": "toy_hap2",
+      "haplotype_label": "HEALTHY",
+      "node_ids": [
+        "n1",
+        "n3"
+      ],
+      "positions": [
+        0,
+        7
+      ],
+      "valid_transition_count": 1,
+      "transition_fraction": 1.0,
+      "mean_node_consistency": 0.8520833333333333,
+      "mean_edge_consistency": 0.75,
+      "rescued_node_count": 0,
+      "questionable_node_count": 0,
+      "consistency_score": 0.880625
+    },
+    {
+      "assembly_id": "toy_hap3",
+      "haplotype_label": "UNHEALTHY",
+      "node_ids": [
+        "n1",
+        "n3",
+        "n2",
+        "n1"
+      ],
+      "positions": [
+        0,
+        3,
+        7,
+        8
+      ],
+      "valid_transition_count": 3,
+      "transition_fraction": 1.0,
+      "mean_node_consistency": 0.8416666666666667,
+      "mean_edge_consistency": 0.5555555555555555,
+      "rescued_node_count": 1,
+      "questionable_node_count": 0,
+      "consistency_score": 0.8191666666666667
+    },
+    {
+      "assembly_id": "toy_hap4",
+      "haplotype_label": "UNHEALTHY",
+      "node_ids": [
+        "n1",
+        "n3"
+      ],
+      "positions": [
+        0,
+        3
+      ],
+      "valid_transition_count": 1,
+      "transition_fraction": 1.0,
+      "mean_node_consistency": 0.8520833333333333,
+      "mean_edge_consistency": 0.75,
+      "rescued_node_count": 0,
+      "questionable_node_count": 0,
+      "consistency_score": 0.880625
+    }
+  ],
+  "metadata": {
+    "path_retention_policy": "Every observed assembly minimizer walk is retained. Nodes below min_node_support are kept as rescued path-specific nodes.",
+    "haplotype_count": 4,
+    "path_count": 4,
+    "shared_node_count": 2,
+    "haplotype_specific_node_count": 1,
+    "rescued_node_count": 1,
+    "rescued_private_node_count": 1,
+    "discarded": {
+      "minimizer_records": 0,
+      "nodes": 0,
+      "reason": "Observed minimizers are retained to preserve haplotype paths."
+    },
+    "graph_consistency": {
+      "formula": {
+        "node": "0.25*path_coverage + 0.25*predecessor_consistency + 0.25*successor_consistency + 0.25*local_path_consistency",
+        "edge": "0.50*path_support_fraction + 0.50*source_transition_agreement",
+        "path": "0.40*valid_transition_fraction + 0.30*mean_node_consistency + 0.30*mean_edge_consistency",
+        "graph": "0.40*mean_node_consistency + 0.30*mean_edge_consistency + 0.30*mean_path_consistency"
+      },
+      "mean_node_consistency": 0.8388888888888889,
+      "mean_edge_consistency": 0.5555555555555555,
+      "mean_path_consistency": 0.8838541666666667,
+      "low_consistency_node_fraction": 0.0,
+      "low_consistency_edge_fraction": 0.3333333333333333,
+      "node_count": 3,
+      "edge_count": 3,
+      "path_count": 4,
+      "graph_path_consistency": 0.7673784722222222
+    },
+    "anchor_scoring": {
+      "formula": "Score(a) = alpha*U(a) + beta*D(a) + gamma*C(a)",
+      "uniqueness_formula": "U(a) = 1 - node_path_coverage",
+      "depth_formula": "D(a) = node_path_occurrences / maximum_node_path_occurrences",
+      "consistency_source": "Step 2 graph-derived node consistency C(v)",
+      "weights": {
+        "alpha": 0.35,
+        "beta": 0.35,
+        "gamma": 0.3
+      },
+      "candidate_anchor_count": 3,
+      "selected_anchor_count": 3,
+      "mean_uniqueness": 0.3333333333333333,
+      "mean_depth": 0.6,
+      "mean_consistency": 0.8388888888888889,
+      "mean_final_score": 0.5783333333333333,
+      "selected_anchor_mean_score": 0.5783333333333333
+    }
+  },
+  "anchors": [
+    {
+      "anchor_id": "a1",
+      "minimizer": "ACGT",
+      "support": 4,
+      "mean_position": 0.0,
+      "consistency_score": 0.85,
+      "informativeness": 0.605,
+      "haplotypes": [
+        "toy_hap1",
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "node_id": "n1",
+      "uniqueness": 0.0,
+      "depth": 1.0,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.605,
+      "selected": true
+    },
+    {
+      "anchor_id": "a3",
+      "minimizer": "TTCG",
+      "support": 3,
+      "mean_position": 4.333333333333333,
+      "consistency_score": 0.8541666666666666,
+      "informativeness": 0.55375,
+      "haplotypes": [
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "node_id": "n3",
+      "uniqueness": 0.25,
+      "depth": 0.6,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.55375,
+      "selected": true
+    },
+    {
+      "anchor_id": "a2",
+      "minimizer": "TACG",
+      "support": 1,
+      "mean_position": 7.0,
+      "consistency_score": 0.8125,
+      "informativeness": 0.5762499999999999,
+      "haplotypes": [
+        "toy_hap3"
+      ],
+      "node_id": "n2",
+      "uniqueness": 0.75,
+      "depth": 0.2,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.5762499999999999,
+      "selected": true
+    }
+  ],
+  "anchor_candidates": [
+    {
+      "anchor_id": "a1",
+      "minimizer": "ACGT",
+      "support": 4,
+      "mean_position": 0.0,
+      "consistency_score": 0.85,
+      "informativeness": 0.605,
+      "haplotypes": [
+        "toy_hap1",
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "node_id": "n1",
+      "uniqueness": 0.0,
+      "depth": 1.0,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.605,
+      "selected": true
+    },
+    {
+      "anchor_id": "a2",
+      "minimizer": "TACG",
+      "support": 1,
+      "mean_position": 7.0,
+      "consistency_score": 0.8125,
+      "informativeness": 0.5762499999999999,
+      "haplotypes": [
+        "toy_hap3"
+      ],
+      "node_id": "n2",
+      "uniqueness": 0.75,
+      "depth": 0.2,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.5762499999999999,
+      "selected": true
+    },
+    {
+      "anchor_id": "a3",
+      "minimizer": "TTCG",
+      "support": 3,
+      "mean_position": 4.333333333333333,
+      "consistency_score": 0.8541666666666666,
+      "informativeness": 0.55375,
+      "haplotypes": [
+        "toy_hap2",
+        "toy_hap3",
+        "toy_hap4"
+      ],
+      "node_id": "n3",
+      "uniqueness": 0.25,
+      "depth": 0.6,
+      "alpha": 0.35,
+      "beta": 0.35,
+      "gamma": 0.3,
+      "final_score": 0.55375,
+      "selected": true
+    }
+  ],
+  "quality": {
+    "node_count": 3,
+    "edge_count": 3,
+    "mean_node_consistency": 0.8388888888888889,
+    "mean_edge_consistency": 0.5555555555555555,
+    "mean_path_consistency": 0.8838541666666667,
+    "graph_path_consistency": 0.7673784722222222,
+    "low_consistency_node_fraction": 0.0,
+    "low_consistency_edge_fraction": 0.3333333333333333,
+    "mean_node_support_ratio": 0.6666666666666666,
+    "anchor_count": 3,
+    "anchor_coverage_ratio": 1.0,
+    "branching_node_ratio": 0.0,
+    "overall_quality_score": 0.8034114583333333
+  }
+}

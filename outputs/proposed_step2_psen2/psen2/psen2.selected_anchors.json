@@ -1,0 +1,114 @@
+[
+  {
+    "anchor_id": "a21353",
+    "minimizer": "TTTATGCAGAG",
+    "support": 4,
+    "mean_position": 3.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a18785",
+    "minimizer": "TGCAGAGCTCC",
+    "support": 4,
+    "mean_position": 7.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a11315",
+    "minimizer": "GAGCTCCTGGT",
+    "support": 4,
+    "mean_position": 11.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a17663",
+    "minimizer": "TCCTGGTGGCT",
+    "support": 4,
+    "mean_position": 15.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a14556",
+    "minimizer": "GGTGGCTCTGA",
+    "support": 4,
+    "mean_position": 19.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a12814",
+    "minimizer": "GCTCTGAAGCG",
+    "support": 4,
+    "mean_position": 23.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a18373",
+    "minimizer": "TGAAGCGCCCT",
+    "support": 4,
+    "mean_position": 27.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  },
+  {
+    "anchor_id": "a8530",
+    "minimizer": "CGCCCTAGGGA",
+    "support": 4,
+    "mean_position": 32.0,
+    "consistency_score": 1.0,
+    "informativeness": 1.0,
+    "haplotypes": [
+      "PSEN2_H_1",
+      "PSEN2_H_2",
+      "PSEN2_U_1",
+      "PSEN2_U_2"
+    ]
+  }
+]

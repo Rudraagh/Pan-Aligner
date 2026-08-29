@@ -1,0 +1,15 @@
+{
+  "node_count": 3,
+  "edge_count": 3,
+  "mean_node_consistency": 0.8388888888888889,
+  "mean_edge_consistency": 0.5555555555555555,
+  "mean_path_consistency": 0.8838541666666667,
+  "graph_path_consistency": 0.7673784722222222,
+  "low_consistency_node_fraction": 0.0,
+  "low_consistency_edge_fraction": 0.3333333333333333,
+  "mean_node_support_ratio": 0.6666666666666666,
+  "anchor_count": 3,
+  "anchor_coverage_ratio": 1.0,
+  "branching_node_ratio": 0.0,
+  "overall_quality_score": 0.8034114583333333
+}

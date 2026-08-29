@@ -1,7 +1,7 @@
 Strongly Connected Component Analysis
 ====================================
 Graph source: app.combined
-SCC count: 9
+SCC count: 10
 
 SCC 1: s6
 SCC 2: s5
@@ -11,4 +11,5 @@ SCC 5: s3
 SCC 6: s2
 SCC 7: s61
 SCC 8: s1
-SCC 9: s11, s12, s13, s14, s15, s16, s17, s18, s19, s20
+SCC 9: s20
+SCC 10: s11, s12, s13, s14, s15, s16, s17, s18, s19

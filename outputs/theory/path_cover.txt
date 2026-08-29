@@ -4,7 +4,7 @@ DAG node count: 18
 Path count: 4
 All nodes covered: True
 
-Path 1: s16 -> s17 -> s18 -> s19 -> s20 -> s11 -> s12 -> s13 -> s14 -> s15
-Path 2: s1 -> s2 -> s3 -> s4 -> s5 -> s6
+Path 1: s17 -> s18 -> s19 -> s20 -> s1 -> s2 -> s3 -> s4 -> s5 -> s6
+Path 2: s11 -> s12 -> s13 -> s14 -> s15 -> s16
 Path 3: s61
 Path 4: s70

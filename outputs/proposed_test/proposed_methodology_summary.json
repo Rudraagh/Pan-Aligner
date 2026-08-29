@@ -1,0 +1,34 @@
+{
+  "dataset_manifest": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\tests\\data\\proposed\\toy_manifest.json",
+  "backend_requested": "cpu",
+  "genes": {
+    "TOY": {
+      "assembly_count": 4,
+      "graph_quality": {
+        "node_count": 4,
+        "edge_count": 6,
+        "mean_node_consistency": 0.7224747474747475,
+        "mean_edge_consistency": 0.5833333333333334,
+        "mean_node_support_ratio": 0.8125,
+        "anchor_count": 3,
+        "anchor_coverage_ratio": 1.0,
+        "branching_node_ratio": 0.5,
+        "overall_quality_score": 0.7459090909090911
+      },
+      "final_parameters": {
+        "k": 3,
+        "window_size": 2,
+        "min_node_support": 1,
+        "max_anchors": 8,
+        "min_anchor_spacing": 1.0
+      },
+      "backend_used": "cpu",
+      "accepted": true,
+      "graph_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_test\\toy\\toy.proposed_graph.json",
+      "graph_gfa": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_test\\toy\\toy.proposed_graph.gfa",
+      "anchors_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_test\\toy\\toy.selected_anchors.json",
+      "quality_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_test\\toy\\toy.quality.json",
+      "feedback_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_test\\toy\\toy.pg_scunk_feedback.json"
+    }
+  }
+}

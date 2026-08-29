@@ -2,6 +2,6 @@ Back-edge Removal Demo
 ======================
 Back edges identified: 1
 
-s15 -> s16
+s16 -> s17
 
 DAG verification: True

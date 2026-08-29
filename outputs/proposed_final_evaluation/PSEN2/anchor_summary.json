@@ -1,0 +1,18 @@
+{
+  "formula": "Score(a) = alpha*U(a) + beta*D(a) + gamma*C(a)",
+  "uniqueness_formula": "U(a) = 1 - node_path_coverage",
+  "depth_formula": "D(a) = node_path_occurrences / maximum_node_path_occurrences",
+  "consistency_source": "Step 2 graph-derived node consistency C(v)",
+  "weights": {
+    "alpha": 0.35,
+    "beta": 0.35,
+    "gamma": 0.3
+  },
+  "candidate_anchor_count": 15635,
+  "selected_anchor_count": 12,
+  "mean_uniqueness": 0.019694823884142714,
+  "mean_depth": 0.09416822906542427,
+  "mean_consistency": 0.9892892618606112,
+  "mean_final_score": 0.3366388470905318,
+  "selected_anchor_mean_score": 0.5597037426081544
+}

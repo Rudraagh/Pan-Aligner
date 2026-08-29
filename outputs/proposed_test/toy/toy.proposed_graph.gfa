@@ -1,0 +1,11 @@
+H	VN:Z:1.0
+S	n1	CGT	RC:i:4	CS:f:0.714646
+S	n2	GTT	RC:i:3	CS:f:0.751515
+S	n3	TAC	RC:i:3	CS:f:0.672222
+S	n4	TCG	RC:i:3	CS:f:0.751515
+L	n1	+	n2	+	0M	RC:i:3	CS:f:0.750000
+L	n1	+	n3	+	0M	RC:i:3	CS:f:0.750000
+L	n2	+	n4	+	0M	RC:i:3	CS:f:0.750000
+L	n3	+	n1	+	0M	RC:i:3	CS:f:0.750000
+L	n4	+	n1	+	0M	RC:i:1	CS:f:0.250000
+L	n4	+	n2	+	0M	RC:i:1	CS:f:0.250000

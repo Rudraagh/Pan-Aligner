@@ -19,7 +19,7 @@ Educational cyclic demo graph summary
 - nodes: 18
 - edges: 20
 - cycle detected: True
-- synthetic back edges added: [('s20', 's11'), ('s19', 's1')]
+- synthetic back edges added: [('s20', 's1'), ('s19', 's11')]
 
 Interpretation
 The real minigraph-derived graphs in this project are mostly DAG-like for the current APP/PSEN1/PSEN2 loci.
@@ -38,7 +38,7 @@ s17 -> s1, s11, s12, s13, s14, s15, s16, s17, s18, s19, s2, s20, s3, s4, s5, s6,
 s18 -> s1, s11, s12, s13, s14, s15, s16, s17, s18, s19, s2, s20, s3, s4, s5, s6, s61, s70
 s19 -> s1, s11, s12, s13, s14, s15, s16, s17, s18, s19, s2, s20, s3, s4, s5, s6, s61, s70
 s2 -> s2, s3, s4, s5, s6, s70
-s20 -> s1, s11, s12, s13, s14, s15, s16, s17, s18, s19, s2, s20, s3, s4, s5, s6, s61, s70
+s20 -> s1, s2, s20, s3, s4, s5, s6, s61, s70
 s3 -> s3, s4, s5, s6, s70
 s4 -> s4, s5, s6
 s5 -> s5, s6
