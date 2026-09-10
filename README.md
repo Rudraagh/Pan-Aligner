@@ -225,6 +225,15 @@ Useful options:
 
 This writes separate outputs under `outputs/proposed/` and does not overwrite the current PanAligner reports or evaluation artifacts.
 
+## Running tests
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m unittest discover -s tests -p "test_*.py"
+```
+
+`tests/test_theory_algorithms.py` covers the educational theory algorithms (Tarjan SCC, DFS back-edge removal, greedy path cover, precedence, gap cost, chaining DP and its iterative variant) and checks that the theory demo output does not change with Python's hash seed. The `tests/test_proposed_*.py` files cover the proposed-methodology prototype.
+
 ## Workflow overview
 
 ### 1. FASTA preprocessing
