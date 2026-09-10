@@ -8,7 +8,10 @@ from pathlib import Path
 
 
 WORKSPACE_ROOT = Path(__file__).resolve().parents[1]
-WSL_ROOT = "/tmp/fyp"
+WSL_TOOL_SPECS = {
+    "panaligner": ("PANALIGNER_WSL_BIN", "PanAligner"),
+    "minigraph": ("MINIGRAPH_WSL_BIN", "minigraph"),
+}
 
 
 def windows_path_to_wsl(path: Path) -> str:
@@ -28,12 +31,36 @@ def resolve_wsl_root() -> str:
     return windows_path_to_wsl(WORKSPACE_ROOT)
 
 
+def discover_wsl_binary(tool: str) -> str:
+    """Find a WSL tool without assuming a particular WSL username or home path."""
+    environment_variable, executable_name = WSL_TOOL_SPECS[tool]
+    shell_script = (
+        f'if [ -n "${{{environment_variable}:-}}" ]; then printf "%s\\n" "${{{environment_variable}}}"; '
+        f'elif command -v {shlex.quote(executable_name)} >/dev/null 2>&1; then command -v {shlex.quote(executable_name)}; '
+        f'else find "$HOME" -type f -name {shlex.quote(executable_name)} -perm -111 -print -quit 2>/dev/null; fi'
+    )
+    completed = subprocess.run(
+        ["wsl.exe", "bash", "-lc", shell_script],
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        text=True,
+        check=False,
+    )
+    discovered = completed.stdout.strip()
+    if completed.returncode != 0 or not discovered:
+        raise RuntimeError(
+            f"Unable to locate {executable_name} in WSL. Set {environment_variable} to its executable path.\n"
+            f"{completed.stderr}"
+        )
+    return discovered
+
+
 def resolve_wsl_binary_path(wsl_binary: str, workspace_wsl_root: str) -> str:
-    if wsl_binary == WSL_ROOT:
-        return "."
-    if wsl_binary.startswith(f"{WSL_ROOT}/"):
-        suffix = wsl_binary[len(WSL_ROOT) :]
-        return f".{suffix}"
+    if wsl_binary.startswith("@"):
+        tool = wsl_binary[1:]
+        if tool not in WSL_TOOL_SPECS:
+            raise ValueError(f"Unknown WSL tool selector: {wsl_binary}")
+        return discover_wsl_binary(tool)
     return wsl_binary
 
 

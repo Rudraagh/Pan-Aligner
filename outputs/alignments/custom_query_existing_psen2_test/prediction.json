@@ -1,0 +1,93 @@
+{
+  "query_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\unhealthy\\psen2\\PSEN2_U_9.fa",
+  "selected_gene": "PSEN2",
+  "prediction": "UNHEALTHY",
+  "confidence": 2.6100523768123273e-06,
+  "healthy_score": 0.9998766018674472,
+  "unhealthy_score": 0.9998818213416754,
+  "tie_like": false,
+  "gene_detection": {},
+  "combined_alignment": {
+    "available": true,
+    "query_name": "PSEN2_U_9",
+    "normalized_score": 0.9997045533541884,
+    "identity": 1.0,
+    "coverage": 0.9997045533541884,
+    "mapping_quality": 60,
+    "path": ">ref|NC_000001.11|:226870184-226927726:0-19951>ref|NC_000001.11|:226870184-226927726:19954-57543",
+    "traversed_nodes": [
+      "ref|NC_000001.11|:226870184-226927726:0-19951",
+      "ref|NC_000001.11|:226870184-226927726:19954-57543"
+    ],
+    "path_span": 57523,
+    "alignment_score": 57523.0
+  },
+  "class_alignments": {
+    "HEALTHY": {
+      "available": true,
+      "query_name": "PSEN2_U_9",
+      "normalized_score": 0.9997045533541884,
+      "identity": 0.9999478496679762,
+      "coverage": 0.9997566909975669,
+      "mapping_quality": 60,
+      "path": "ref|NC_000001.11|:226870184-226927726",
+      "traversed_nodes": [
+        "ref|NC_000001.11|:226870184-226927726"
+      ],
+      "path_span": 57526,
+      "alignment_score": 57523.0
+    },
+    "UNHEALTHY": {
+      "available": true,
+      "query_name": "PSEN2_U_9",
+      "normalized_score": 0.9997045533541884,
+      "identity": 1.0,
+      "coverage": 0.9997045533541884,
+      "mapping_quality": 60,
+      "path": ">ref|NC_000001.11|:226870184-226927726:0-19951>ref|NC_000001.11|:226870184-226927726:19954-57543",
+      "traversed_nodes": [
+        "ref|NC_000001.11|:226870184-226927726:0-19951",
+        "ref|NC_000001.11|:226870184-226927726:19954-57543"
+      ],
+      "path_span": 57523,
+      "alignment_score": 57523.0
+    }
+  },
+  "score_breakdown": {
+    "HEALTHY": {
+      "identity_component": 0.4499765323505893,
+      "coverage_component": 0.3499148418491484,
+      "mapping_quality_component": 0.15,
+      "normalized_score_component": 0.04998522766770942,
+      "composite_score": 0.9998766018674472
+    },
+    "UNHEALTHY": {
+      "identity_component": 0.45,
+      "coverage_component": 0.3498965936739659,
+      "mapping_quality_component": 0.15,
+      "normalized_score_component": 0.04998522766770942,
+      "composite_score": 0.9998818213416754
+    },
+    "COMBINED": {
+      "identity_component": 0.45,
+      "coverage_component": 0.3498965936739659,
+      "mapping_quality_component": 0.15,
+      "normalized_score_component": 0.04998522766770942,
+      "composite_score": 0.9998818213416754
+    }
+  },
+  "matched_regions": {
+    "predicted_class_nodes": [
+      "ref|NC_000001.11|:226870184-226927726:0-19951",
+      "ref|NC_000001.11|:226870184-226927726:19954-57543"
+    ],
+    "combined_graph_nodes": [
+      "ref|NC_000001.11|:226870184-226927726:0-19951",
+      "ref|NC_000001.11|:226870184-226927726:19954-57543"
+    ]
+  },
+  "explanation": "Gene inference selected PSEN2. The best unhealthy-graph alignment had higher composite evidence (healthy=0.9999, unhealthy=0.9999) using identity, coverage, MAPQ, and normalized alignment score.",
+  "query_argument": "",
+  "alignment_detected": true,
+  "score_plot": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\alignments\\custom_query_existing_psen2_test\\custom_query_scores.png"
+}

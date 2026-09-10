@@ -22,7 +22,19 @@ def parse_gfa(gfa_path: Path) -> nx.DiGraph:
             if record_type == "S":
                 node_id = fields[1]
                 sequence = fields[2]
-                graph.add_node(node_id, length=len(sequence))
+                attributes: dict[str, int | str] = {"length": len(sequence)}
+                for tag in fields[3:]:
+                    parts = tag.split(":", 2)
+                    if len(parts) != 3:
+                        continue
+                    if parts[0] == "SN":
+                        attributes["reference_name"] = parts[2]
+                    elif parts[0] == "SO":
+                        try:
+                            attributes["reference_offset"] = int(parts[2])
+                        except ValueError:
+                            pass
+                graph.add_node(node_id, **attributes)
             elif record_type == "L":
                 from_node = fields[1]
                 from_orient = fields[2]
@@ -95,12 +107,32 @@ def visualize_graph(gfa_path: Path, output_prefix: Path) -> dict:
     return stats
 
 
-def visualize_alignment(graph_gfa: Path, gaf_path: Path, output_png: Path) -> None:
-    graph = parse_gfa(graph_gfa)
-    results = parse_gaf_file(gaf_path)
+def alignment_highlighted_nodes(graph: nx.DiGraph, results: list) -> set[str]:
+    """Map GAF path ranges to minigraph segment IDs when they differ."""
     highlighted_nodes = set()
     for result in results[:1]:
         highlighted_nodes.update(result.traversed_nodes)
+        for traversed_node in result.traversed_nodes:
+            try:
+                reference_name, coordinate_range = traversed_node.rsplit(":", 1)
+                start_text, end_text = coordinate_range.split("-", 1)
+                start, end = int(start_text), int(end_text)
+            except ValueError:
+                continue
+            for node_id, attributes in graph.nodes(data=True):
+                offset = attributes.get("reference_offset")
+                if (
+                    attributes.get("reference_name") == reference_name
+                    and isinstance(offset, int)
+                    and max(start, offset) < min(end, offset + int(attributes["length"]))
+                ):
+                    highlighted_nodes.add(node_id)
+    return highlighted_nodes
+
+
+def visualize_alignment(graph_gfa: Path, gaf_path: Path, output_png: Path) -> None:
+    graph = parse_gfa(graph_gfa)
+    highlighted_nodes = alignment_highlighted_nodes(graph, parse_gaf_file(gaf_path))
     draw_graph(graph, output_png, highlighted_nodes=highlighted_nodes, title=output_png.stem)
 
 

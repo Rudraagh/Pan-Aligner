@@ -20,6 +20,7 @@ from common import (
     write_wrapped_fasta,
 )
 from parse_gaf import AlignmentResult, best_alignment, parse_gaf_file
+from visualize import visualize_alignment
 
 
 def prepare_query_fasta(query_sequence: str | None, query_fasta: Path | None, output_path: Path) -> Path:
@@ -32,6 +33,12 @@ def prepare_query_fasta(query_sequence: str | None, query_fasta: Path | None, ou
         raise ValueError("Query sequence must contain only DNA bases A/C/G/T/N.")
     write_wrapped_fasta([("query", normalized_sequence)], output_path)
     return output_path.resolve()
+
+
+def resolve_graph_path(graph_path: str) -> Path:
+    """Resolve portable manifest paths against the project root."""
+    candidate = Path(graph_path)
+    return candidate.resolve() if candidate.is_absolute() else (ROOT / candidate).resolve()
 
 
 def summarize_alignment(result: AlignmentResult | None) -> dict:
@@ -150,7 +157,7 @@ def infer_gene(query_fasta: Path, graph_manifest: dict, panaligner_bin: Path, th
     per_gene_scores: dict[str, dict] = {}
     for gene, entry in graph_manifest["graphs"].items():
         gaf_path = output_dir / f"{gene.lower()}.combined.gaf"
-        results = run_panaligner(Path(entry["combined_graph"]), query_fasta, gaf_path, panaligner_bin, threads)
+        results = run_panaligner(resolve_graph_path(entry["combined_graph"]), query_fasta, gaf_path, panaligner_bin, threads)
         best = best_alignment(results)
         per_gene_scores[gene] = summarize_alignment(best)
 
@@ -186,7 +193,7 @@ def predict_health_state(
 
     for label, graph_key in (("HEALTHY", "healthy_graph"), ("UNHEALTHY", "unhealthy_graph"), ("COMBINED", "combined_graph")):
         gaf_path = resolved_output_dir / f"{selected_gene.lower()}.{label.lower()}.gaf"
-        results = run_panaligner(Path(gene_entry[graph_key]), query_fasta, gaf_path, panaligner_bin, threads)
+        results = run_panaligner(resolve_graph_path(gene_entry[graph_key]), query_fasta, gaf_path, panaligner_bin, threads)
         class_results[label] = best_alignment(results)
 
     prediction = build_prediction_payload(query_fasta, selected_gene, class_results, gene_detection)
@@ -215,9 +222,67 @@ def predict_from_existing_gafs(
     return prediction
 
 
+def has_valid_alignment(prediction: dict) -> bool:
+    """Return whether a custom-query result contains an actual graph alignment."""
+    if "alignment_detected" in prediction:
+        return bool(prediction["alignment_detected"])
+    return any(
+        summary.get("available", False)
+        for summary in (
+            prediction.get("combined_alignment", {}),
+            prediction.get("class_alignments", {}).get("HEALTHY", {}),
+            prediction.get("class_alignments", {}).get("UNHEALTHY", {}),
+        )
+    )
+
+
+def generate_custom_alignment_overlay(prediction: dict, graph_manifest_path: Path, output_dir: Path) -> Path | None:
+    """Create a run-local combined-graph overlay when its GAF has an alignment."""
+    combined_alignment = prediction.get("combined_alignment", {})
+    selected_gene = prediction["selected_gene"]
+    combined_gaf = output_dir / f"{selected_gene.lower()}.combined.gaf"
+    if not combined_alignment.get("available", False) or not combined_gaf.exists():
+        prediction["alignment_overlay_status"] = "SKIPPED_NO_COMBINED_ALIGNMENT"
+        return None
+
+    graph_manifest = read_json(graph_manifest_path)
+    combined_graph = resolve_graph_path(graph_manifest["graphs"][selected_gene]["combined_graph"])
+    overlay_path = output_dir / f"{selected_gene.lower()}.combined.alignment.png"
+    try:
+        visualize_alignment(combined_graph, combined_gaf, overlay_path)
+    except Exception as exc:  # Visualization must not invalidate a successful alignment result.
+        prediction["alignment_overlay_status"] = "FAILED"
+        prediction["alignment_overlay_error"] = str(exc)
+        return None
+
+    if not overlay_path.exists():
+        prediction["alignment_overlay_status"] = "FAILED"
+        prediction["alignment_overlay_error"] = "Visualization completed without producing an overlay PNG."
+        return None
+    prediction["alignment_overlay_status"] = "GENERATED"
+    prediction["alignment_overlay"] = str(overlay_path.resolve())
+    return overlay_path
+
+
 def plot_custom_query_scores(prediction: dict, output_dir: Path) -> Path:
     resolved_output_dir = ensure_dir(output_dir)
     plot_path = resolved_output_dir / "custom_query_scores.png"
+
+    alignment_available = has_valid_alignment(prediction)
+    argument_suffix = f" | argument: {prediction['query_argument']}" if prediction.get("query_argument") else ""
+    figure, axes = plt.subplots(1, 2, figsize=(14, 5))
+
+    if not alignment_available:
+        for axis in axes:
+            axis.axis("off")
+        axes[0].text(0.5, 0.55, "No valid alignment detected", ha="center", va="center", fontsize=16, fontweight="bold")
+        axes[0].text(0.5, 0.38, "No healthy or unhealthy graph alignment was reported.", ha="center", va="center", fontsize=10)
+        axes[1].text(0.5, 0.55, "Alignment unavailable\nScores not applicable", ha="center", va="center", fontsize=15, fontweight="bold")
+        figure.suptitle(f"Custom Query Analysis for {prediction['selected_gene']}{argument_suffix}", fontsize=12)
+        figure.tight_layout()
+        figure.savefig(plot_path, dpi=220, bbox_inches="tight")
+        plt.close(figure)
+        return plot_path
 
     class_labels = ["HEALTHY", "UNHEALTHY", "COMBINED"]
     composite_values = [prediction["score_breakdown"][label]["composite_score"] for label in class_labels]
@@ -234,14 +299,12 @@ def plot_custom_query_scores(prediction: dict, output_dir: Path) -> Path:
     gene_labels = list(prediction["gene_detection"].keys())
     gene_scores = [prediction["gene_detection"][gene]["normalized_score"] for gene in gene_labels]
 
-    figure, axes = plt.subplots(1, 2, figsize=(14, 5))
-
     axes[0].bar(class_labels, composite_values, color=["#5B8FF9", "#F08A5D", "#7BC96F"])
     axes[0].set_ylim(0, max(1.0, max(composite_values, default=0.0) + 0.1))
     axes[0].set_title("Alignment Composite Scores")
     axes[0].set_ylabel("Score")
     for index, value in enumerate(composite_values):
-        axes[0].text(index, value + 0.02, f"{value:.3f}", ha="center", va="bottom", fontsize=9)
+        axes[0].text(index, value + 0.02, f"{value:.6f}", ha="center", va="bottom", fontsize=9)
 
     axes[1].plot(class_labels, identity_values, marker="o", linewidth=2, label="Identity", color="#6A4C93")
     axes[1].plot(class_labels, coverage_values, marker="o", linewidth=2, label="Coverage", color="#1982C4")
@@ -262,9 +325,6 @@ def plot_custom_query_scores(prediction: dict, output_dir: Path) -> Path:
     axes[1].set_ylabel("Fraction")
     axes[1].legend()
 
-    argument_suffix = ""
-    if prediction.get("query_argument"):
-        argument_suffix = f" | argument: {prediction['query_argument']}"
     figure.suptitle(f"Custom Query Analysis for {prediction['selected_gene']}{argument_suffix}", fontsize=12)
     figure.tight_layout()
     figure.savefig(plot_path, dpi=220, bbox_inches="tight")
@@ -299,6 +359,13 @@ def analyze_custom_query(
             prediction["class_alignments"]["UNHEALTHY"],
         )
     )
+    prediction["analysis_status"] = "ALIGNMENT_DETECTED" if prediction["alignment_detected"] else "NO_VALID_ALIGNMENT"
+    if not prediction["alignment_detected"]:
+        prediction["explanation"] = (
+            "No valid alignment was detected in the selected healthy, unhealthy, or combined graph. "
+            "The retained zero score fields are unavailable-result placeholders, not biological measurements."
+        )
+    generate_custom_alignment_overlay(prediction, graph_manifest_path, resolved_output_dir)
     plot_path = plot_custom_query_scores(prediction, resolved_output_dir)
     prediction["score_plot"] = str(plot_path.resolve())
     prediction_path = resolved_output_dir / "prediction.json"

@@ -73,9 +73,9 @@ def run_command(command: Sequence[str], cwd: Path | None = None, stdout_path: Pa
     if command_to_run:
         launcher = Path(command_to_run[0])
         if launcher.name == "minigraph_wsl.cmd":
-            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "/tmp/fyp/minigraph/minigraph", *command_to_run[1:]]
+            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "@minigraph", *command_to_run[1:]]
         elif launcher.name == "panaligner_wsl.cmd":
-            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "/tmp/fyp/PanAligner/PanAligner", *command_to_run[1:]]
+            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "@panaligner", *command_to_run[1:]]
 
     if stdout_path is not None:
         ensure_dir(stdout_path.parent)

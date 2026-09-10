@@ -1,0 +1,70 @@
+{
+  "query_fasta": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\queries\\custom_query.fa",
+  "selected_gene": "PSEN2",
+  "prediction": "HEALTHY",
+  "confidence": 0.0,
+  "healthy_score": 0.0,
+  "unhealthy_score": 0.0,
+  "tie_like": true,
+  "gene_detection": {},
+  "combined_alignment": {
+    "available": false,
+    "normalized_score": 0.0,
+    "identity": 0.0,
+    "coverage": 0.0,
+    "mapping_quality": 0,
+    "path": "",
+    "traversed_nodes": []
+  },
+  "class_alignments": {
+    "HEALTHY": {
+      "available": false,
+      "normalized_score": 0.0,
+      "identity": 0.0,
+      "coverage": 0.0,
+      "mapping_quality": 0,
+      "path": "",
+      "traversed_nodes": []
+    },
+    "UNHEALTHY": {
+      "available": false,
+      "normalized_score": 0.0,
+      "identity": 0.0,
+      "coverage": 0.0,
+      "mapping_quality": 0,
+      "path": "",
+      "traversed_nodes": []
+    }
+  },
+  "score_breakdown": {
+    "HEALTHY": {
+      "identity_component": 0.0,
+      "coverage_component": 0.0,
+      "mapping_quality_component": 0.0,
+      "normalized_score_component": 0.0,
+      "composite_score": 0.0
+    },
+    "UNHEALTHY": {
+      "identity_component": 0.0,
+      "coverage_component": 0.0,
+      "mapping_quality_component": 0.0,
+      "normalized_score_component": 0.0,
+      "composite_score": 0.0
+    },
+    "COMBINED": {
+      "identity_component": 0.0,
+      "coverage_component": 0.0,
+      "mapping_quality_component": 0.0,
+      "normalized_score_component": 0.0,
+      "composite_score": 0.0
+    }
+  },
+  "matched_regions": {
+    "predicted_class_nodes": [],
+    "combined_graph_nodes": []
+  },
+  "explanation": "Gene inference selected PSEN2, but the healthy and unhealthy graph alignments are effectively indistinguishable (healthy=0.0000, unhealthy=0.0000). This suggests the current graph pair does not separate the query clearly.",
+  "query_argument": "review_test",
+  "alignment_detected": false,
+  "score_plot": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\alignments\\custom_query_portability_test\\custom_query_scores.png"
+}

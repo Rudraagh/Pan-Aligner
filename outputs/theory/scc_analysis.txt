@@ -8,8 +8,8 @@ SCC 2: s5
 SCC 3: s4
 SCC 4: s70
 SCC 5: s3
-SCC 6: s2
-SCC 7: s61
+SCC 6: s61
+SCC 7: s2
 SCC 8: s1
 SCC 9: s20
 SCC 10: s11, s12, s13, s14, s15, s16, s17, s18, s19

@@ -285,6 +285,7 @@ def main() -> None:
                 "prediction": prediction["prediction"],
                 "confidence": prediction["confidence"],
                 "alignment_detected": prediction["alignment_detected"],
+                "analysis_status": prediction["analysis_status"],
                 "score_plot": prediction["score_plot"],
                 "prediction_json": str((Path(prediction["score_plot"]).parent / "prediction.json").resolve()),
             }

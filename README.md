@@ -145,6 +145,15 @@ cd ..
 python3 -m pip install -r requirements.txt
 ```
 
+### Windows GUI with WSL tools
+
+The Windows GUI can use `tools/minigraph_wsl.cmd` and `tools/panaligner_wsl.cmd`.
+They convert project files to paths relative to the current project mount, so the
+shared graph manifest never contains a Windows or WSL username. The wrappers find
+each executable through `MINIGRAPH_WSL_BIN` or `PANALIGNER_WSL_BIN` when set;
+otherwise they search the current WSL user's home directory. Set either variable
+only when automatic discovery cannot find your local installation.
+
 ## Build verification
 
 PanAligner:

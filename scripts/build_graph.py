@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from common import GRAPHS_DIR, METADATA_DIR, ensure_dir, read_json, resolve_binary, run_command, write_json
+from common import GRAPHS_DIR, METADATA_DIR, ROOT, ensure_dir, read_json, resolve_binary, run_command, write_json
 
 
 def build_gene_graph(reference_fasta: Path, sample_fastas: list[Path], output_gfa: Path, minigraph_bin: Path, threads: int) -> None:
@@ -55,16 +55,24 @@ def build_graphs(
         unhealthy_fastas = [resolve_manifest_fasta_path(Path(entry["path"]), gene, "unhealthy", entry["id"]) for entry in payload["unhealthy"]]
         combined_fastas = healthy_fastas + unhealthy_fastas
 
+        # Manifests are shared between Windows/WSL users, so retain project-relative
+        # paths rather than embedding a machine-specific home directory.
+        def project_relative(path: Path) -> str:
+            return path.resolve().relative_to(ROOT).as_posix()
+
+        healthy_graph = (target_graph_dir / f"{gene.lower()}.healthy.gfa").resolve()
+        unhealthy_graph = (target_graph_dir / f"{gene.lower()}.unhealthy.gfa").resolve()
+        combined_graph = (target_graph_dir / f"{gene.lower()}.combined.gfa").resolve()
         gene_graphs = {
-            "reference_fasta": str(reference_fasta.resolve()),
-            "healthy_graph": str((target_graph_dir / f"{gene.lower()}.healthy.gfa").resolve()),
-            "unhealthy_graph": str((target_graph_dir / f"{gene.lower()}.unhealthy.gfa").resolve()),
-            "combined_graph": str((target_graph_dir / f"{gene.lower()}.combined.gfa").resolve()),
+            "reference_fasta": project_relative(reference_fasta),
+            "healthy_graph": project_relative(healthy_graph),
+            "unhealthy_graph": project_relative(unhealthy_graph),
+            "combined_graph": project_relative(combined_graph),
         }
 
-        build_gene_graph(reference_fasta, healthy_fastas, Path(gene_graphs["healthy_graph"]), minigraph_bin, threads)
-        build_gene_graph(reference_fasta, unhealthy_fastas, Path(gene_graphs["unhealthy_graph"]), minigraph_bin, threads)
-        build_gene_graph(reference_fasta, combined_fastas, Path(gene_graphs["combined_graph"]), minigraph_bin, threads)
+        build_gene_graph(reference_fasta, healthy_fastas, healthy_graph, minigraph_bin, threads)
+        build_gene_graph(reference_fasta, unhealthy_fastas, unhealthy_graph, minigraph_bin, threads)
+        build_gene_graph(reference_fasta, combined_fastas, combined_graph, minigraph_bin, threads)
         graphs_manifest["graphs"][gene] = gene_graphs
 
     manifest_path = output_manifest_path or (METADATA_DIR / "graph_manifest.json")

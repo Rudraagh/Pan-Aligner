@@ -1,3 +1,2 @@
 @echo off
-python "%~dp0wsl_exec.py" /tmp/fyp/minigraph/minigraph %*
-
+python "%~dp0wsl_exec.py" @minigraph %*

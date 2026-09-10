@@ -7,6 +7,7 @@ import subprocess
 import sys
 import threading
 import tkinter as tk
+from datetime import datetime, timezone
 from pathlib import Path
 from tkinter import filedialog, messagebox, ttk
 
@@ -21,6 +22,7 @@ PAFTOOLS_READINESS_REPORT = OUTPUTS_DIR / "evaluation" / "paftools_readiness_rep
 DATASET_REPRODUCTION_REPORT = OUTPUTS_DIR / "evaluation" / "dataset_specific_reproduction_report.txt"
 DEFAULT_MINIGRAPH_BIN = ROOT / "tools" / "minigraph_wsl.cmd"
 DEFAULT_PANALIGNER_BIN = ROOT / "tools" / "panaligner_wsl.cmd"
+LATEST_GUI_RUN_PATH = OUTPUTS_DIR / "gui" / "latest_run.json"
 
 
 def open_path(target: Path) -> None:
@@ -47,6 +49,11 @@ class PanAlignerGUI:
         self.preview_image: tk.PhotoImage | None = None
         self.last_summary: dict | None = None
         self.image_paths: list[Path] = []
+        self.latest_image_paths: list[Path] = []
+        self.latest_run: dict | None = None
+        self._run_output_snapshot: dict[str, tuple[int, int]] = {}
+        self._image_list_paths: dict[tk.Listbox, list[Path]] = {}
+        self._selected_image_path: Path | None = None
         self.file_paths: list[Path] = []
 
         self.pipeline_mode = tk.StringVar(value="--custom-query-analysis")
@@ -284,15 +291,31 @@ class PanAlignerGUI:
         paned = ttk.Panedwindow(parent, orient="horizontal")
         paned.pack(fill="both", expand=True)
 
-        left = ttk.LabelFrame(paned, text="Available Graphs", style="Section.TLabelframe", padding=10)
+        left = ttk.LabelFrame(paned, text="Graphs", style="Section.TLabelframe", padding=10)
         right = ttk.LabelFrame(paned, text="Preview", style="Section.TLabelframe", padding=10)
         paned.add(left, weight=2)
         paned.add(right, weight=5)
 
-        self.images_listbox = tk.Listbox(left, exportselection=False)
+        graph_notebook = ttk.Notebook(left)
+        graph_notebook.pack(fill="both", expand=True)
+        latest_tab = ttk.Frame(graph_notebook, padding=6)
+        historical_tab = ttk.Frame(graph_notebook, padding=6)
+        graph_notebook.add(latest_tab, text="Latest Run")
+        graph_notebook.add(historical_tab, text="All Other Graphs")
+
+        self.latest_run_label = ttk.Label(latest_tab, text="No completed run available.", justify="left", wraplength=330)
+        self.latest_run_label.pack(fill="x", pady=(0, 8))
+        self.latest_images_listbox = tk.Listbox(latest_tab, exportselection=False)
+        self.latest_images_listbox.pack(side="left", fill="both", expand=True)
+        self.latest_images_listbox.bind("<<ListboxSelect>>", self._on_image_select)
+        latest_scroll = ttk.Scrollbar(latest_tab, orient="vertical", command=self.latest_images_listbox.yview)
+        latest_scroll.pack(side="right", fill="y")
+        self.latest_images_listbox.configure(yscrollcommand=latest_scroll.set)
+
+        self.images_listbox = tk.Listbox(historical_tab, exportselection=False)
         self.images_listbox.pack(side="left", fill="both", expand=True)
         self.images_listbox.bind("<<ListboxSelect>>", self._on_image_select)
-        image_scroll = ttk.Scrollbar(left, orient="vertical", command=self.images_listbox.yview)
+        image_scroll = ttk.Scrollbar(historical_tab, orient="vertical", command=self.images_listbox.yview)
         image_scroll.pack(side="right", fill="y")
         self.images_listbox.configure(yscrollcommand=image_scroll.set)
 
@@ -483,6 +506,7 @@ class PanAlignerGUI:
         self.log_text.delete("1.0", "end")
         self.output_buffer.clear()
         self.last_summary = None
+        self._run_output_snapshot = self._snapshot_output_files()
         self.preview_image = None
         self.image_label.configure(image="", text="Run started. Waiting for generated visuals...")
         self._set_text_widget(self.summary_text, "Working...\n")
@@ -540,6 +564,8 @@ class PanAlignerGUI:
         output_text = "".join(self.output_buffer).strip()
         self.status_var.set("Run completed successfully." if return_code == 0 else f"Run failed with exit code {return_code}.")
         self.last_summary = self._extract_json_summary(output_text)
+        if return_code == 0:
+            self._record_completed_run(self.last_summary)
         self._refresh_outputs()
         self._render_summary(self.last_summary, return_code, output_text)
         self._render_preview(self.last_summary)
@@ -562,7 +588,10 @@ class PanAlignerGUI:
         if summary:
             lines.append("Latest Run Summary")
             lines.append("===================")
+            unavailable_alignment = summary.get("alignment_detected") is False
             for key, value in summary.items():
+                if unavailable_alignment and key in {"prediction", "confidence"}:
+                    continue
                 lines.append(f"{key.replace('_', ' ').title()}: {value}")
             lines.append("")
 
@@ -586,11 +615,15 @@ class PanAlignerGUI:
             lines.append("Custom Query Snapshot")
             lines.append("=====================")
             lines.append(f"Selected gene: {prediction.get('selected_gene', '')}")
-            lines.append(f"Prediction: {prediction.get('prediction', '')}")
-            lines.append(f"Confidence: {prediction.get('confidence', 0.0):.4f}")
-            lines.append(f"Healthy score: {prediction.get('healthy_score', 0.0):.4f}")
-            lines.append(f"Unhealthy score: {prediction.get('unhealthy_score', 0.0):.4f}")
-            lines.append(f"Alignment detected: {prediction.get('alignment_detected', False)}")
+            if prediction.get("alignment_detected", False):
+                lines.append(f"Prediction: {prediction.get('prediction', '')}")
+                lines.append(f"Confidence: {prediction.get('confidence', 0.0):.4f}")
+                lines.append(f"Healthy score: {prediction.get('healthy_score', 0.0):.4f}")
+                lines.append(f"Unhealthy score: {prediction.get('unhealthy_score', 0.0):.4f}")
+                lines.append("Alignment detected: True")
+            else:
+                lines.append("Status: Prediction unavailable — no valid alignment detected")
+                lines.append("Alignment detected: False")
             lines.append(f"Argument: {prediction.get('query_argument', '')}")
             explanation = prediction.get("explanation")
             if explanation:
@@ -869,15 +902,65 @@ class PanAlignerGUI:
         PAPER_COVERAGE_REPORT.write_text(content, encoding="utf-8")
 
     def _refresh_images(self) -> None:
-        self.image_paths = sorted(OUTPUTS_DIR.rglob("*.png"))
-        self.images_listbox.delete(0, "end")
-        for path in self.image_paths:
-            self.images_listbox.insert("end", str(path.relative_to(ROOT)))
-        if self.image_paths:
-            self.images_listbox.selection_set(0)
-            self.images_listbox.event_generate("<<ListboxSelect>>")
+        self.latest_run = self._load_json(LATEST_GUI_RUN_PATH)
+        latest_artifacts = self.latest_run.get("artifacts", []) if isinstance(self.latest_run, dict) else []
+        self.latest_image_paths = sorted(
+            {Path(path).resolve() for path in latest_artifacts if Path(path).suffix.lower() == ".png" and Path(path).exists()}
+        )
+        latest_paths = {path.resolve() for path in self.latest_image_paths}
+        self.image_paths = [path for path in sorted(OUTPUTS_DIR.rglob("*.png")) if path.resolve() not in latest_paths]
+
+        if isinstance(self.latest_run, dict):
+            details = ["Latest completed GUI run", f"Run type: {self.latest_run.get('mode', 'Unknown')}"]
+            if self.latest_run.get("selected_gene"):
+                details.append(f"Gene: {self.latest_run['selected_gene']}")
+            details.append(f"Status: {self.latest_run.get('status', 'SUCCESS')}")
+            if not self.latest_image_paths:
+                details.append("No graphs were generated by the latest run.")
+            self.latest_run_label.configure(text="\n".join(details))
         else:
+            self.latest_run_label.configure(text="No completed run available.")
+
+        self._populate_image_list(self.latest_images_listbox, self.latest_image_paths)
+        self._populate_image_list(self.images_listbox, self.image_paths)
+
+    def _populate_image_list(self, listbox: tk.Listbox, paths: list[Path]) -> None:
+        self._image_list_paths[listbox] = paths
+        listbox.delete(0, "end")
+        for path in paths:
+            listbox.insert("end", str(path.relative_to(ROOT)) if path.is_relative_to(ROOT) else str(path))
+        if paths:
+            listbox.selection_set(0)
+        elif listbox is self.images_listbox and not self.latest_image_paths:
             self.image_label.configure(image="", text="No generated graphs found yet.")
+
+    def _snapshot_output_files(self) -> dict[str, tuple[int, int]]:
+        return {
+            str(path.resolve()): (path.stat().st_mtime_ns, path.stat().st_size)
+            for path in OUTPUTS_DIR.rglob("*")
+            if path.is_file()
+        }
+
+    def _record_completed_run(self, summary: dict | None) -> None:
+        after = self._snapshot_output_files()
+        artifact_paths = {path for path, signature in after.items() if self._run_output_snapshot.get(path) != signature}
+        if summary:
+            for value in summary.values():
+                if isinstance(value, str):
+                    candidate = Path(value)
+                    if candidate.exists() and candidate.is_file():
+                        artifact_paths.add(str(candidate.resolve()))
+                        if candidate.name == "prediction.json":
+                            artifact_paths.update(str(path.resolve()) for path in candidate.parent.iterdir() if path.is_file())
+        record = {
+            "run_id": datetime.now(timezone.utc).isoformat(),
+            "mode": summary.get("mode", "GUI run") if summary else "GUI run",
+            "selected_gene": summary.get("selected_gene", "") if summary else "",
+            "status": summary.get("analysis_status", "SUCCESS") if summary else "SUCCESS",
+            "artifacts": sorted(artifact_paths),
+        }
+        LATEST_GUI_RUN_PATH.parent.mkdir(parents=True, exist_ok=True)
+        LATEST_GUI_RUN_PATH.write_text(json.dumps(record, indent=2), encoding="utf-8")
 
     def _refresh_files(self) -> None:
         wanted_suffixes = {".txt", ".json", ".csv", ".gaf"}
@@ -916,11 +999,18 @@ class PanAlignerGUI:
         except (OSError, json.JSONDecodeError):
             return None
 
-    def _on_image_select(self, _event: object) -> None:
-        selection = self.images_listbox.curselection()
+    def _on_image_select(self, event: object) -> None:
+        listbox = event.widget
+        if not isinstance(listbox, tk.Listbox):
+            return
+        selection = listbox.curselection()
         if not selection:
             return
-        image_path = self.image_paths[selection[0]]
+        image_paths = self._image_list_paths.get(listbox, [])
+        if selection[0] >= len(image_paths):
+            return
+        image_path = image_paths[selection[0]]
+        self._selected_image_path = image_path
         self._show_image(image_path)
 
     def _on_file_select(self, _event: object) -> None:
@@ -954,10 +1044,9 @@ class PanAlignerGUI:
         open_path(output_dir)
 
     def _open_selected_image(self) -> None:
-        selection = self.images_listbox.curselection()
-        if not selection:
+        if self._selected_image_path is None:
             return
-        open_path(self.image_paths[selection[0]])
+        open_path(self._selected_image_path)
 
     def _open_selected_file(self) -> None:
         selection = self.files_listbox.curselection()

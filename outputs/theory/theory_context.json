@@ -18,6 +18,7 @@
     ]
   ],
   "walk_nodes": [
+    "s16",
     "s17",
     "s18",
     "s19",
@@ -25,8 +26,7 @@
     "s12",
     "s13",
     "s14",
-    "s15",
-    "s16"
+    "s15"
   ],
-  "query_sequence": "ANTCNAGAGGAGAGCTNGATGANCG"
+  "query_sequence": "GNATNCAGAGGAGAGCNTGATGNAC"
 }
