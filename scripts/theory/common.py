@@ -116,7 +116,22 @@ def extract_representative_subgraph(graph: nx.DiGraph, limit: int = 18) -> nx.Di
         if len(selected) >= limit:
             break
 
-    return graph.subgraph(selected[:limit]).copy()
+    return _ordered_subgraph(graph, selected[:limit])
+
+
+def _ordered_subgraph(graph: nx.DiGraph, nodes: list[str]) -> nx.DiGraph:
+    # graph.subgraph() may iterate a set of the kept nodes, so node order would follow
+    # Python's per-process string hashing; build the induced subgraph in list order instead.
+    kept = set(nodes)
+    subgraph = nx.DiGraph()
+    subgraph.add_nodes_from((node, graph.nodes[node]) for node in nodes)
+    subgraph.add_edges_from(
+        (node, neighbor, data)
+        for node in nodes
+        for neighbor, data in graph.succ[node].items()
+        if neighbor in kept
+    )
+    return subgraph
 
 
 def augment_with_synthetic_cycles(graph: nx.DiGraph) -> tuple[nx.DiGraph, list[tuple[str, str]]]:

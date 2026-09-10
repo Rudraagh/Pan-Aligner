@@ -1,0 +1,50 @@
+{
+  "dataset_manifest": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\data\\metadata\\train_manifest.json",
+  "backend_requested": "cpu",
+  "genes": {
+    "PSEN2": {
+      "assembly_count": 4,
+      "graph_quality": {
+        "node_count": 15602,
+        "edge_count": 16045,
+        "mean_node_consistency": 0.9794434537638169,
+        "mean_edge_consistency": 0.9686740417575569,
+        "mean_path_consistency": 0.9858275388673271,
+        "graph_path_consistency": 0.978127855692992,
+        "low_consistency_node_fraction": 0.0,
+        "low_consistency_edge_fraction": 0.00024929884699283265,
+        "mean_node_support_ratio": 0.9403281630560184,
+        "anchor_count": 8,
+        "anchor_coverage_ratio": 1.0,
+        "branching_node_ratio": 0.024163568773234202,
+        "overall_quality_score": 0.975102670203644
+      },
+      "final_parameters": {
+        "k": 11,
+        "window_size": 6,
+        "min_node_support": 2,
+        "max_anchors": 8,
+        "min_anchor_spacing": 4.0,
+        "anchor_alpha": 0.35,
+        "anchor_beta": 0.35,
+        "anchor_gamma": 0.3
+      },
+      "backend_used": "cpu",
+      "accepted": true,
+      "graph_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\psen2.proposed_graph.json",
+      "graph_gfa": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\psen2.proposed_graph.gfa",
+      "anchors_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\psen2.selected_anchors.json",
+      "quality_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\psen2.quality.json",
+      "node_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\node_consistency.csv",
+      "edge_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\edge_consistency.csv",
+      "path_consistency_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\path_consistency.csv",
+      "graph_consistency_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\graph_consistency.json",
+      "anchor_scores_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\anchor_scores.csv",
+      "anchor_summary_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\anchor_summary.json",
+      "pg_scunk_iterations_csv": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\pg_scunk_iterations.csv",
+      "pg_scunk_summary_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\pg_scunk_summary.json",
+      "pg_scunk_quality_plot": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\pg_scunk_quality.png",
+      "feedback_json": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\outputs\\proposed_step4_psen2\\psen2\\psen2.pg_scunk_feedback.json"
+    }
+  }
+}

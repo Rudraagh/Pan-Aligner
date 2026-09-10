@@ -1,0 +1,30 @@
+PafTools Readiness Report
+=========================
+Wrapper: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\tools\paftools_wsl.cmd
+k8 binary: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\tools\third_party\k8-bin\k8-1.2\k8-x86_64-Linux
+paftools.js: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\tools\third_party\minimap2\misc\paftools.js
+PafTools runnable: True
+Coordinate-encoded headers available for all samples: False
+Exact paper-style paftools correctness eval possible: False
+
+Limitation
+Current dataset headers do not encode truth interval coordinates like the simulated CHM13 reads used in the paper, so paftools-based correctness evaluation cannot be reproduced exactly.
+
+Sample headers checked
+- APP healthy APP_H_3: APP_H_3 | truth-coordinates=False
+- PSEN1 healthy PSEN1_H_1: PSEN1_H_1 | truth-coordinates=False
+- PSEN2 healthy PSEN2_H_3: PSEN2_H_3 | truth-coordinates=False
+
+PafTools help snippet
+- Usage: paftools.js <command> [arguments]
+- Commands:
+-   view       convert PAF to BLAST-like (for eyeballing) or MAF
+-   splice2bed convert spliced alignment in PAF/SAM to BED12
+-   sam2paf    convert SAM to PAF
+-   delta2paf  convert MUMmer's delta to PAF
+-   gff2bed    convert GTF/GFF3 to BED12
+-   gff2junc   convert GFF3 to junction BED
+-   longcs2seq convert long-cs PAF to sequences
+- 
+-   stat       collect basic mapping information in PAF/SAM
+-   asmstat    collect basic assembly information

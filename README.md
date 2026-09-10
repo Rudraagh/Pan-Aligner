@@ -13,6 +13,24 @@ The final project focus is:
 
 The repository is intentionally presented as a PanAligner paper implementation project, not as a prediction or machine-learning system.
 
+## Incremental proposed-methodology prototype
+
+Alongside the existing workflow, the repository now also contains an **optional proposed-methodology prototype** for the project architecture:
+
+- haplotype-resolved assemblies
+- GPU-ready k-mer/minimizer engine with honest CPU fallback
+- alignment-free graph construction
+- haplotype-consistency-aware scoring
+- intelligent anchor selection
+- PG-SCUnK-style in-loop quality feedback and parameter retuning
+
+Important notes:
+
+- this new stack is **additive** and does not replace the working `main.py` PanAligner workflow
+- it is implemented as a separate modular research prototype under `scripts/proposed/`
+- it should be described as **our proposed implementation**, not as an exact reproduction of PanAligner's internal algorithms
+- the GPU path is currently an incremental backend interface with deterministic CPU fallback when no compatible GPU backend is available
+
 ## Core scope
 
 The main workflow now focuses only on paper-relevant components:
@@ -161,6 +179,60 @@ Meaning:
 - `--theory-only`: run only the educational reproductions of paper concepts
 - `--evaluate`: run the held-out PanAligner alignment evaluation without rerunning the theory suite
 - `--custom-query-analysis`: accept a custom query FASTA or inline DNA sequence, check whether it aligns to the current graphs, compute healthy/unhealthy scores, and generate a score plot plus JSON summary
+
+## Desktop GUI
+
+The repository now also includes a desktop GUI built with Tkinter:
+
+```bash
+python3 gui_app.py
+```
+
+On Windows you can also start it with:
+
+```bat
+run_gui.bat
+```
+
+GUI features:
+
+- run `full-pipeline`, `theory-only`, and `evaluate` modes without typing commands
+- run custom query analysis from either an inline DNA sequence or a FASTA file
+- attach a custom argument/note to query analysis runs
+- watch live console output in the app
+- preview generated PNG graphs directly in the GUI
+- inspect evaluation scores and per-gene metrics in dedicated panels
+- browse generated reports, JSON outputs, GAF files, and text artifacts inside the GUI
+- open generated output files and folders quickly
+
+The GUI currently remains focused on the stable PanAligner-centered workflow. The new proposed methodology is available through its own CLI runner so the existing UI stays stable.
+
+## Proposed methodology runner
+
+The new prototype can be run independently with:
+
+```bash
+python3 proposed_methodology.py --dataset-manifest data/metadata/train_manifest.json
+```
+
+Useful options:
+
+- `--gene PSEN2`
+- `--backend cpu`
+- `--max-assemblies-per-bucket 8`
+- `--quality-threshold 0.72`
+- `--max-rounds 3`
+
+This writes separate outputs under `outputs/proposed/` and does not overwrite the current PanAligner reports or evaluation artifacts.
+
+## Running tests
+
+```bash
+python3 -m pip install -r requirements.txt
+python3 -m unittest discover -s tests -p "test_*.py"
+```
+
+`tests/test_theory_algorithms.py` covers the educational theory algorithms (Tarjan SCC, DFS back-edge removal, greedy path cover, precedence, gap cost, chaining DP and its iterative variant) and checks that the theory demo output does not change with Python's hash seed. The `tests/test_proposed_*.py` files cover the proposed-methodology prototype.
 
 ## Workflow overview
 

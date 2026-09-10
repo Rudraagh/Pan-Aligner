@@ -1,0 +1,17 @@
+{
+  "formula": {
+    "node": "0.25*path_coverage + 0.25*predecessor_consistency + 0.25*successor_consistency + 0.25*local_path_consistency",
+    "edge": "0.50*path_support_fraction + 0.50*source_transition_agreement",
+    "path": "0.40*valid_transition_fraction + 0.30*mean_node_consistency + 0.30*mean_edge_consistency",
+    "graph": "0.40*mean_node_consistency + 0.30*mean_edge_consistency + 0.30*mean_path_consistency"
+  },
+  "mean_node_consistency": 0.9837970609195076,
+  "mean_edge_consistency": 0.9848838274096429,
+  "mean_path_consistency": 0.9887931760698487,
+  "low_consistency_node_fraction": 0.0,
+  "low_consistency_edge_fraction": 0.00592611817631283,
+  "node_count": 21397,
+  "edge_count": 23118,
+  "path_count": 124,
+  "graph_path_consistency": 0.9856219254116505
+}

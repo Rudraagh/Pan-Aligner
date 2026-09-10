@@ -1,0 +1,46 @@
+{
+  "paftools_wrapper": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\tools\\paftools_wsl.cmd",
+  "k8_binary": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\tools\\third_party\\k8-bin\\k8-1.2\\k8-x86_64-Linux",
+  "paftools_js": "C:\\Users\\arun1\\OneDrive\\Desktop\\FINAL YEAR PROJECT PHASE\\tools\\third_party\\minimap2\\misc\\paftools.js",
+  "paftools_runnable": true,
+  "coordinate_encoded_headers_detected_for_all_samples": false,
+  "exact_paper_style_paftools_correctness_eval_possible": false,
+  "why_not_possible": "Current dataset headers do not encode truth interval coordinates like the simulated CHM13 reads used in the paper, so paftools-based correctness evaluation cannot be reproduced exactly.",
+  "sample_headers": [
+    {
+      "gene": "APP",
+      "bucket": "healthy",
+      "sequence_id": "APP_H_3",
+      "header": "APP_H_3",
+      "has_truth_coordinates": false
+    },
+    {
+      "gene": "PSEN1",
+      "bucket": "healthy",
+      "sequence_id": "PSEN1_H_1",
+      "header": "PSEN1_H_1",
+      "has_truth_coordinates": false
+    },
+    {
+      "gene": "PSEN2",
+      "bucket": "healthy",
+      "sequence_id": "PSEN2_H_3",
+      "header": "PSEN2_H_3",
+      "has_truth_coordinates": false
+    }
+  ],
+  "paftools_help_snippet": [
+    "Usage: paftools.js <command> [arguments]",
+    "Commands:",
+    "  view       convert PAF to BLAST-like (for eyeballing) or MAF",
+    "  splice2bed convert spliced alignment in PAF/SAM to BED12",
+    "  sam2paf    convert SAM to PAF",
+    "  delta2paf  convert MUMmer's delta to PAF",
+    "  gff2bed    convert GTF/GFF3 to BED12",
+    "  gff2junc   convert GFF3 to junction BED",
+    "  longcs2seq convert long-cs PAF to sequences",
+    "",
+    "  stat       collect basic mapping information in PAF/SAM",
+    "  asmstat    collect basic assembly information"
+  ]
+}

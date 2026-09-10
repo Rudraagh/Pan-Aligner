@@ -1,0 +1,149 @@
+{
+  "initial_quality": 0.8462952138892851,
+  "best_quality": 0.8487145687279948,
+  "final_quality": 0.8475048913086399,
+  "threshold": 0.72,
+  "threshold_reached": false,
+  "best_round": 3,
+  "total_rounds": 3,
+  "unique_configurations_evaluated": 7,
+  "stagnation_reason": "max_rounds_reached",
+  "best_configuration": {
+    "k": 11,
+    "window_size": 6,
+    "min_node_support": 2,
+    "max_anchors": 16,
+    "min_anchor_spacing": 4.0,
+    "anchor_alpha": 0.35,
+    "anchor_beta": 0.35,
+    "anchor_gamma": 0.3
+  },
+  "final_configuration": {
+    "k": 11,
+    "window_size": 6,
+    "min_node_support": 2,
+    "max_anchors": 14,
+    "min_anchor_spacing": 4.0,
+    "anchor_alpha": 0.409090909091,
+    "anchor_beta": 0.318181818182,
+    "anchor_gamma": 0.272727272727
+  },
+  "best_evaluation": {
+    "round": 3,
+    "candidate_id": "c006",
+    "configuration_key": "{\"anchor_alpha\":0.35,\"anchor_beta\":0.35,\"anchor_gamma\":0.3,\"k\":11,\"max_anchors\":16,\"min_anchor_spacing\":4.0,\"min_node_support\":2,\"window_size\":6}",
+    "parameters": {
+      "k": 11,
+      "window_size": 6,
+      "min_node_support": 2,
+      "max_anchors": 16,
+      "min_anchor_spacing": 4.0,
+      "anchor_alpha": 0.35,
+      "anchor_beta": 0.35,
+      "anchor_gamma": 0.3
+    },
+    "overall_quality": 0.8487145687279948,
+    "mean_node_consistency": 0.9837970609195076,
+    "mean_edge_consistency": 0.9848838274096429,
+    "mean_path_consistency": 0.9887931760698487,
+    "anchor_coverage": 0.10483870967741936,
+    "node_count": 21397,
+    "edge_count": 23118,
+    "path_count": 124,
+    "anchor_count": 16,
+    "accepted": false,
+    "is_best_so_far": true,
+    "quality_delta": 0.0012096774193548487,
+    "weakest_component": "anchor_coverage",
+    "action": "retune_anchor_selection",
+    "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."
+  },
+  "final_evaluation": {
+    "round": 3,
+    "candidate_id": "c007",
+    "configuration_key": "{\"anchor_alpha\":0.409090909091,\"anchor_beta\":0.318181818182,\"anchor_gamma\":0.272727272727,\"k\":11,\"max_anchors\":14,\"min_anchor_spacing\":4.0,\"min_node_support\":2,\"window_size\":6}",
+    "parameters": {
+      "k": 11,
+      "window_size": 6,
+      "min_node_support": 2,
+      "max_anchors": 14,
+      "min_anchor_spacing": 4.0,
+      "anchor_alpha": 0.409090909091,
+      "anchor_beta": 0.318181818182,
+      "anchor_gamma": 0.272727272727
+    },
+    "overall_quality": 0.8475048913086399,
+    "mean_node_consistency": 0.9837970609195076,
+    "mean_edge_consistency": 0.9848838274096429,
+    "mean_path_consistency": 0.9887931760698487,
+    "anchor_coverage": 0.0967741935483871,
+    "node_count": 21397,
+    "edge_count": 23118,
+    "path_count": 124,
+    "anchor_count": 14,
+    "accepted": false,
+    "is_best_so_far": false,
+    "quality_delta": -0.0012096774193548487,
+    "weakest_component": "anchor_coverage",
+    "action": "retune_anchor_selection",
+    "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."
+  },
+  "diagnostic_mapping": {
+    "anchor_coverage": {
+      "action": "retune_anchor_selection",
+      "parameters": [
+        "min_anchor_spacing",
+        "max_anchors",
+        "anchor_alpha",
+        "anchor_beta",
+        "anchor_gamma"
+      ],
+      "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."
+    },
+    "node_consistency": {
+      "action": "retune_minimizer_nodes",
+      "parameters": [
+        "k",
+        "window_size",
+        "min_node_support"
+      ],
+      "reason": "Node context coherence is low; vary k, window size, and minimum node support."
+    },
+    "node_support": {
+      "action": "retune_node_support",
+      "parameters": [
+        "k",
+        "window_size",
+        "min_node_support"
+      ],
+      "reason": "Cross-path node support is low; vary k, window size, and minimum node support."
+    },
+    "edge_structural_coherence": {
+      "action": "retune_graph_transitions",
+      "parameters": [
+        "k",
+        "window_size",
+        "min_node_support"
+      ],
+      "reason": "Observed-path edge support is weak; vary k, window size, and minimum node support."
+    },
+    "path_structural_coherence": {
+      "action": "retune_path_resolution",
+      "parameters": [
+        "k",
+        "window_size"
+      ],
+      "reason": "Observed-path structural coherence is weak; vary k and window size."
+    },
+    "branch_coherence": {
+      "action": "retune_graph_branching",
+      "parameters": [
+        "k",
+        "window_size",
+        "min_node_support"
+      ],
+      "reason": "Branching is high; vary k, window size, and minimum node support."
+    }
+  },
+  "quality_interpretation": "Path and edge consistency are observed-path structural coherence measures; because edges are constructed from observed paths, they are not independent biological correctness evidence."
+}

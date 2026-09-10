@@ -1,0 +1,28 @@
+{
+  "assemblies": [
+    {
+      "id": "toy_hap1",
+      "gene": "TOY",
+      "label": "HEALTHY",
+      "path": "tests/data/proposed/toy_hap1.fa"
+    },
+    {
+      "id": "toy_hap2",
+      "gene": "TOY",
+      "label": "HEALTHY",
+      "path": "tests/data/proposed/toy_hap2.fa"
+    },
+    {
+      "id": "toy_hap3",
+      "gene": "TOY",
+      "label": "UNHEALTHY",
+      "path": "tests/data/proposed/toy_hap3.fa"
+    },
+    {
+      "id": "toy_hap4",
+      "gene": "TOY",
+      "label": "UNHEALTHY",
+      "path": "tests/data/proposed/toy_hap4.fa"
+    }
+  ]
+}

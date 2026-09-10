@@ -89,15 +89,25 @@ def run_theory_suite(graph_path: Path) -> dict:
 def run_alignment_evaluation(
     train_graph_manifest_path: Path,
     panaligner_bin: Path,
+    minigraph_bin: Path | None,
     threads: int,
 ) -> dict:
     return evaluate_panaligner_workflow(
         METADATA_DIR / "test_manifest.json",
         train_graph_manifest_path,
         panaligner_bin,
+        minigraph_bin,
         threads,
         OUTPUTS_DIR / "evaluation",
     )
+
+
+def existing_evaluation_inputs_ready() -> bool:
+    required = [
+        METADATA_DIR / "test_manifest.json",
+        METADATA_DIR / "train_graph_manifest.json",
+    ]
+    return all(path.exists() for path in required)
 
 
 def write_theoretical_report(theory_result: dict) -> Path:
@@ -227,6 +237,7 @@ def main() -> None:
     parser.add_argument("--test-fraction", type=float, default=0.20, help="Fraction reserved for test data.")
     parser.add_argument("--minigraph-bin", type=str, default=None, help="Path to the minigraph binary.")
     parser.add_argument("--panaligner-bin", type=str, default=None, help="Path to the PanAligner binary.")
+    parser.add_argument("--hybrid-approximation", action="store_true", help="Use local Minigraph-first heuristic screening before PanAligner during evaluation.")
     parser.add_argument("--graph-manifest", type=Path, default=METADATA_DIR / "graph_manifest.json", help="Graph manifest used by custom query analysis.")
     parser.add_argument("--query-fasta", type=Path, default=None, help="Custom query FASTA for custom-query-analysis mode.")
     parser.add_argument("--query-sequence", type=str, default=None, help="Inline DNA query for custom-query-analysis mode.")
@@ -280,9 +291,32 @@ def main() -> None:
         )
         return
 
-    minigraph_bin = resolve_binary(args.minigraph_bin, [Path("minigraph/minigraph")])
     panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])
+    minigraph_bin = resolve_binary(args.minigraph_bin, [Path("minigraph/minigraph")]) if args.hybrid_approximation else None
+    theory_result = None
+    evaluation_metrics = None
+    graph_manifest = None
+    train_graph_manifest_path = METADATA_DIR / "train_graph_manifest.json"
 
+    if args.evaluate and existing_evaluation_inputs_ready():
+        evaluation_metrics = run_alignment_evaluation(
+            train_graph_manifest_path,
+            panaligner_bin,
+            minigraph_bin,
+            args.threads,
+        )
+        final_report = write_final_summary(None, evaluation_metrics)
+        print_json_summary(
+            {
+                "mode": "evaluate",
+                "final_report": str(final_report.resolve()),
+                "alignment_rate": evaluation_metrics["overall"]["alignment_rate"],
+                "aligned_query_count": evaluation_metrics["overall"]["aligned_query_count"],
+            }
+        )
+        return
+
+    minigraph_bin = resolve_binary(args.minigraph_bin, [Path("minigraph/minigraph")])
     graph_manifest, train_graph_manifest_path = build_training_artifacts(
         [path.resolve() for path in args.input_fastas],
         minigraph_bin,
@@ -291,14 +325,12 @@ def main() -> None:
         args.test_fraction,
     )
 
-    theory_result = None
-    evaluation_metrics = None
-
     if args.full_pipeline:
         theory_result = run_theory_suite(choose_theory_graph(graph_manifest))
         evaluation_metrics = run_alignment_evaluation(
             train_graph_manifest_path,
             panaligner_bin,
+            minigraph_bin,
             args.threads,
         )
         theory_report = write_theoretical_report(theory_result)
@@ -317,6 +349,7 @@ def main() -> None:
         evaluation_metrics = run_alignment_evaluation(
             train_graph_manifest_path,
             panaligner_bin,
+            minigraph_bin,
             args.threads,
         )
         final_report = write_final_summary(None, evaluation_metrics)

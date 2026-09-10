@@ -14,5 +14,9 @@ scripts/__pycache__/
 data/**/*.pyc
 outputs/**/*.pyc
 
+# Retained locally for review; GitHub rejects these generated files (>100 MB).
+/outputs/proposed_final_evaluation/APP/app.proposed_graph.json
+/outputs/proposed_final_evaluation/PSEN1/psen1.proposed_graph.json
+
 Thumbs.db
 .DS_Store

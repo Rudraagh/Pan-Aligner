@@ -1,4 +1,2 @@
 Gap Cost Analysis
 =================
-A6 -> A7: query_gap=0.00, graph_gap=3.00, total=3.00
-A7 -> A8: query_gap=1.00, graph_gap=1.00, total=2.00

@@ -1,0 +1,15 @@
+H	VN:Z:1.0
+S	n1	CGT	RC:i:4	CS:f:0.722222
+S	n2	GTT	RC:i:3	CS:f:0.875000
+S	n3	TAC	RC:i:3	CS:f:0.937500
+S	n4	TCG	RC:i:3	CS:f:0.812500
+L	n1	+	n2	+	0M	RC:i:3	CS:f:0.750000
+L	n1	+	n3	+	0M	RC:i:3	CS:f:0.750000
+L	n2	+	n4	+	0M	RC:i:3	CS:f:0.875000
+L	n3	+	n1	+	0M	RC:i:3	CS:f:0.875000
+L	n4	+	n1	+	0M	RC:i:1	CS:f:0.291667
+L	n4	+	n2	+	0M	RC:i:1	CS:f:0.291667
+P	toy_hap1	n1+,n3+,n1+,n3+,n1+	*	HP:Z:HEALTHY
+P	toy_hap2	n1+,n3+,n1+,n2+,n4+	*	HP:Z:HEALTHY
+P	toy_hap3	n1+,n2+,n4+,n1+,n3+,n1+	*	HP:Z:UNHEALTHY
+P	toy_hap4	n1+,n2+,n4+,n2+,n4+	*	HP:Z:UNHEALTHY

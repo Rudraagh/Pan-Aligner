@@ -1,0 +1,73 @@
+PanAligner Reproduction Evaluation
+=================================
+This evaluation summarizes sequence-to-graph alignment behavior on held-out test sequences.
+
+Overall metrics
+- query count: 46
+- aligned query count: 46
+- unaligned query count: 0
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+- mean alignment score: 128882.5652
+- mean normalized score: 1.0000
+
+Hybrid approximation summary
+- enabled: True
+- minigraph-selected queries: 45
+- PanAligner-selected queries: 1
+- easy-case queries: 45
+
+Per-bucket metrics
+healthy
+- query count: 23
+- aligned query count: 23
+- unaligned query count: 0
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+
+unhealthy
+- query count: 23
+- aligned query count: 23
+- unaligned query count: 0
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+
+Per-gene metrics
+APP
+- query count: 10
+- aligned query count: 10
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+- mean alignment score: 290574.9000
+
+PSEN1
+- query count: 32
+- aligned query count: 32
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+- mean alignment score: 87272.4062
+
+PSEN2
+- query count: 4
+- aligned query count: 4
+- mean identity: 1.0000
+- mean coverage: 0.9998
+- mean MAPQ: 60.0000
+- mean alignment score: 57533.0000
+
+Additional paper-style local artifacts
+- mq cutoff sweep csv: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\outputs\evaluation\mq_cutoff_sweep.csv
+- mq cutoff sweep plot: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\outputs\evaluation\mq_cutoff_sweep.png
+- local graph properties csv: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\outputs\evaluation\local_graph_properties.csv
+- local reproduction report: C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\outputs\evaluation\dataset_specific_reproduction_report.txt
+
+Note
+These artifacts approximate the paper's evaluation style with the local dataset, but they do not replace the paper's full external benchmark suite.

@@ -1,0 +1,11 @@
+H	VN:Z:1.0
+S	n1	ACGT	RC:i:4	CS:f:0.850000
+S	n2	TACG	RC:i:1	CS:f:0.812500
+S	n3	TTCG	RC:i:3	CS:f:0.854167
+L	n1	+	n3	+	0M	RC:i:3	CS:f:0.750000
+L	n2	+	n1	+	0M	RC:i:1	CS:f:0.625000
+L	n3	+	n2	+	0M	RC:i:1	CS:f:0.291667
+P	toy_hap1	n1+	*	HP:Z:HEALTHY
+P	toy_hap2	n1+,n3+	*	HP:Z:HEALTHY
+P	toy_hap3	n1+,n3+,n2+,n1+	*	HP:Z:UNHEALTHY
+P	toy_hap4	n1+,n3+	*	HP:Z:UNHEALTHY

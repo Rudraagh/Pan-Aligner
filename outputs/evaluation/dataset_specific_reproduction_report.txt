@@ -1,0 +1,59 @@
+Dataset-Specific Reproduction Report
+===================================
+This report captures the paper-style outputs that are feasible with the local APP/PSEN1/PSEN2 dataset.
+
+What is included here
+- Local combined-graph structural properties per gene.
+- Held-out alignment summary across all test sequences.
+- Per-gene and per-bucket alignment behavior.
+- Mapping-quality cutoff sweep artifacts and plots.
+
+Overall local evaluation
+- query count: 46
+- aligned query count: 46
+- unaligned query count: 0
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+- mean alignment score: 128882.5652
+
+Local graph properties
+APP
+- nodes: 96
+- edges: 130
+- weak components: 1
+- SCCs: 96
+- cycle detected: False
+
+PSEN1
+- nodes: 323
+- edges: 428
+- weak components: 1
+- SCCs: 323
+- cycle detected: False
+
+PSEN2
+- nodes: 34
+- edges: 43
+- weak components: 1
+- SCCs: 34
+- cycle detected: False
+
+Per-bucket alignment summary
+healthy
+- query count: 23
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+
+unhealthy
+- query count: 23
+- alignment rate: 1.0000
+- mean identity: 1.0000
+- mean coverage: 1.0000
+- mean MAPQ: 60.0000
+
+Important limitation
+These outputs are dataset-specific approximations, not the paper's 10H/40H/80H/95H multi-aligner benchmark tables.

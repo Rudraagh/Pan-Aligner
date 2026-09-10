@@ -1,0 +1,4 @@
+gene,graph_path,node_count,edge_count,weakly_connected_components,strongly_connected_components,largest_component_size,largest_scc_size,cycle_detected,self_loops
+APP,C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\graphs\train\app.combined.gfa,96,130,1,96,96,1,False,0
+PSEN1,C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\graphs\train\psen1.combined.gfa,323,428,1,323,323,1,False,0
+PSEN2,C:\Users\arun1\OneDrive\Desktop\FINAL YEAR PROJECT PHASE\graphs\train\psen2.combined.gfa,34,43,1,34,34,1,False,0

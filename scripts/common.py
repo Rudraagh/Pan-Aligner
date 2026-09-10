@@ -4,6 +4,7 @@ import json
 import re
 import shlex
 import subprocess
+import sys
 from pathlib import Path
 from typing import Iterable, Sequence
 
@@ -68,11 +69,19 @@ def infer_gene_from_reference_header(header: str) -> str:
 
 
 def run_command(command: Sequence[str], cwd: Path | None = None, stdout_path: Path | None = None) -> subprocess.CompletedProcess:
+    command_to_run = list(command)
+    if command_to_run:
+        launcher = Path(command_to_run[0])
+        if launcher.name == "minigraph_wsl.cmd":
+            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "/tmp/fyp/minigraph/minigraph", *command_to_run[1:]]
+        elif launcher.name == "panaligner_wsl.cmd":
+            command_to_run = [sys.executable, str(ROOT / "tools" / "wsl_exec.py"), "/tmp/fyp/PanAligner/PanAligner", *command_to_run[1:]]
+
     if stdout_path is not None:
         ensure_dir(stdout_path.parent)
         with stdout_path.open("w", encoding="utf-8") as handle:
             completed = subprocess.run(
-                list(command),
+                command_to_run,
                 cwd=str(cwd) if cwd else None,
                 stdout=handle,
                 stderr=subprocess.PIPE,
@@ -81,7 +90,7 @@ def run_command(command: Sequence[str], cwd: Path | None = None, stdout_path: Pa
             )
     else:
         completed = subprocess.run(
-            list(command),
+            command_to_run,
             cwd=str(cwd) if cwd else None,
             stdout=subprocess.PIPE,
             stderr=subprocess.PIPE,
@@ -90,7 +99,7 @@ def run_command(command: Sequence[str], cwd: Path | None = None, stdout_path: Pa
         )
 
     if completed.returncode != 0:
-        rendered = " ".join(shlex.quote(part) for part in command)
+        rendered = " ".join(shlex.quote(part) for part in command_to_run)
         raise RuntimeError(
             f"Command failed with exit code {completed.returncode}: {rendered}\nSTDERR:\n{completed.stderr}"
         )
@@ -131,4 +140,3 @@ def resolve_binary(explicit: str | None, candidates: Sequence[Path]) -> Path:
     raise FileNotFoundError(
         f"Unable to locate required binary. Checked: {candidate_text}. Pass the path explicitly with the script argument."
     )
-

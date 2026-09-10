@@ -1,0 +1,4 @@
+anchor_id,node_id,haplotype_count,U,D,C,alpha,beta,gamma,final_score,selected
+a1,n1,4,0.0,1.0,0.85,0.35,0.35,0.3,0.605,True
+a2,n2,1,0.75,0.2,0.8125,0.35,0.35,0.3,0.5762499999999999,True
+a3,n3,3,0.25,0.6,0.8541666666666666,0.35,0.35,0.3,0.55375,True

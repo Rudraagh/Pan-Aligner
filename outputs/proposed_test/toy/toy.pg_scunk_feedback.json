@@ -1,0 +1,46 @@
+{
+  "accepted": true,
+  "final_parameters": {
+    "k": 3,
+    "window_size": 2,
+    "min_node_support": 1,
+    "max_anchors": 8,
+    "min_anchor_spacing": 1.0
+  },
+  "best_quality": {
+    "node_count": 4,
+    "edge_count": 6,
+    "mean_node_consistency": 0.7224747474747475,
+    "mean_edge_consistency": 0.5833333333333334,
+    "mean_node_support_ratio": 0.8125,
+    "anchor_count": 3,
+    "anchor_coverage_ratio": 1.0,
+    "branching_node_ratio": 0.5,
+    "overall_quality_score": 0.7459090909090911
+  },
+  "round_summaries": [
+    {
+      "round_index": 1,
+      "selected_parameters": {
+        "k": 3,
+        "window_size": 2,
+        "min_node_support": 1,
+        "max_anchors": 8,
+        "min_anchor_spacing": 1.0
+      },
+      "quality": {
+        "node_count": 4,
+        "edge_count": 6,
+        "mean_node_consistency": 0.7224747474747475,
+        "mean_edge_consistency": 0.5833333333333334,
+        "mean_node_support_ratio": 0.8125,
+        "anchor_count": 3,
+        "anchor_coverage_ratio": 1.0,
+        "branching_node_ratio": 0.5,
+        "overall_quality_score": 0.7459090909090911
+      },
+      "accepted": true,
+      "decision": "accepted"
+    }
+  ]
+}

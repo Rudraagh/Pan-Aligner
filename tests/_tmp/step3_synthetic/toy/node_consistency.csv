@@ -1,0 +1,5 @@
+node_id,haplotype_count,path_fraction,predecessor_consistency,successor_consistency,local_consistency,consistency_score,status
+n1,4,1.0,0.4444444444444444,0.4444444444444444,1.0,0.7222222222222222,shared
+n2,3,0.75,0.75,1.0,1.0,0.875,shared
+n3,3,0.75,1.0,1.0,1.0,0.9375,shared
+n4,3,0.75,1.0,0.5,1.0,0.8125,shared
