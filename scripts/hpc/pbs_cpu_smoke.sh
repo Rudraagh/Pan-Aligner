@@ -14,13 +14,35 @@
 #
 # Configure via environment (or edit here):
 #   PROJECT_DIR  staged repository on the cluster (default: PBS submit directory)
-#   PYTHON_BIN   Python >= 3.10, e.g. from a CondaEnv or venv (default: python3)
+#   MODULES      space-separated modules to load first, e.g. "gcc11" (names from pbs_env_probe.sh)
+#   PYTHON_BIN   Python >= 3.10 (default: first python3.13..python3.10/python3 on PATH that qualifies)
 #   RUN_BUILD=1  also run scripts/hpc/build_tools_linux.sh inside this job
 set -uo pipefail
 
 PROJECT_DIR="${PROJECT_DIR:-${PBS_O_WORKDIR:-$(pwd)}}"
-PYTHON_BIN="${PYTHON_BIN:-python3}"
+MODULES="${MODULES:-}"
 RUN_BUILD="${RUN_BUILD:-0}"
+
+if [[ -n "$MODULES" ]]; then
+  if ! type module >/dev/null 2>&1; then
+    for init in /etc/profile.d/modules.sh /usr/share/Modules/init/bash /etc/profile.d/lmod.sh; do
+      [[ -f "$init" ]] && source "$init" && break
+    done
+  fi
+  for mod in $MODULES; do
+    module load "$mod" || { echo "ERROR: module load $mod failed" >&2; exit 2; }
+  done
+fi
+
+if [[ -z "${PYTHON_BIN:-}" ]]; then
+  for candidate in python3.13 python3.12 python3.11 python3.10 python3 python; do
+    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' 2>/dev/null; then
+      PYTHON_BIN="$candidate"
+      break
+    fi
+  done
+  PYTHON_BIN="${PYTHON_BIN:-python3}"
+fi
 JOB_TAG="${PBS_JOBID:-local}"
 RUN_DIR="$PROJECT_DIR/hpc_runs/$(date +%Y%m%d_%H%M%S)_cpu_smoke_${JOB_TAG%%.*}"
 
@@ -57,6 +79,7 @@ fi
   echo "cpu: $(grep -m1 'model name' /proc/cpuinfo | cut -d: -f2- | sed 's/^ //')"
   echo "nproc (visible): $(nproc)"
   echo "PBS_JOBID=${PBS_JOBID:-} PBS_QUEUE=${PBS_QUEUE:-} NCPUS=${NCPUS:-} PBS_O_WORKDIR=${PBS_O_WORKDIR:-}"
+  echo "modules requested: ${MODULES:-none}"
   echo "python: $(command -v "$PYTHON_BIN") $("$PYTHON_BIN" --version 2>&1)"
   echo "gcc: $(gcc --version 2>&1 | head -1)"
   echo "nvidia-smi: $(command -v nvidia-smi || echo 'not found')"

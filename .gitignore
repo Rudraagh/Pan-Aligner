@@ -21,6 +21,7 @@ outputs/**/*.pyc
 # HPC build products and per-job results (retrieved separately, not versioned).
 /.hpc-build/
 /hpc_runs/
+/hpc_staging/
 
 Thumbs.db
 .DS_Store
