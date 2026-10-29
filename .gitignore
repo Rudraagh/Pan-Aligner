@@ -24,5 +24,12 @@ outputs/**/*.pyc
 /hpc_staging/
 /.hpc-venv/
 
+# Laptop builds of helper tools (e.g. pbsim2 for truth-labelled reads).
+/.local-build/
+
+# Truth-eval simulated reads and per-seed GAFs (~480 MB, regenerable from scripts + seeds).
+/outputs/truth_eval/reads/*/*/
+/outputs/truth_eval/results/*/*/
+
 Thumbs.db
 .DS_Store

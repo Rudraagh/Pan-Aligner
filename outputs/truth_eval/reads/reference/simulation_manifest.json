@@ -1,0 +1,164 @@
+{
+  "source": "reference",
+  "parameters": {
+    "depth": 30.0,
+    "length": 10000,
+    "accuracy": 0.95,
+    "model": "P6C4.model",
+    "seeds": [
+      1,
+      2,
+      3
+    ]
+  },
+  "paper_parameters": {
+    "depth": 0.5,
+    "length": 10000,
+    "accuracy": 0.95,
+    "model": "P6C4.model"
+  },
+  "tools": {
+    "pbsim": ".local-build/pbsim2/bin/pbsim",
+    "pbsim_sha256": "af4e0591091596064c9543626659352f1a42c495338b11bff7fd19ce877e4792",
+    "paftools_js": "tools/third_party/minimap2/misc/paftools.js",
+    "k8": "tools/third_party/k8-bin/k8-1.2/k8-x86_64-Linux"
+  },
+  "host": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "runs": [
+    {
+      "gene": "APP",
+      "seed": 1,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000021.9|:25880550-26171128"
+      ],
+      "source_bases": 290579,
+      "reference_name": "ref|NC_000021.9|:25880550-26171128",
+      "reference_fasta": "outputs/truth_eval/reads/reference/APP/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/APP/seed1/reads.fa",
+      "reads": 872,
+      "reads_sha256": "bc39af8c84e2abe277a4b3aa636a37bff72010390ea114188568e72d5362f636",
+      "pbsim_log": "outputs/truth_eval/reads/reference/APP/seed1/pbsim.log"
+    },
+    {
+      "gene": "APP",
+      "seed": 2,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000021.9|:25880550-26171128"
+      ],
+      "source_bases": 290579,
+      "reference_name": "ref|NC_000021.9|:25880550-26171128",
+      "reference_fasta": "outputs/truth_eval/reads/reference/APP/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/APP/seed2/reads.fa",
+      "reads": 872,
+      "reads_sha256": "2d728c45a6dd9be9537b7d5180d1ea48cf5cc6bd6ee7e5fe6023b31d3913019e",
+      "pbsim_log": "outputs/truth_eval/reads/reference/APP/seed2/pbsim.log"
+    },
+    {
+      "gene": "APP",
+      "seed": 3,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000021.9|:25880550-26171128"
+      ],
+      "source_bases": 290579,
+      "reference_name": "ref|NC_000021.9|:25880550-26171128",
+      "reference_fasta": "outputs/truth_eval/reads/reference/APP/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/APP/seed3/reads.fa",
+      "reads": 872,
+      "reads_sha256": "efaca9731ec511c7de2b37e56d4de4e0469ca12ec7c9a8004d08bdfabd81f950",
+      "pbsim_log": "outputs/truth_eval/reads/reference/APP/seed3/pbsim.log"
+    },
+    {
+      "gene": "PSEN1",
+      "seed": 1,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000014.9|:73136417-73223691"
+      ],
+      "source_bases": 87275,
+      "reference_name": "ref|NC_000014.9|:73136417-73223691",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN1/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN1/seed1/reads.fa",
+      "reads": 262,
+      "reads_sha256": "9e4ac611c0e212a98ab0f1b68c16a21c079a3fd9878e7789b744e1af5dfa79e8",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN1/seed1/pbsim.log"
+    },
+    {
+      "gene": "PSEN1",
+      "seed": 2,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000014.9|:73136417-73223691"
+      ],
+      "source_bases": 87275,
+      "reference_name": "ref|NC_000014.9|:73136417-73223691",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN1/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN1/seed2/reads.fa",
+      "reads": 262,
+      "reads_sha256": "c189e2f1a4cb56a2915b9845888d3602551f002aa02af4d4064c641fd356a293",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN1/seed2/pbsim.log"
+    },
+    {
+      "gene": "PSEN1",
+      "seed": 3,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000014.9|:73136417-73223691"
+      ],
+      "source_bases": 87275,
+      "reference_name": "ref|NC_000014.9|:73136417-73223691",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN1/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN1/seed3/reads.fa",
+      "reads": 262,
+      "reads_sha256": "e1510c55d9b50e4d64e9d87b2863daa1d93dc2e7d8ad593785f83b6c22919c24",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN1/seed3/pbsim.log"
+    },
+    {
+      "gene": "PSEN2",
+      "seed": 1,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000001.11|:226870184-226927726"
+      ],
+      "source_bases": 57543,
+      "reference_name": "ref|NC_000001.11|:226870184-226927726",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN2/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN2/seed1/reads.fa",
+      "reads": 173,
+      "reads_sha256": "0952326e127720b7e41a8dcb9e01e5563e4fa060ec8589f20c4ae418014ffdd1",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN2/seed1/pbsim.log"
+    },
+    {
+      "gene": "PSEN2",
+      "seed": 2,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000001.11|:226870184-226927726"
+      ],
+      "source_bases": 57543,
+      "reference_name": "ref|NC_000001.11|:226870184-226927726",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN2/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN2/seed2/reads.fa",
+      "reads": 173,
+      "reads_sha256": "42ad7bcd79051ca7eaefe67bb6f1f4f781dabd6d48e82a4be860bd3096cf29e2",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN2/seed2/pbsim.log"
+    },
+    {
+      "gene": "PSEN2",
+      "seed": 3,
+      "source": "reference",
+      "source_sequences": [
+        "ref|NC_000001.11|:226870184-226927726"
+      ],
+      "source_bases": 57543,
+      "reference_name": "ref|NC_000001.11|:226870184-226927726",
+      "reference_fasta": "outputs/truth_eval/reads/reference/PSEN2/reference.fa",
+      "reads_fasta": "outputs/truth_eval/reads/reference/PSEN2/seed3/reads.fa",
+      "reads": 173,
+      "reads_sha256": "9c721a56822a4bb2a623134d91737e8c40c81abc1070369de356e58729b4cab7",
+      "pbsim_log": "outputs/truth_eval/reads/reference/PSEN2/seed3/pbsim.log"
+    }
+  ]
+}

@@ -1,0 +1,13 @@
+source,gene,aligner,graph,seeds,reads_total,aligned_pct_mean,aligned_pct_sd,unaligned_pct_mean,unaligned_pct_sd,mapeval_wrong_pct_mean,mapeval_wrong_pct_sd,projected_wrong_pct_mean,projected_wrong_pct_sd,off_reference_path_total,unprojectable_total
+reference,APP,minigraph,combined,3,2616,100.0,0.0,0.0,0.0,1.7202,0.4135,0.0,0.0,45,0
+reference,APP,minigraph,linear,3,2616,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0
+reference,APP,panaligner,combined,3,2616,100.0,0.0,0.0,0.0,1.682,0.4027,0.0,0.0,44,0
+reference,APP,panaligner,linear,3,2616,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0
+reference,PSEN1,minigraph,combined,3,786,100.0,0.0,0.0,0.0,15.5216,1.9211,0.0,0.0,122,0
+reference,PSEN1,minigraph,linear,3,786,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0
+reference,PSEN1,panaligner,combined,3,786,100.0,0.0,0.0,0.0,15.3944,1.9586,0.0,0.0,121,0
+reference,PSEN1,panaligner,linear,3,786,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0
+reference,PSEN2,minigraph,combined,3,519,100.0,0.0,0.0,0.0,2.8902,0.0,0.0,0.0,15,0
+reference,PSEN2,minigraph,linear,3,519,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0
+reference,PSEN2,panaligner,combined,3,519,100.0,0.0,0.0,0.0,2.6975,0.3337,0.0,0.0,14,0
+reference,PSEN2,panaligner,linear,3,519,100.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0,0

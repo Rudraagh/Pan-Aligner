@@ -1,0 +1,30 @@
+{
+  "source": "heldout",
+  "git": {
+    "commit": "f8172184bd79d5c62cb549d0d3ac4d087e2917fe",
+    "dirty_paths": 704
+  },
+  "host": "Linux-6.6.87.2-microsoft-standard-WSL2-x86_64-with-glibc2.39",
+  "threads": 4,
+  "aligner_command": "<aligner> -t <threads> -cx lr <graph> <reads>",
+  "mapeval_command": "k8 paftools.js mapeval <gaf>  (defaults: -r 0.1, -m 0 longest alignment)",
+  "tool_versions": {
+    "panaligner": "PanAligner v1.0",
+    "minigraph": "0.21-r606",
+    "paftools": "2.30-r1287"
+  },
+  "simulation_manifest": "outputs/truth_eval/reads/heldout/simulation_manifest.json",
+  "input_sha256": {
+    "graphs/train/app.combined.gfa": "9290c8074d73c07ef004121a44171c1fbe035c9ca6e10b3be19ba59996fc581e",
+    "outputs/truth_eval/reads/heldout/APP/reference.fa": "6d39c52e134218ad645309317b21fd3934e3778195d4cb8162d6652f79218084",
+    "graphs/train/psen1.combined.gfa": "e4ef68aae74c737522b2106e15760bb18680128c13488958470c8a70111b8ed7",
+    "outputs/truth_eval/reads/heldout/PSEN1/reference.fa": "32b98143715c8b84d5c879c382c2344bb10ef826c8a9ea102cdea4644ada697c",
+    "graphs/train/psen2.combined.gfa": "a38153e23ba51f1b509236a723b7733160bece14a0533c089fd327782b144684",
+    "outputs/truth_eval/reads/heldout/PSEN2/reference.fa": "c0d1869556d6f9eb995e6507bc0ec63747b9ecb0e50af1c0a18282e43e171b5f"
+  },
+  "notes": [
+    "Locus-scale benchmark on APP/PSEN1/PSEN2 regions; not the paper's whole-genome 10H-95H benchmark.",
+    "wall_seconds is laptop/WSL wall time for one aligner call; it is not a runtime benchmark.",
+    "mapeval counts alignments through non-reference nodes as wrong; projected_* re-scores those paths."
+  ]
+}
