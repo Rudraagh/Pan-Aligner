@@ -6,7 +6,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_project_path, write_json
 
 
 THEORY_OUTPUT_DIR = OUTPUTS_DIR / "theory"
@@ -54,11 +54,11 @@ def choose_source_graph(graph_path: Path | None = None) -> tuple[Path, str]:
         if manifest_path.exists():
             manifest = read_json(manifest_path)
             if "APP" in manifest["graphs"]:
-                selected = Path(manifest["graphs"]["APP"]["combined_graph"]).resolve()
+                selected = resolve_project_path(manifest["graphs"]["APP"]["combined_graph"]).resolve()
                 if selected.exists():
                     return selected, "APP combined"
             first_gene = sorted(manifest["graphs"])[0]
-            selected = Path(manifest["graphs"][first_gene]["combined_graph"]).resolve()
+            selected = resolve_project_path(manifest["graphs"][first_gene]["combined_graph"]).resolve()
             if selected.exists():
                 return selected, f"{first_gene} combined"
 

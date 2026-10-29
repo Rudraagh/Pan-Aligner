@@ -7,7 +7,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 import networkx as nx
 
-from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_project_path, write_json
 from parse_gaf import parse_gaf_file
 
 
@@ -172,7 +172,7 @@ def main() -> None:
             raise ValueError("Pass --gene when using --gaf so the script knows which graph to overlay.")
         selected = graph_manifest["graphs"][args.gene.upper()]["combined_graph"]
         overlay_path = ensure_dir(OUTPUTS_DIR / "alignments") / f"{args.gene.lower()}.alignment.png"
-        visualize_alignment(Path(selected), args.gaf.resolve(), overlay_path)
+        visualize_alignment(resolve_project_path(selected), args.gaf.resolve(), overlay_path)
         print(f"Alignment visualization written to {overlay_path.resolve()}")
 
 

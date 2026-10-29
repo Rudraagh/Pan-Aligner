@@ -15,6 +15,7 @@ from common import (
     normalize_sequence,
     read_json,
     resolve_binary,
+    resolve_project_path,
     validate_dna,
     write_json,
     write_wrapped_fasta,
@@ -37,8 +38,7 @@ def prepare_query_fasta(query_sequence: str | None, query_fasta: Path | None, ou
 
 def resolve_graph_path(graph_path: str) -> Path:
     """Resolve portable manifest paths against the project root."""
-    candidate = Path(graph_path)
-    return candidate.resolve() if candidate.is_absolute() else (ROOT / candidate).resolve()
+    return resolve_project_path(graph_path)
 
 
 def summarize_alignment(result: AlignmentResult | None) -> dict:

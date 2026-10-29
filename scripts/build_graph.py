@@ -3,7 +3,7 @@ from __future__ import annotations
 import argparse
 from pathlib import Path
 
-from common import GRAPHS_DIR, METADATA_DIR, ROOT, ensure_dir, read_json, resolve_binary, run_command, write_json
+from common import GRAPHS_DIR, METADATA_DIR, ROOT, ensure_dir, project_relative, read_json, resolve_binary, resolve_project_path, run_command, write_json
 
 
 def build_gene_graph(reference_fasta: Path, sample_fastas: list[Path], output_gfa: Path, minigraph_bin: Path, threads: int) -> None:
@@ -23,13 +23,14 @@ def build_gene_graph(reference_fasta: Path, sample_fastas: list[Path], output_gf
 
 
 def resolve_manifest_fasta_path(candidate: Path, gene: str, label: str | None = None, sequence_id: str | None = None) -> Path:
+    candidate = resolve_project_path(candidate)
     if candidate.exists():
         return candidate
 
     if label is None:
-        fallback = Path("data/raw") / f"{gene.lower()}_reference.fa"
+        fallback = ROOT / "data" / "raw" / f"{gene.lower()}_reference.fa"
     else:
-        fallback = Path("data") / label.lower() / gene.lower() / f"{sequence_id}.fa"
+        fallback = ROOT / "data" / label.lower() / gene.lower() / f"{sequence_id}.fa"
 
     resolved_fallback = fallback.resolve()
     if resolved_fallback.exists():
@@ -54,11 +55,6 @@ def build_graphs(
         healthy_fastas = [resolve_manifest_fasta_path(Path(entry["path"]), gene, "healthy", entry["id"]) for entry in payload["healthy"]]
         unhealthy_fastas = [resolve_manifest_fasta_path(Path(entry["path"]), gene, "unhealthy", entry["id"]) for entry in payload["unhealthy"]]
         combined_fastas = healthy_fastas + unhealthy_fastas
-
-        # Manifests are shared between Windows/WSL users, so retain project-relative
-        # paths rather than embedding a machine-specific home directory.
-        def project_relative(path: Path) -> str:
-            return path.resolve().relative_to(ROOT).as_posix()
 
         healthy_graph = (target_graph_dir / f"{gene.lower()}.healthy.gfa").resolve()
         unhealthy_graph = (target_graph_dir / f"{gene.lower()}.unhealthy.gfa").resolve()

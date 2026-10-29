@@ -5,7 +5,7 @@ import re
 import subprocess
 from pathlib import Path
 
-from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, resolve_project_path, write_json
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -50,7 +50,7 @@ def build_report(test_manifest_path: Path) -> dict:
         found_one = False
         for bucket in ("healthy", "unhealthy"):
             for entry in payload[bucket]:
-                fasta_path = Path(entry["path"])
+                fasta_path = resolve_project_path(entry["path"])
                 header = first_fasta_header(fasta_path)
                 has_coords = header_has_truth_coordinates(header)
                 coordinate_ready = coordinate_ready and has_coords

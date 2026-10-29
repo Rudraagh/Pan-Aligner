@@ -8,7 +8,7 @@ import shutil
 import matplotlib.pyplot as plt
 
 from align import run_minigraph, run_panaligner
-from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json
 from parse_gaf import best_alignment
 from visualize import visualize_alignment
 from visualize import graph_statistics, parse_gfa
@@ -100,7 +100,7 @@ def write_csv_rows(output_path: Path, rows: list[dict]) -> None:
 def build_local_graph_properties(graph_manifest: dict) -> list[dict[str, int | str | bool]]:
     rows: list[dict[str, int | str | bool]] = []
     for gene, entry in sorted(graph_manifest["graphs"].items()):
-        combined_graph = Path(entry["combined_graph"])
+        combined_graph = resolve_project_path(entry["combined_graph"])
         stats = graph_statistics(parse_gfa(combined_graph))
         rows.append(
             {
@@ -256,7 +256,7 @@ def evaluate_panaligner_workflow(
     }
 
     for gene, payload in test_manifest["genes"].items():
-        combined_graph = Path(graph_manifest["graphs"][gene]["combined_graph"])
+        combined_graph = resolve_project_path(graph_manifest["graphs"][gene]["combined_graph"])
         per_gene_summary[gene] = {
             "sequence_count": 0,
             "aligned_sequences": 0,
@@ -269,7 +269,7 @@ def evaluate_panaligner_workflow(
 
         for bucket_name in ("healthy", "unhealthy"):
             for entry in payload[bucket_name]:
-                sequence_path = Path(entry["path"])
+                sequence_path = resolve_project_path(entry["path"])
                 sequence_output_dir = ensure_dir(alignments_root / gene.lower() / entry["id"])
                 gaf_path = sequence_output_dir / "combined.gaf"
                 best, hybrid_info = run_alignment_with_local_hybrid(

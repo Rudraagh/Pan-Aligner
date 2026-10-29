@@ -5,7 +5,7 @@ import csv
 from pathlib import Path
 
 from align import run_panaligner
-from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json
 from parse_gaf import AlignmentResult, best_alignment
 from visualize import parse_gfa
 
@@ -98,10 +98,10 @@ def extract_sequence_features(
     graph_cache: dict[str, object],
 ) -> dict:
     gene_graphs = graph_manifest["graphs"][gene]
-    combined_graph_path = Path(gene_graphs["combined_graph"])
-    healthy_graph_path = Path(gene_graphs["healthy_graph"])
-    unhealthy_graph_path = Path(gene_graphs["unhealthy_graph"])
-    sequence_path = Path(sequence_entry["path"])
+    combined_graph_path = resolve_project_path(gene_graphs["combined_graph"])
+    healthy_graph_path = resolve_project_path(gene_graphs["healthy_graph"])
+    unhealthy_graph_path = resolve_project_path(gene_graphs["unhealthy_graph"])
+    sequence_path = resolve_project_path(sequence_entry["path"])
 
     sequence_output_dir = ensure_dir(output_dir / split_name / gene.lower() / sequence_entry["id"])
     alignments = {}

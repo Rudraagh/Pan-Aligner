@@ -4,7 +4,7 @@ import argparse
 from pathlib import Path
 
 from build_graph import build_graphs
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, resolve_binary
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, resolve_binary, resolve_project_path
 from evaluate import evaluate_test_set
 from extract_features import generate_feature_dataset
 from predict_ml import predict_with_ml
@@ -47,9 +47,9 @@ def run_pipeline(
 
     for gene_name, graph_entry in graph_manifest["graphs"].items():
         train_graph_output_dir = ensure_dir(OUTPUTS_DIR / "graphs" / "train")
-        visualize_graph(Path(graph_entry["combined_graph"]), train_graph_output_dir / f"{gene_name.lower()}.combined")
-        visualize_graph(Path(graph_entry["healthy_graph"]), train_graph_output_dir / f"{gene_name.lower()}.healthy")
-        visualize_graph(Path(graph_entry["unhealthy_graph"]), train_graph_output_dir / f"{gene_name.lower()}.unhealthy")
+        visualize_graph(resolve_project_path(graph_entry["combined_graph"]), train_graph_output_dir / f"{gene_name.lower()}.combined")
+        visualize_graph(resolve_project_path(graph_entry["healthy_graph"]), train_graph_output_dir / f"{gene_name.lower()}.healthy")
+        visualize_graph(resolve_project_path(graph_entry["unhealthy_graph"]), train_graph_output_dir / f"{gene_name.lower()}.unhealthy")
 
     if evaluate_split:
         baseline_metrics = evaluate_test_set(
@@ -107,7 +107,7 @@ def run_pipeline(
         selected_gene = prediction["selected_gene"]
         combined_gaf = OUTPUTS_DIR / "alignments" / f"{selected_gene.lower()}.combined.gaf"
         if combined_gaf.exists():
-            visualize_alignment(Path(graph_manifest["graphs"][selected_gene]["combined_graph"]), combined_gaf, OUTPUTS_DIR / "alignments" / f"{selected_gene.lower()}.alignment.png")
+            visualize_alignment(resolve_project_path(graph_manifest["graphs"][selected_gene]["combined_graph"]), combined_gaf, OUTPUTS_DIR / "alignments" / f"{selected_gene.lower()}.alignment.png")
         return prediction
     return None
 

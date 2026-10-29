@@ -18,5 +18,9 @@ outputs/**/*.pyc
 /outputs/proposed_final_evaluation/APP/app.proposed_graph.json
 /outputs/proposed_final_evaluation/PSEN1/psen1.proposed_graph.json
 
+# HPC build products and per-job results (retrieved separately, not versioned).
+/.hpc-build/
+/hpc_runs/
+
 Thumbs.db
 .DS_Store

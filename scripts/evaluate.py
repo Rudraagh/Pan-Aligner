@@ -10,7 +10,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
 
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json
 from predictor import predict_health_state
 
 
@@ -235,7 +235,7 @@ def evaluate_test_set(
             for entry in payload[label_key]:
                 sequence_output_dir = ensure_dir(alignments_root / gene.lower() / entry["id"])
                 prediction = predict_health_state(
-                    Path(entry["path"]),
+                    resolve_project_path(entry["path"]),
                     train_graph_manifest_path,
                     panaligner_bin,
                     threads,

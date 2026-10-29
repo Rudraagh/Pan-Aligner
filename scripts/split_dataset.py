@@ -4,11 +4,11 @@ import argparse
 import random
 from pathlib import Path
 
-from common import DATA_DIR, METADATA_DIR, ensure_dir, read_json, write_json, write_wrapped_fasta
+from common import DATA_DIR, METADATA_DIR, ensure_dir, project_relative, read_json, resolve_project_path, write_json, write_wrapped_fasta
 
 
 def resolve_local_fasta_path(entry: dict, gene: str, payload_key: str) -> Path:
-    candidate = Path(entry["path"])
+    candidate = resolve_project_path(entry["path"])
     if candidate.exists():
         return candidate
     fallback = DATA_DIR / payload_key / gene.lower() / f"{entry['id']}.fa"
@@ -42,7 +42,7 @@ def write_split_records(records: list[dict], destination_dir: Path, combined_pat
         written_records.append(
             {
                 "id": record["id"],
-                "path": str(sample_path.resolve()),
+                "path": project_relative(sample_path),
                 "length": len(sequence),
                 "source_file": record["source_file"],
                 "label": record["label"],
@@ -60,13 +60,13 @@ def build_dataset_manifest(split_name: str, preprocess_manifest: dict, split_rec
     }
 
     for gene, gene_payload in preprocess_manifest["genes"].items():
-        reference_path = Path(gene_payload["reference"]["path"])
+        reference_path = resolve_project_path(gene_payload["reference"]["path"])
         if not reference_path.exists():
             reference_path = DATA_DIR / "raw" / f"{gene.lower()}_reference.fa"
         dataset_manifest["genes"][gene] = {
             "reference": {
                 **gene_payload["reference"],
-                "path": str(reference_path.resolve()),
+                "path": project_relative(reference_path),
             },
             "healthy": [],
             "unhealthy": [],
@@ -87,8 +87,8 @@ def build_dataset_manifest(split_name: str, preprocess_manifest: dict, split_rec
             unhealthy_output_root,
             unhealthy_combined_path,
         )
-        dataset_manifest["genes"][gene]["healthy_combined_fasta"] = str(healthy_combined_path.resolve())
-        dataset_manifest["genes"][gene]["unhealthy_combined_fasta"] = str(unhealthy_combined_path.resolve())
+        dataset_manifest["genes"][gene]["healthy_combined_fasta"] = project_relative(healthy_combined_path)
+        dataset_manifest["genes"][gene]["unhealthy_combined_fasta"] = project_relative(unhealthy_combined_path)
 
     return dataset_manifest
 
@@ -170,7 +170,7 @@ def split_dataset(preprocess_manifest_path: Path, test_fraction: float, random_s
                     {
                         "id": entry["id"],
                         "sequence": "".join(sequence_lines),
-                        "source_file": str(fasta_path.resolve()),
+                        "source_file": project_relative(fasta_path),
                         "label": label_key,
                     }
                 )

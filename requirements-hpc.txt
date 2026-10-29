@@ -1,0 +1,15 @@
+# HPC (Linux/PBS) environment for CPU runs.
+# Needs Python >= 3.10 from a CondaEnv/module; the cluster default /bin/python3
+# (3.6.8 on cn01) cannot import this code. Install into a per-user env only:
+#   python -m venv "$HOME/envs/panaligner" && "$HOME/envs/panaligner/bin/pip" install -r requirements-hpc.txt
+# Offline nodes: build a wheelhouse on the laptop (pip download -r requirements-hpc.txt -d wheels
+# --platform manylinux2014_x86_64 --python-version <hpc version> --only-binary=:all:), stage it,
+# then: pip install --no-index --find-links wheels -r requirements-hpc.txt
+-r requirements.txt
+
+# Legacy ML path only (scripts/evaluate.py, train_ml.py, predict_ml.py); not used by the smoke test.
+scikit-learn>=1.3
+joblib>=1.3
+
+# GPU minimizer is optional and NOT listed: install the CuPy wheel matching the node's CUDA
+# runtime (e.g. cupy-cuda12x) only after nvidia-smi confirms an allocated GPU.

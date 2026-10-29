@@ -11,7 +11,7 @@ if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
 from build_graph import build_graphs
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT as PROJECT_ROOT, ensure_dir, resolve_binary
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT as PROJECT_ROOT, ensure_dir, resolve_binary, resolve_project_path
 from paper_evaluation import evaluate_panaligner_workflow
 from preprocess import preprocess_fasta_files
 from predictor import analyze_custom_query, prepare_query_fasta
@@ -54,17 +54,17 @@ def build_training_artifacts(
 
     graph_output_dir = ensure_dir(OUTPUTS_DIR / "graphs" / "train")
     for gene_name, graph_entry in graph_manifest["graphs"].items():
-        visualize_graph(Path(graph_entry["combined_graph"]), graph_output_dir / f"{gene_name.lower()}.combined")
-        visualize_graph(Path(graph_entry["healthy_graph"]), graph_output_dir / f"{gene_name.lower()}.healthy")
-        visualize_graph(Path(graph_entry["unhealthy_graph"]), graph_output_dir / f"{gene_name.lower()}.unhealthy")
+        visualize_graph(resolve_project_path(graph_entry["combined_graph"]), graph_output_dir / f"{gene_name.lower()}.combined")
+        visualize_graph(resolve_project_path(graph_entry["healthy_graph"]), graph_output_dir / f"{gene_name.lower()}.healthy")
+        visualize_graph(resolve_project_path(graph_entry["unhealthy_graph"]), graph_output_dir / f"{gene_name.lower()}.unhealthy")
     return graph_manifest, train_graph_manifest_path
 
 
 def choose_theory_graph(graph_manifest: dict) -> Path:
     if "APP" in graph_manifest["graphs"]:
-        return Path(graph_manifest["graphs"]["APP"]["combined_graph"]).resolve()
+        return resolve_project_path(graph_manifest["graphs"]["APP"]["combined_graph"]).resolve()
     first_gene = sorted(graph_manifest["graphs"])[0]
-    return Path(graph_manifest["graphs"][first_gene]["combined_graph"]).resolve()
+    return resolve_project_path(graph_manifest["graphs"][first_gene]["combined_graph"]).resolve()
 
 
 def run_theory_suite(graph_path: Path) -> dict:

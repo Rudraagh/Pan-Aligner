@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import asdict
 from pathlib import Path
 
-from common import OUTPUTS_DIR, ensure_dir, read_json, validate_dna, write_json
+from common import OUTPUTS_DIR, ensure_dir, read_json, resolve_project_path, validate_dna, write_json
 from visualize import visualize_graph
 
 from .anchor_selection import DEFAULT_ALPHA, DEFAULT_BETA, DEFAULT_GAMMA
@@ -45,7 +45,7 @@ def load_assembly_inputs(
                     assembly_id=item["id"],
                     gene=item["gene"].upper(),
                     haplotype_label=item.get("label", "UNKNOWN").upper(),
-                    sequence=_read_single_fasta_sequence(Path(item["path"])),
+                    sequence=_read_single_fasta_sequence(resolve_project_path(item["path"])),
                 )
             )
         return assemblies
@@ -64,7 +64,7 @@ def load_assembly_inputs(
                         assembly_id=entry["id"],
                         gene=gene_name.upper(),
                         haplotype_label=bucket_name.upper(),
-                        sequence=_read_single_fasta_sequence(Path(entry["path"])),
+                        sequence=_read_single_fasta_sequence(resolve_project_path(entry["path"])),
                     )
                 )
     return assemblies

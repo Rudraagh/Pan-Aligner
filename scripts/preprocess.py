@@ -6,7 +6,7 @@ from pathlib import Path
 
 from Bio import SeqIO
 
-from common import DATA_DIR, METADATA_DIR, ROOT, ensure_dir, normalize_sequence, parse_sequence_header, validate_dna, write_json, write_wrapped_fasta
+from common import DATA_DIR, METADATA_DIR, ROOT, ensure_dir, normalize_sequence, parse_sequence_header, project_relative, validate_dna, write_json, write_wrapped_fasta
 
 
 def preprocess_fasta_files(input_fastas: list[Path], deduplicate: bool = True) -> dict:
@@ -16,7 +16,7 @@ def preprocess_fasta_files(input_fastas: list[Path], deduplicate: bool = True) -
     metadata_root = ensure_dir(METADATA_DIR)
 
     manifest: dict[str, dict] = {
-        "input_fastas": [str(path.resolve()) for path in input_fastas],
+        "input_fastas": [project_relative(path) for path in input_fastas],
         "genes": {},
         "summary": {
             "healthy_sequences": 0,
@@ -49,7 +49,7 @@ def preprocess_fasta_files(input_fastas: list[Path], deduplicate: bool = True) -
                 {
                     "id": metadata["sequence_id"],
                     "sequence": sequence,
-                    "source_file": str(fasta_path.resolve()),
+                    "source_file": project_relative(fasta_path),
                 }
             )
             manifest["summary"][f"{metadata['label'].lower()}_sequences"] += 1
@@ -69,7 +69,7 @@ def preprocess_fasta_files(input_fastas: list[Path], deduplicate: bool = True) -
         write_wrapped_fasta([(reference_record["id"], reference_record["sequence"])], ref_path)
         gene_manifest["reference"] = {
             "id": reference_record["id"],
-            "path": str(ref_path.resolve()),
+            "path": project_relative(ref_path),
             "length": len(reference_record["sequence"]),
         }
 
@@ -88,20 +88,20 @@ def preprocess_fasta_files(input_fastas: list[Path], deduplicate: bool = True) -
                 gene_manifest[label_name].append(
                     {
                         "id": item["id"],
-                        "path": str(sample_path.resolve()),
+                        "path": project_relative(sample_path),
                         "length": len(item["sequence"]),
                     }
                 )
 
             write_wrapped_fasta(combined_records, combined_path)
-            gene_manifest[f"{label_name}_combined_fasta"] = str(combined_path.resolve())
+            gene_manifest[f"{label_name}_combined_fasta"] = project_relative(combined_path)
 
         combined_all_path = raw_root / f"{gene.lower()}_all_labeled.fa"
         combined_records = [(reference_record["id"], reference_record["sequence"])]
         combined_records.extend((entry["id"], next(item["sequence"] for item in buckets["HEALTHY"] if item["id"] == entry["id"])) for entry in gene_manifest["healthy"])
         combined_records.extend((entry["id"], next(item["sequence"] for item in buckets["UNHEALTHY"] if item["id"] == entry["id"])) for entry in gene_manifest["unhealthy"])
         write_wrapped_fasta(combined_records, combined_all_path)
-        gene_manifest["all_labeled_fasta"] = str(combined_all_path.resolve())
+        gene_manifest["all_labeled_fasta"] = project_relative(combined_all_path)
 
         manifest["genes"][gene] = gene_manifest
 

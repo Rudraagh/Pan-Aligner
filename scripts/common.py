@@ -5,7 +5,7 @@ import re
 import shlex
 import subprocess
 import sys
-from pathlib import Path
+from pathlib import Path, PureWindowsPath
 from typing import Iterable, Sequence
 
 
@@ -22,6 +22,37 @@ LABELED_HEADER_PATTERN = re.compile(r"^(?P<gene>[A-Za-z0-9]+)_(?P<label>[HU])_(?
 def ensure_dir(path: Path) -> Path:
     path.mkdir(parents=True, exist_ok=True)
     return path
+
+
+def project_relative(path: Path) -> str:
+    """Manifest form of a path: POSIX and relative to ROOT when inside the project."""
+    resolved = Path(path).resolve()
+    try:
+        return resolved.relative_to(ROOT).as_posix()
+    except ValueError:
+        return str(resolved)
+
+
+def resolve_project_path(value: str | Path) -> Path:
+    """Resolve a manifest path on Windows, WSL or Linux/HPC.
+
+    Relative paths resolve against ROOT, not the working directory. Absolute paths
+    written on another machine (e.g. C:\\Users\\...\\data\\raw\\x.fa) are remapped
+    onto the first trailing project-relative portion that exists under ROOT.
+    """
+    text = str(value)
+    windows_path = PureWindowsPath(text)
+    candidate = Path(text)
+    if not candidate.anchor and not windows_path.drive:
+        return (ROOT / candidate).resolve()
+    if candidate.exists():
+        return candidate.resolve()
+    parts = windows_path.parts if windows_path.drive else candidate.parts
+    for index in range(1, len(parts)):
+        remapped = ROOT.joinpath(*parts[index:])
+        if remapped.exists():
+            return remapped.resolve()
+    return candidate
 
 
 def normalize_sequence(sequence: str) -> str:
