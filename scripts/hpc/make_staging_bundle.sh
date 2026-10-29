@@ -5,7 +5,10 @@
 # pristine upstream sources of the gitignored PanAligner/, minigraph/ and zlib/ checkouts
 # at their recorded commits (no laptop .o files or Ubuntu-built binaries).
 #
-# Usage: bash scripts/hpc/make_staging_bundle.sh [--with-outputs] [OUT_DIR]
+# With --wheelhouse DIR (from make_wheelhouse.sh), DIR is bundled as wheelhouse/ for the
+# offline pbs_setup_venv.sh job and covered by the same checksums.
+#
+# Usage: bash scripts/hpc/make_staging_bundle.sh [--with-outputs] [--wheelhouse DIR] [OUT_DIR]
 # Output (default hpc_staging/, gitignored):
 #   panaligner_<commit>.tar.gz          the bundle (contains STAGED_FILES.sha256)
 #   panaligner_<commit>.tar.gz.sha256   checksum to verify after upload
@@ -15,10 +18,14 @@ set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
 WITH_OUTPUTS=0
-if [[ "${1:-}" == "--with-outputs" ]]; then
-  WITH_OUTPUTS=1
-  shift
-fi
+WHEELHOUSE=""
+while [[ "${1:-}" == --* ]]; do
+  case "$1" in
+    --with-outputs) WITH_OUTPUTS=1; shift ;;
+    --wheelhouse) WHEELHOUSE="$(cd "${2:?--wheelhouse needs a directory}" && pwd)"; shift 2 ;;
+    *) echo "ERROR: unknown option $1" >&2; exit 1 ;;
+  esac
+done
 OUT_DIR="${1:-$ROOT_DIR/hpc_staging}"
 TOOLS=(PanAligner minigraph zlib)
 mkdir -p "$OUT_DIR"
@@ -69,6 +76,12 @@ for tool in "${TOOLS[@]}"; do
   printf '%s %s %s\n' "$tool" "$(git -C "$ROOT_DIR/$tool" rev-parse HEAD)" "$(git -C "$ROOT_DIR/$tool" remote get-url origin 2>/dev/null || echo unknown)" >> "$WORK/$NAME/STAGED_TOOLS.txt"
 done
 
+wheel_tags=""
+if [[ -n "$WHEELHOUSE" ]]; then
+  cp -r "$WHEELHOUSE" "$WORK/$NAME/wheelhouse"
+  wheel_tags="$(cd "$WORK/$NAME/wheelhouse" && ls -d py* 2>/dev/null | tr '\n' ' ')"
+fi
+
 (cd "$WORK/$NAME" && find . -type f ! -name STAGED_FILES.sha256 -print0 | LC_ALL=C sort -z | xargs -0 sha256sum > STAGED_FILES.sha256)
 file_count="$(wc -l < "$WORK/$NAME/STAGED_FILES.sha256")"
 
@@ -98,6 +111,7 @@ cat > "$OUT_DIR/bundle_manifest.json" <<EOF
   "file_count": $file_count,
   "outputs_included": $([[ "$WITH_OUTPUTS" == "1" ]] && echo true || echo false),
   "uncommitted_changes_excluded": $([[ -n "$uncommitted" ]] && echo true || echo false),
+  "wheelhouse": "${wheel_tags% }",
   "tools": {$tool_json}
 }
 EOF

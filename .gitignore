@@ -22,6 +22,7 @@ outputs/**/*.pyc
 /.hpc-build/
 /hpc_runs/
 /hpc_staging/
+/.hpc-venv/
 
 Thumbs.db
 .DS_Store

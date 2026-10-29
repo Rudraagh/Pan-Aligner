@@ -15,13 +15,23 @@
 # Configure via environment (or edit here):
 #   PROJECT_DIR  staged repository on the cluster (default: PBS submit directory)
 #   MODULES      space-separated modules to load first, e.g. "gcc11" (names from pbs_env_probe.sh)
-#   PYTHON_BIN   Python >= 3.10 (default: first python3.13..python3.10/python3 on PATH that qualifies)
+#   PYTHON_BIN   Python >= 3.10 (default: .hpc-venv from pbs_setup_venv.sh, else the first
+#                python3.13..python3.10/python3 on PATH that qualifies)
 #   RUN_BUILD=1  also run scripts/hpc/build_tools_linux.sh inside this job
 set -uo pipefail
 
 PROJECT_DIR="${PROJECT_DIR:-${PBS_O_WORKDIR:-$(pwd)}}"
 MODULES="${MODULES:-}"
 RUN_BUILD="${RUN_BUILD:-0}"
+VENV_PYTHON="$PROJECT_DIR/.hpc-venv/bin/python"
+
+# A venv built from a module Python needs that module loaded again to run.
+if [[ -z "${PYTHON_BIN:-}" && -x "$VENV_PYTHON" ]]; then
+  PYTHON_BIN="$VENV_PYTHON"
+  MODULES="$(cat "$PROJECT_DIR/.hpc-venv/MODULES_USED" 2>/dev/null) $MODULES"
+  MODULES="${MODULES# }"
+  MODULES="${MODULES% }"
+fi
 
 if [[ -n "$MODULES" ]]; then
   if ! type module >/dev/null 2>&1; then

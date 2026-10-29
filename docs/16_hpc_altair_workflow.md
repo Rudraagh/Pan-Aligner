@@ -21,8 +21,11 @@ Nothing in this document has been verified on the cluster yet. Queue access, mem
 Commit the code you want to run first; the bundle is built from `HEAD`, not the working tree.
 
 ```bash
-bash scripts/hpc/make_staging_bundle.sh
+bash scripts/hpc/make_wheelhouse.sh            # downloads Linux wheels for py3.10-3.12 (needs internet)
+bash scripts/hpc/make_staging_bundle.sh --wheelhouse hpc_staging/wheelhouse
 ```
+
+The wheelhouse (manylinux2014, glibc >= 2.17) lets the cluster build a Python environment offline. Without `--wheelhouse` the bundle is ~72 MB; with it, ~200 MB.
 
 Output goes to `hpc_staging/` (gitignored):
 
@@ -61,9 +64,15 @@ Submit `pbs_unpack_bundle.sh` from the same folder. It:
 
 Its log is `unpack_<date>_<jobid>.log`. Stop if it reports any checksum failure.
 
-## 5. Job 3 — CPU smoke test
+## 4b. Job 3 — offline Python environment
 
-Submit `panaligner_<commit>/scripts/hpc/pbs_cpu_smoke.sh` with the working directory set to `panaligner_<commit>/`. If the probe showed Python ≥ 3.10 only after loading a module, set `MODULES` (and if needed `PYTHON_BIN`) through the launcher's environment/arguments field, or edit the defaults at the top of the uploaded copy.
+Submit `panaligner_<commit>/scripts/hpc/pbs_setup_venv.sh` with the working directory set to `panaligner_<commit>/`. It finds a base Python ≥ 3.10 (set `MODULES`/`PYTHON_BIN` if it is only available through a module), creates `.hpc-venv/` and installs `requirements.txt` from `wheelhouse/py3XY` with `--no-index` (no network).
+
+Output: `hpc_runs/<date>_setup_venv_<jobid>/setup.log`, `ENV_READY.txt`, `pip_freeze.txt`, or `FAILED` with the reason. Exit codes: 3 no Python ≥ 3.10, 4 no wheelhouse for that Python version (only 3.10–3.12 are bundled), 5 `venv` unavailable, 6 install failed, 7 imports failed. A working `.hpc-venv` is reused; a broken one is renamed, not deleted.
+
+## 5. Job 4 — CPU smoke test
+
+Submit `panaligner_<commit>/scripts/hpc/pbs_cpu_smoke.sh` with the working directory set to `panaligner_<commit>/`. It uses `.hpc-venv` automatically, reloading the modules recorded when it was built. Without a venv, set `MODULES` (and if needed `PYTHON_BIN`) through the launcher's environment/arguments field, or edit the defaults at the top of the uploaded copy.
 
 Set `RUN_BUILD=1` on a later run to rebuild PanAligner/minigraph for the node (`scripts/hpc/build_tools_linux.sh`, needs a C++20 compiler such as a `gcc11` module).
 
