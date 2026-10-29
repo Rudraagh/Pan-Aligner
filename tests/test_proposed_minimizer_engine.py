@@ -9,23 +9,58 @@ SCRIPTS_DIR = ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
-from proposed.minimizer_engine import compute_minimizers
+from proposed.minimizer_engine import _load_usable_cupy, compute_minimizers
 
 
 class MinimizerEngineTests(unittest.TestCase):
-    def test_minimizer_engine_returns_deterministic_records(self) -> None:
+    def test_cpu_matches_known_reference_output(self) -> None:
         payload = compute_minimizers("ACGTACGTACGT", k=3, window_size=4, assembly_id="hap1", backend="cpu")
         self.assertEqual(payload["backend_used"], "cpu")
-        self.assertGreaterEqual(payload["minimizer_count"], 1)
-        first = payload["records"][0]
-        self.assertEqual(first["source_assembly"], "hap1")
-        self.assertEqual(len(first["minimizer"]), 3)
+        self.assertEqual(payload["records"], [
+            {"minimizer": "TAC", "hash_value": 6524611422502594526, "position": 3, "window_start": 0, "source_assembly": "hap1"},
+            {"minimizer": "TAC", "hash_value": 6524611422502594526, "position": 7, "window_start": 4, "source_assembly": "hap1"},
+        ])
 
-    def test_gpu_request_falls_back_honestly_when_backend_missing(self) -> None:
-        payload = compute_minimizers("ACGTACGTACGT", k=3, window_size=4, assembly_id="hap1", backend="gpu")
+    def test_cpu_boundaries_ambiguity_and_determinism(self) -> None:
+        cases = [("", 3, 4), ("AC", 3, 4), ("ACG", 3, 4), ("ACGT", 3, 4), ("NNRYACGTN", 3, 8), ("AAAAAAAAAA", 3, 4)]
+        for sequence, k, window in cases:
+            with self.subTest(sequence=sequence, k=k, window=window):
+                first = compute_minimizers(sequence, k, window, "hap", "cpu")
+                second = compute_minimizers(sequence, k, window, "hap", "cpu")
+                self.assertEqual(first["records"], second["records"])
+        self.assertEqual(compute_minimizers("", 3, 4, "hap", "cpu")["records"], [])
+        self.assertEqual(len(compute_minimizers("ACGT", 3, 4, "hap", "cpu")["records"]), 1)
+
+    def test_invalid_parameters_are_rejected(self) -> None:
+        with self.assertRaises(ValueError):
+            compute_minimizers("ACGT", 0, 4, "hap", "cpu")
+        with self.assertRaises(ValueError):
+            compute_minimizers("ACGT", 3, 0, "hap", "cpu")
+
+    def test_auto_falls_back_or_executes_gpu_truthfully(self) -> None:
+        payload = compute_minimizers("ACGTACGT", 3, 4, "hap", "auto")
         self.assertIn(payload["backend_used"], {"cpu", "gpu"})
-        if payload["backend_used"] == "cpu":
-            self.assertIn("fell back", payload["backend_note"])
+        self.assertIn("CPU" if payload["backend_used"] == "cpu" else "executed on the GPU", payload["backend_note"])
+
+    def test_explicit_gpu_requires_a_usable_device(self) -> None:
+        cp, _ = _load_usable_cupy()
+        if cp is None:
+            with self.assertRaisesRegex(RuntimeError, "GPU backend was requested but is unavailable"):
+                compute_minimizers("ACGTACGT", 3, 4, "hap", "gpu")
+        else:
+            self.skipTest("GPU correctness is covered by the CUDA-gated parity test.")
+
+    def test_gpu_matches_cpu_exactly_when_cuda_is_available(self) -> None:
+        cp, reason = _load_usable_cupy()
+        if cp is None:
+            self.skipTest(reason)
+        cases = [("ACGTACGTACGT", 3, 4), ("AAAAAAAAAA", 3, 4), ("NNRYACGTN", 3, 8), ("ACGT", 3, 4), ("AC", 3, 4)]
+        for sequence, k, window in cases:
+            with self.subTest(sequence=sequence, k=k, window=window):
+                cpu = compute_minimizers(sequence, k, window, "hap", "cpu")
+                gpu = compute_minimizers(sequence, k, window, "hap", "gpu")
+                self.assertEqual(gpu["backend_used"], "gpu")
+                self.assertEqual(gpu["records"], cpu["records"])
 
 
 if __name__ == "__main__":

@@ -1,0 +1,4 @@
+# Keep scripts LF so they run unchanged on Linux/HPC (system core.autocrlf=true).
+*.sh text eol=lf
+*.py text eol=lf
+*.pbs text eol=lf
