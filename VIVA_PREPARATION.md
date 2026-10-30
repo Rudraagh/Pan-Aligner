@@ -229,6 +229,7 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 - **Evaluation:** folds over 20 kb windows of true position with neighbouring windows removed, plus a leave-one-gene-out test; isotonic calibration on a held-back part of each training fold; a MAPQ-only model and a plain MAPQ threshold as baselines.
 - **Results:** PR-AUC for the incorrect class is 0.979 (gradient boosting) and 0.986 (logistic) vs 0.564 (MAPQ only) under window folds, and 0.929 and 0.956 when a gene is held out. The first figure of 0.995 used a haplotype split that was too weak, because every haplotype is the same reference plus one variant.
 - **Compared with MAPQ 60:** at the same 89.6% coverage, error among accepted is 0.84% (gradient boosting, window folds) vs 4.24%.
+- **Focused second dataset (`outputs/ml_alignment_v2/`):** 75% accuracy reads with 536 within-locus errors, 96% of them minigraph's. Gradient boosting's within-locus PR-AUC is 0.965 (window) and 0.946 (gene held out). But MAPQ 60 is about equal at its own coverage (0.13% vs 0.14% error at 86.7% accepted); the model only clearly wins at higher coverage (0.13% vs 0.30% at 94.6%).
 - **Abstention:** with the 1% / 90% targets the "insufficient evidence" band never opened. With 0.1% / 99% it covers about 2% of alignments, and held-out error among accepted is 0.12–0.17%, above the 0.1% target; that run used only the weak haplotype split.
 
 **Model B, healthy/disease-associated classification.** A feasibility study only.
@@ -402,6 +403,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “All three genes are accepted, so the graphs are high quality.” | “All three pass a structural-coherence threshold on the first configuration; the score is high partly by construction and is not biological accuracy.” |
 | “The feedback loop improved the real-data graphs.” | “On APP/PSEN1/PSEN2 the controller accepted the initial configuration; retuning was only demonstrated on a synthetic stress demo.” |
 | “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
+| “Our model replaces MAPQ.” | “On simulated locus-scale reads it beats MAPQ when few alignments are discarded, but MAPQ 60 is about equal at its own operating point.” |
 | “Our model detects misaligned reads with 0.98 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
 | “Model B classifies disease-associated variants.” | “The labels’ source is unknown and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
 | “The ML predicts Alzheimer’s risk.” | “Nothing in this project is a clinical or diagnostic prediction.” |

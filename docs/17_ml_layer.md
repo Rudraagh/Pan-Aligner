@@ -92,8 +92,46 @@ What the results show:
 **Limits:**
 
 - The incorrect class is almost entirely off-target reads on single-locus graphs, where the read's true locus is not available to the aligner. The models mainly learn that low identity and coverage mean wrong. This is evidence for detecting off-target or contaminating reads, not for whole-genome alignment.
-- Within-locus misplacements number only 96, too few for strong conclusions about them.
+- Within-locus misplacements number only 96, too few for strong conclusions about them. The focused v2 dataset below addresses this.
 - The reads are simulated at locus scale; real sequencing data and whole-genome graphs are not covered.
+
+### Focused v2 dataset (more within-locus errors)
+
+A pilot (depth 0.1, seed 11; scratchpad only, not kept) showed the first proposed v2 grid (accuracy 0.90/0.80/0.70, reads of 5,000/1,000/500 bp) would give roughly 120 within-locus errors, too few, and that most 70% reads do not align. So v2 uses the settings that produced the most errors in the first dataset:
+
+```bash
+python3 main.py --ml-alignment-data --accuracies 0.75 --lengths 10000 2000 --depth 10 --seeds 11 12 13 14 --threads 8 --output-dir outputs/ml_alignment_v2
+python main.py --ml-alignment --features outputs/ml_alignment_v2/alignment_features.csv.gz --grouping window --output-dir outputs/ml_alignment_v2/regrouped/window
+python main.py --ml-alignment --features outputs/ml_alignment_v2/alignment_features.csv.gz --grouping leave_one_gene_out --output-dir outputs/ml_alignment_v2/regrouped/leave_one_gene_out
+```
+
+**Dataset** (commit `0c22ced`, 10 minutes): 854,976 rows, of which 189,184 correct, 1,588 incorrect and 664,204 unaligned. It passed the go/no-go check set beforehand (at least 500 within-locus errors, 15 windows, all genes): 536 within-locus errors across 23 windows, with 1,052 off-target. Within-locus errors split PSEN1 364, APP 156, PSEN2 16, and minigraph 517, PanAligner 19.
+
+**Results.** Incorrect alignments are 0.83% of rows here against 11% in the first dataset, so these numbers cannot be compared directly with those above.
+
+| Grouping | Model | PR-AUC, all errors | Within-locus PR-AUC | Off-target PR-AUC | Error among accepted | All errors caught | Within-locus caught (of 536) | Within-locus false alarms |
+|---|---|---|---|---|---|---|---|---|
+| Window | MAPQ only | 0.086 | 0.035 | 0.056 | 0.76% | 0% | 0 | 0 |
+| | Logistic | 0.783 | 0.751 | 0.697 | 0.37% | 55.3% | 350 | 91 |
+| | Gradient boosting | 0.821 | 0.965 | 0.724 | 0.25% | 70.2% | 482 | 37 |
+| Leave one gene out | MAPQ only | 0.105 | 0.038 | 0.074 | 0.83% | 0% | 0 | 0 |
+| | Logistic | 0.701 | 0.525 | 0.631 | 0.53% | 37.0% | 155 | 133 |
+| | Gradient boosting | 0.758 | 0.946 | 0.632 | 0.28% | 66.6% | 477 | 16 |
+
+| Plain MAPQ rule | Accepted | Error among accepted | Errors caught | Gradient boosting error at same share (window / gene held out) |
+|---|---|---|---|---|
+| MAPQ >= 30 | 94.6% | 0.30% | 66.4% | 0.13% / 0.18% |
+| MAPQ = 60 | 86.7% | 0.13% | 86.6% | 0.14% / 0.13% |
+
+What v2 shows:
+
+- **Within-locus detection works on simulated reads:** gradient boosting catches about 90% of these errors with few false alarms, including with a whole gene held out. Logistic regression does not hold up.
+- **A plain MAPQ 60 cutoff is about as good at its own operating point.** The model's gain appears when fewer alignments are discarded: at 94.6% accepted, its error is well below MAPQ's. So the model is not a clear replacement for MAPQ.
+- **The MAPQ-only model's low PR-AUC overstates MAPQ's weakness,** because most alignments tie at MAPQ 60. The plain threshold is the fairer baseline.
+- **Off-target detection is harder at 75% accuracy** (PR-AUC 0.63–0.72).
+- **Abstention still does not work at the default targets:** the band collapsed in every fold for both learned models, so `insufficient_evidence` was never used. Stricter targets have not been run on v2.
+
+**Limits:** within-locus errors are 96% minigraph's, so PanAligner cannot be judged on them. There is one accuracy level (75%). Errors from the same regions repeat, so the effective sample is far smaller than 536, and PSEN2 has only 16.
 
 ## Model B: feasibility study (research label recovery, not diagnosis)
 
