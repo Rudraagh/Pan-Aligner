@@ -203,6 +203,7 @@ def run_study(table: list[dict], *, seeds: list[int], n_splits: int = 5, target_
                 metrics.update({
                     "roc_auc": roc_auc_score(y, prob[name]), "brier": brier_score_loss(y, prob[name]),
                     "coverage": float(confident.mean()),
+                    "confident_rows": int(confident.sum()),
                     "confident_accuracy": float((predicted[confident] == y[confident].astype(bool)).mean()) if confident.any() else None,
                 })
             per_seed[name].append(metrics)
@@ -233,7 +234,8 @@ def write_report(path: Path, table: list[dict], results: dict, leak: dict) -> No
     def row(name: str) -> str:
         m = results["models"][name]
         fmt = lambda key: "–" if m.get(f"{key}_mean") is None else f"{m[f'{key}_mean']:.3f} ± {m[f'{key}_sd']:.3f}"
-        return f"| {name} | {fmt('balanced_accuracy')} | {fmt('mcc')} | {fmt('roc_auc')} | {fmt('coverage')} | {fmt('confident_accuracy')} |"
+        rows = "–" if m.get("confident_rows_mean") is None else f"{m['confident_rows_mean']:.1f} of {len(table)}"
+        return f"| {name} | {fmt('balanced_accuracy')} | {fmt('mcc')} | {fmt('roc_auc')} | {rows} | {fmt('confident_accuracy')} |"
 
     kinds = Counter(item["kind"] for item in table)
     lines = [
@@ -243,7 +245,7 @@ def write_report(path: Path, table: list[dict], results: dict, leak: dict) -> No
         f"{sum(item['label'] == 'UNHEALTHY' for item in table)} labelled unhealthy.", "",
         f"Evaluation: StratifiedGroupKFold({results['n_splits']}) over {results['window_bp']} bp genomic windows, seeds {results['seeds']}; "
         f"mean ± SD over seeds. `uncertain` margin chosen by inner grouped CV for target accuracy {results['target_accuracy']}.", "",
-        "| Model | Balanced accuracy | MCC | ROC-AUC | Coverage | Accuracy when confident |", "|---|---|---|---|---|---|",
+        "| Model | Balanced accuracy | MCC | ROC-AUC | Confident predictions (mean) | Accuracy when confident |", "|---|---|---|---|---|---|",
         *[row(name) for name in results["models"]], "",
         f"Original seed-42 per-sequence split, nearest training variant: {leak['correct']}/{leak['test_rows']} correct "
         f"(balanced accuracy {leak['balanced_accuracy']:.3f}); the random split leaks through position.", "",

@@ -88,6 +88,8 @@ class StudyMechanicsTests(unittest.TestCase):
         for name, summary in results["models"].items():
             with self.subTest(model=name):
                 self.assertIn("balanced_accuracy_mean", summary)
+                if name in vf.FEATURE_SETS:  # accuracy-when-confident is meaningless without how many were confident
+                    self.assertIn("confident_rows_mean", summary)
 
 
 @unittest.skipUnless(HAVE_ML_LIBRARIES, "scikit-learn/numpy not installed in this environment")
