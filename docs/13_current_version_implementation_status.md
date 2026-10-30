@@ -351,6 +351,13 @@ The active workflow is:
 6. evaluate held-out sequences using real alignment
 7. generate reports, JSON summaries, plots, and GUI-viewable artifacts
 
+## Machine-learning layer
+
+The current ML layer is separate from the legacy modules below and is described in `docs/17_ml_layer.md`:
+
+- Model A, alignment reliability (`scripts/ml/build_alignment_dataset.py`, `scripts/ml/alignment_reliability.py`; `main.py --ml-alignment-data`, `--ml-alignment`): trained and evaluated on simulated reads with independent truth labels
+- Model B, healthy/disease-associated classification (`scripts/ml/variant_feasibility.py`; `main.py --ml-variant`): a feasibility study only, because the label source is unknown and the labels are confounded with position
+
 ## What is implemented but not part of the current main story
 
 The repository still contains earlier or archival modules from the project's older ML-oriented phase.

@@ -197,12 +197,16 @@ python3 main.py --proposed --final-proposed-evaluation --backend cpu
 python3 main.py --shared-query-eval --genes PSEN2
 python3 main.py --simulate-truth-reads --source heldout   # Linux/WSL only
 python3 main.py --truth-eval --source heldout             # Linux/WSL only
+python3 main.py --ml-alignment-data --threads 8           # Linux/WSL only
+python3 main.py --ml-alignment
+python3 main.py --ml-variant
 ```
 
 - `--proposed`: the proposed alignment-free methodology (`proposed_methodology.py`)
 - `--shared-query-eval`: alignment-free comparison of the proposed and minigraph graphs on held-out haplotypes (`scripts/shared_query_eval.py`)
 - `--simulate-truth-reads`: PBSIM2 reads with true intervals (`scripts/simulate_truth_reads.py`)
 - `--truth-eval`: `paftools.js mapeval` correctness scoring of PanAligner and minigraph (`scripts/truth_eval.py`)
+- `--ml-alignment-data`, `--ml-alignment`, `--ml-variant`: the ML layer (see below and `docs/17_ml_layer.md`)
 
 ## Desktop GUI
 
@@ -221,6 +225,7 @@ run_gui.bat
 GUI features:
 
 - run `full-pipeline`, `theory-only`, and `evaluate` modes without typing commands
+- run the proposed final evaluation, the synthetic stress demo and the shared held-out query comparison, with a minimizer-backend selector (`cpu` by default)
 - run custom query analysis from either an inline DNA sequence or a FASTA file
 - attach a custom argument/note to query analysis runs
 - watch live console output in the app
@@ -229,7 +234,7 @@ GUI features:
 - browse generated reports, JSON outputs, GAF files, and text artifacts inside the GUI
 - open generated output files and folders quickly
 
-The GUI currently remains focused on the stable PanAligner-centered workflow. The new proposed methodology is available through its own CLI runner so the existing UI stays stable.
+The truth-labelled evaluation and the ML layer are not in the GUI: the truth and Model A dataset steps need Linux tools (WSL), and the ML models run from `main.py`. The GUI's paper-coverage panel shows `docs/paper_coverage_audit.md` and never rewrites it.
 
 ## Proposed methodology runner
 
@@ -250,6 +255,15 @@ Useful options:
 - `--max-rounds 3`
 
 A normal run writes `outputs/proposed/`; `--final-proposed-evaluation` writes `outputs/proposed_final_evaluation/`; the stress demo writes `outputs/proposed_step5_pgscunk_demo/`. None of them overwrite the PanAligner reports or evaluation artifacts. The overall quality score is a structure-only coherence score, not biological accuracy; on the real APP/PSEN1/PSEN2 inputs every gene passes the threshold on its initial configuration, so the feedback loop performs no retuning there.
+
+## Machine-learning layer
+
+Two separate research tasks, described in full in `docs/17_ml_layer.md`. Install `requirements-ml.txt` first.
+
+- **Model A, alignment reliability** (`correct` / `incorrect` / `insufficient_evidence`). Labels come from simulation truth: PBSIM2 reads from the held-out haplotypes, aligned to their own and to other genes' graphs. Evaluated with folds over source haplotypes against a MAPQ-only baseline: PR-AUC for incorrect alignments is 0.995 (gradient boosting) vs 0.569 (MAPQ). Almost all incorrect examples are off-target reads, so this is evidence for detecting off-target alignments, not for whole-genome alignment accuracy.
+- **Model B, healthy/disease-associated classification**: a feasibility study only. Each labelled sequence is the reference plus one variant, the labels' source is unknown, and the labels correlate with position. Under window-grouped CV no model recovers the labels from sequence context (balanced accuracy 0.55 context-only; 0.63 for the nearest training variant). It is research label recovery, not diagnosis.
+
+The older healthy/unhealthy ML scripts (`scripts/pipeline.py`, `extract_features.py`, `train_ml.py`, `predict_ml.py`, `evaluate.py`) are legacy, leak the label, and print a warning when run.
 
 ## Workflow overview
 
@@ -392,6 +406,10 @@ The main workflow produces:
   proposed-methodology results and the synthetic feedback-loop demo
 - `outputs/gpu_validation/laptop/`
   CPU/GPU minimizer parity and minimizer-only benchmark on one laptop GPU
+- `outputs/ml_alignment/`
+  Model A dataset manifest, class counts, results, plots and report (`sensitivity_strict/` for stricter targets; simulated reads and the features file are regenerable and not versioned)
+- `outputs/ml_variant/`
+  Model B feasibility study: variant table, results and report
 
 ## Key generated files
 
@@ -487,6 +505,7 @@ The repository should be understood as:
 
 not as:
 
-- a machine learning project
-- a disease prediction framework
-- an AI pipeline
+- a disease prediction or diagnostic framework
+- an AI pipeline whose ML results stand on their own
+
+Its ML layer is research: Model A is validated only on simulated, locus-scale reads, and Model B is a feasibility study for labels of unknown provenance.

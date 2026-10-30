@@ -28,6 +28,7 @@ Separate from the paper reproduction
 - The proposed alignment-free methodology (`scripts/proposed/`, `python main.py --proposed ...`) and its structural quality scores are the project's own prototype, not part of the paper.
 - The CUDA minimizer path has exact CPU parity and a minimizer-only speed-up on one laptop GPU (`outputs/gpu_validation/laptop/`); it is not part of the paper and does not affect PanAligner.
 - The shared held-out-query comparison (`scripts/shared_query_eval.py`) is an alignment-free representation check, not a paper benchmark.
+- The ML layer (`docs/17_ml_layer.md`) is not part of the paper. Model A predicts alignment reliability from simulated reads with truth labels. Model B is a feasibility study for healthy/unhealthy labels of unknown provenance.
 
 Bottom line
 This repo reproduces the paper at a workflow-and-concepts level, plus a locus-scale version of the paper's truth-labelled correctness evaluation for PanAligner and minigraph. It does not reproduce the paper's whole-genome benchmark tables and figures, GraphAligner comparisons, or runtime/memory results. It is accurate to present it as a partial practical reproduction plus a theory/demo layer, not as a complete reimplementation of every experiment, table, and figure in the paper.

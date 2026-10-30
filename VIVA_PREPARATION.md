@@ -221,6 +221,24 @@ All three genes pass on their initial configuration, so **the controller perform
 
 The run covered 174 assemblies.  It validates serialisation and structural properties, not a held-out biological ground truth.  The baseline alignment metrics in `outputs/evaluation/` are intentionally separate and not numerically interchangeable with this table.
 
+## 10b. Machine-learning layer (full detail: `docs/17_ml_layer.md`)
+
+**Model A, alignment reliability.**
+- **Data and labels:** labels come only from simulation truth. PBSIM2 reads from the 46 held-out haplotypes are aligned by PanAligner and minigraph to their own gene's graph and to the other two genes' graphs as decoys. That gives 113,295 correct, 14,073 incorrect (13,977 off-target, 96 within-locus) and 259,920 unaligned rows.
+- **Features:** only things visible after alignment.
+- **Evaluation:** folds over source haplotypes, isotonic calibration on a held-back part of each training fold, and a MAPQ-only baseline.
+- **Results:** PR-AUC for the incorrect class is 0.995 (gradient boosting) vs 0.569 (MAPQ only).
+- **Abstention:** with the 1% / 90% targets the "insufficient evidence" band never opened. With 0.1% / 99% it covers about 2% of alignments, and held-out error among accepted is 0.12–0.17%, above the 0.1% target.
+
+**Model B, healthy/disease-associated classification.** A feasibility study only.
+- **Data:** each of the 220 labelled sequences is the reference plus one variant.
+- **Labels:** their source is unknown, and they cluster by position.
+- **Results under 1 kb window-grouped CV:** context-only balanced accuracy 0.550; the nearest training variant 0.628; almost every prediction "uncertain".
+
+**Safe claim:** "Model A detects off-target alignments on simulated, locus-scale reads far better than MAPQ alone. Model B shows the healthy/unhealthy labels cannot be recovered from sequence context without leakage; it is research label recovery, not diagnosis."
+
+Examiner attack: *"Your 0.995 PR-AUC looks too good."* Answer: "Almost every incorrect alignment is an off-target read aligned to a single-locus graph, which low identity and coverage give away. It says nothing about whole-genome misplacement; only 96 within-locus errors exist, too few for strong claims."
+
 ## 11. Testing evidence
 
 | Test file | Coverage / important cases | It catches | It does not prove |
@@ -368,7 +386,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 
 **Must know parameters:** default final initial `k=11`, window `6`, support `2`, anchors `12`, spacing `4.0`, weights `.35/.35/.30`, threshold `.72` (no anchor-coverage gate since `22076bc`), searched parameters `k` and `window` only, tolerance `1e-4`, max rounds `3`.
 
-**20 must-know questions:** What is a minimizer? Why paths? What is rescued? What exactly does the GPU do, and what not? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required?
+**20 must-know questions:** What is a minimizer? Why paths? What is rescued? What exactly does the GPU do, and what not? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required? Where do Model A's labels come from? Why is MAPQ a weak baseline here? Why is Model B only a feasibility study? Why was the legacy ML path retired?
 
 ## 19. CLAIMS I MUST NOT MAKE
 
@@ -383,6 +401,9 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “All three genes are accepted, so the graphs are high quality.” | “All three pass a structural-coherence threshold on the first configuration; the score is high partly by construction and is not biological accuracy.” |
 | “The feedback loop improved the real-data graphs.” | “On APP/PSEN1/PSEN2 the controller accepted the initial configuration; retuning was only demonstrated on a synthetic stress demo.” |
 | “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
+| “Our model detects misaligned reads with 0.995 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
+| “Model B classifies disease-associated variants.” | “The labels’ source is unknown and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
+| “The ML predicts Alzheimer’s risk.” | “Nothing in this project is a clinical or diagnostic prediction.” |
 | “The proposed method beats PanAligner.” | “No direct biological performance comparison is established by these non-interchangeable metrics.” |
 | “Forward GFA means strand handling is solved.” | “The current GFA emits forward `+` paths/links; orientation-aware modelling is future work.” |
 
