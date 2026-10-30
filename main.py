@@ -11,6 +11,33 @@ SCRIPTS_DIR = ROOT / "scripts"
 if str(SCRIPTS_DIR) not in sys.path:
     sys.path.insert(0, str(SCRIPTS_DIR))
 
+# Modes that hand every remaining argument to an existing tool's own CLI, so each
+# option is defined once. Run `python main.py <mode> --help` for the tool's options.
+FORWARDED_MODES = {
+    "--proposed": ("proposed_methodology", "Proposed alignment-free methodology (proposed_methodology.py)."),
+    "--shared-query-eval": ("shared_query_eval", "Shared held-out-query comparison of proposed and minigraph graphs (scripts/shared_query_eval.py)."),
+    "--simulate-truth-reads": ("simulate_truth_reads", "PBSIM2 truth-labelled read simulation (scripts/simulate_truth_reads.py; Linux/WSL only)."),
+    "--truth-eval": ("truth_eval", "Truth-labelled PanAligner/minigraph correctness scoring (scripts/truth_eval.py; Linux/WSL only)."),
+    "--ml-alignment-data": ("ml.build_alignment_dataset", "Model A dataset: simulated reads, alignments and truth labels (scripts/ml/build_alignment_dataset.py; Linux/WSL only)."),
+    "--ml-alignment": ("ml.alignment_reliability", "Model A alignment reliability: train and evaluate with group-disjoint CV (scripts/ml/alignment_reliability.py; needs requirements-ml.txt)."),
+    "--ml-variant": ("ml.variant_feasibility", "Model B feasibility study, research label recovery only (scripts/ml/variant_feasibility.py; needs requirements-ml.txt)."),
+}
+LINUX_ONLY_MODES = {"--simulate-truth-reads", "--truth-eval", "--ml-alignment-data"}
+
+
+def run_forwarded_mode(mode: str, argv: list[str]) -> None:
+    if mode in LINUX_ONLY_MODES and sys.platform.startswith("win"):
+        raise SystemExit(f"{mode} needs Linux tools (PBSIM2, k8, PanAligner, minigraph); run it inside WSL: python3 main.py {mode} ...")
+    module_name, _ = FORWARDED_MODES[mode]
+    importlib.import_module(module_name).main(argv)
+
+
+if __name__ == "__main__" and len(sys.argv) > 1 and sys.argv[1] in FORWARDED_MODES:
+    # Dispatch before importing the baseline stack below: the Linux-only tools run under
+    # WSL's Python, which has no networkx/Biopython.
+    run_forwarded_mode(sys.argv[1], sys.argv[2:])
+    raise SystemExit(0)
+
 from build_graph import build_graphs
 from common import METADATA_DIR, OUTPUTS_DIR, ROOT as PROJECT_ROOT, ensure_dir, resolve_binary, resolve_project_path
 from paper_evaluation import evaluate_panaligner_workflow
@@ -222,24 +249,6 @@ def write_final_summary(theory_result: dict | None = None, evaluation_metrics: d
 
 def print_json_summary(payload: dict) -> None:
     print(json.dumps(payload, indent=2))
-
-
-# Modes that hand every remaining argument to an existing tool's own CLI, so each
-# option is defined once. Run `python main.py <mode> --help` for the tool's options.
-FORWARDED_MODES = {
-    "--proposed": ("proposed_methodology", "Proposed alignment-free methodology (proposed_methodology.py)."),
-    "--shared-query-eval": ("shared_query_eval", "Shared held-out-query comparison of proposed and minigraph graphs (scripts/shared_query_eval.py)."),
-    "--simulate-truth-reads": ("simulate_truth_reads", "PBSIM2 truth-labelled read simulation (scripts/simulate_truth_reads.py; Linux/WSL only)."),
-    "--truth-eval": ("truth_eval", "Truth-labelled PanAligner/minigraph correctness scoring (scripts/truth_eval.py; Linux/WSL only)."),
-}
-LINUX_ONLY_MODES = {"--simulate-truth-reads", "--truth-eval"}
-
-
-def run_forwarded_mode(mode: str, argv: list[str]) -> None:
-    if mode in LINUX_ONLY_MODES and sys.platform.startswith("win"):
-        raise SystemExit(f"{mode} needs Linux tools (PBSIM2, k8, PanAligner, minigraph); run it inside WSL: python3 main.py {mode} ...")
-    module_name, _ = FORWARDED_MODES[mode]
-    importlib.import_module(module_name).main(argv)
 
 
 def main(argv: list[str] | None = None) -> None:

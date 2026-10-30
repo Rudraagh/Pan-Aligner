@@ -54,6 +54,49 @@ class MainForwardingTests(unittest.TestCase):
                     project_main.main([mode])
                 target.assert_not_called()
 
+    def test_ml_modes_forward_to_the_ml_tools(self) -> None:
+        import importlib
+        import importlib.util
+
+        cases = {
+            "--ml-alignment-data": ("ml.build_alignment_dataset", ["--seeds", "1"], False),
+            "--ml-alignment": ("ml.alignment_reliability", ["--folds", "3"], True),
+            "--ml-variant": ("ml.variant_feasibility", ["--seeds", "0"], True),
+        }
+        for mode, (module_name, rest, needs_sklearn) in cases.items():
+            with self.subTest(mode=mode):
+                if needs_sklearn and importlib.util.find_spec("sklearn") is None:
+                    self.skipTest("scikit-learn not installed in this environment")
+                module = importlib.import_module(module_name)
+                with mock.patch.object(project_main.sys, "platform", "linux"), mock.patch.object(module, "main") as target:
+                    project_main.main([mode, *rest])
+                target.assert_called_once_with(rest)
+
+    def test_ml_dataset_mode_stops_on_windows(self) -> None:
+        with mock.patch.object(project_main.sys, "platform", "win32"), self.assertRaisesRegex(SystemExit, "WSL"):
+            project_main.main(["--ml-alignment-data"])
+
+    def test_linux_modes_run_without_the_baseline_dependencies(self) -> None:
+        # WSL's Python has no networkx/Biopython; forwarding modes must not import the baseline stack first.
+        import subprocess
+
+        script = (
+            "import importlib.abc, runpy, sys\n"
+            "class Block(importlib.abc.MetaPathFinder):\n"
+            "    def find_spec(self, name, path, target=None):\n"
+            "        if name.split('.')[0] in ('networkx', 'Bio'):\n"
+            "            raise ModuleNotFoundError(f'No module named {name!r} (blocked)', name=name)\n"
+            "sys.meta_path.insert(0, Block())\n"
+            "sys.platform = 'linux'\n"
+            "sys.argv = ['main.py', sys.argv[1], '--help']\n"
+            "runpy.run_path('main.py', run_name='__main__')\n"
+        )
+        for mode in ("--truth-eval", "--simulate-truth-reads", "--ml-alignment-data"):
+            with self.subTest(mode=mode):
+                completed = subprocess.run([sys.executable, "-B", "-c", script, mode], cwd=ROOT, capture_output=True, text=True)
+                self.assertEqual(completed.returncode, 0, completed.stderr[-800:])
+                self.assertIn("usage:", completed.stdout)
+
     def test_tool_mains_accept_argv(self) -> None:
         for module in (proposed_methodology, shared_query_eval, simulate_truth_reads, truth_eval):
             with self.subTest(module=module.__name__):
