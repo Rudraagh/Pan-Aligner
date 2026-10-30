@@ -5,8 +5,16 @@ whose labels come from simulation truth. Only quantities visible after running a
 aligner are features: the GAF columns and tags, plus which aligner produced them.
 Simulation settings, the decoy flag and the genes are never features.
 
-Evaluation is group-disjoint: outer GroupKFold over source haplotypes. Inside each
-training fold a haplotype-disjoint quarter is held back to calibrate probabilities
+Evaluation is group-disjoint, with three groupings:
+
+  window              (default) GroupKFold over 20 kb windows of the read's true position,
+                      with reads from adjacent windows removed from training
+  leave_one_gene_out  test on one gene's reads; train without that gene's reads or graph
+  haplotype           GroupKFold over source haplotypes. Weak: every haplotype is the same
+                      reference plus one variant, so the same locus is on both sides. Kept
+                      only to compare with the first results in outputs/ml_alignment/.
+
+Inside each training fold a group-disjoint quarter is held back to calibrate probabilities
 (isotonic, `CalibratedClassifierCV(FrozenEstimator(model))`) and to choose the two
 decision thresholds:
 
@@ -16,7 +24,8 @@ decision thresholds:
                          precision of rejections at or above `min_reject_precision`
   insufficient_evidence  everything in between (an abstention band, not a trained class)
 
-A MAPQ-only model, calibrated the same way, is the baseline every model is compared to.
+Baselines: a MAPQ-only model calibrated the same way, and a plain MAPQ threshold sweep
+(accept when MAPQ >= Q), which involves no training at all.
 """
 
 from __future__ import annotations
@@ -57,6 +66,13 @@ MODEL_FEATURES = {
     "gradient_boosting": [*FEATURE_COLUMNS, "aligner_panaligner"],
 }
 DEFAULT_DIR = OUTPUTS_DIR / "ml_alignment"
+WINDOW_BP = 20000
+GROUPINGS = {
+    "window": f"GroupKFold over {WINDOW_BP // 1000} kb windows of the read's true position, with adjacent windows removed from training",
+    "leave_one_gene_out": "each gene's reads tested in turn, with that gene's reads and graph removed from training",
+    "haplotype": "GroupKFold over source haplotypes (weak: every haplotype is the same reference plus one variant)",
+}
+MAPQ_THRESHOLDS = (0, 1, 5, 10, 20, 30, 40, 50, 60)
 
 
 def model_feature_names() -> list[str]:
@@ -79,6 +95,59 @@ def make_estimator(model_name: str, seed: int):
 
 def group_folds(groups: np.ndarray, n_splits: int):
     return GroupKFold(n_splits=n_splits).split(np.zeros(len(groups)), groups=groups)
+
+
+def window_index(row: dict) -> int:
+    """20 kb window of the read's true start on its own gene's reference."""
+    return int(row["read"].split("!")[2]) // WINDOW_BP
+
+
+def evaluation_folds(rows: list[dict], grouping: str, n_splits: int) -> tuple[list[tuple[np.ndarray, np.ndarray]], np.ndarray]:
+    """(train, test) index folds, and the groups used to keep calibration data disjoint inside a fold."""
+    if grouping not in GROUPINGS:
+        raise ValueError(f"grouping must be one of {sorted(GROUPINGS)}")
+    if grouping == "haplotype":
+        groups = np.array([row["group"] for row in rows])
+        return list(group_folds(groups, n_splits)), groups
+    own_genes = np.array([row["own_gene"] for row in rows])
+    indices = np.array([window_index(row) for row in rows])
+    groups = np.array([f"{gene}:{index}" for gene, index in zip(own_genes, indices)])
+    if grouping == "leave_one_gene_out":
+        graph_genes = np.array([row["graph_gene"] for row in rows])
+        return [(np.flatnonzero((own_genes != gene) & (graph_genes != gene)), np.flatnonzero(own_genes == gene))
+                for gene in sorted(set(own_genes))], groups
+    folds = []
+    for train, test in group_folds(groups, n_splits):
+        neighbours = {f"{own_genes[i]}:{indices[i] + offset}" for i in test for offset in (-1, 1)}
+        folds.append((train[~np.isin(groups[train], sorted(neighbours))], test))
+    return folds, groups
+
+
+def output_dir_for(output_dir: Path | None, grouping: str) -> Path:
+    """Results go to their own folder, so the first results in outputs/ml_alignment/ stay as committed."""
+    return output_dir if output_dir is not None else DEFAULT_DIR / "regrouped" / grouping
+
+
+def mapq_threshold_sweep(y: np.ndarray, mapq: np.ndarray, thresholds=MAPQ_THRESHOLDS) -> list[dict]:
+    """Accept alignments with MAPQ >= Q: no training, no calibration."""
+    rows = []
+    for threshold in thresholds:
+        accepted = mapq >= threshold
+        rows.append({
+            "threshold": int(threshold),
+            "coverage": float(accepted.mean()),
+            "accepted_error_rate": float(y[accepted].mean()) if accepted.any() else None,
+            "incorrect_caught": float((~accepted)[y == 1].mean()) if y.any() else None,
+        })
+    return rows
+
+
+def model_error_at_coverage(y: np.ndarray, prob: np.ndarray, coverage: float) -> float | None:
+    """Error among the `coverage` fraction of alignments with the lowest p(incorrect)."""
+    count = round(coverage * len(y))
+    if count == 0:
+        return None
+    return float(y[np.argsort(prob, kind="stable")[:count]].mean())
 
 
 def expected_calibration_error(y_true: np.ndarray, prob: np.ndarray, bins: int = 10) -> float:
@@ -118,16 +187,16 @@ def three_way(prob: np.ndarray, low: float, high: float) -> np.ndarray:
 
 
 def cross_validate(rows: list[dict], model_name: str, *, n_splits: int = 5, seed: int = 0,
-                   max_accept_error: float = 0.01, min_reject_precision: float = 0.9) -> dict:
+                   max_accept_error: float = 0.01, min_reject_precision: float = 0.9, grouping: str = "haplotype") -> dict:
     labelled = [row for row in rows if row["label"] in LABELLED]
     names = MODEL_FEATURES[model_name]
     X = build_matrix(labelled, names)
     y = np.array([int(row["label"] == "incorrect") for row in labelled])
-    groups = np.array([row["group"] for row in labelled])
+    folds, groups = evaluation_folds(labelled, grouping, n_splits)
     prob = np.zeros(len(labelled))
     decision = np.empty(len(labelled), dtype=object)
     thresholds = []
-    for fold, (train, test) in enumerate(group_folds(groups, n_splits)):
+    for fold, (train, test) in enumerate(folds):
         inner = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=seed + fold)
         fit_part, cal_part = next(inner.split(X[train], y[train], groups[train]))
         fit_idx, cal_idx = train[fit_part], train[cal_part]
@@ -141,7 +210,7 @@ def cross_validate(rows: list[dict], model_name: str, *, n_splits: int = 5, seed
         prob[test] = calibrated.predict_proba(X[test])[:, 1]
         decision[test] = three_way(prob[test], low, high)
         thresholds.append({"fold": fold, "low": low, "high": high, "test_groups": sorted(set(groups[test]))})
-    return {"model": model_name, "features": names, "rows": labelled, "y": y, "prob_incorrect": prob,
+    return {"model": model_name, "grouping": grouping, "features": names, "rows": labelled, "y": y, "prob_incorrect": prob,
             "decision": decision, "thresholds": thresholds}
 
 
@@ -169,6 +238,16 @@ def summarize(result: dict) -> dict:
         "ece": expected_calibration_error(y, prob),
         "prevalence_incorrect": float(y.mean()),
     }
+    # Incorrect alignments split into two different problems; correct rows are shared by both.
+    decoy = np.array([int(row["decoy"]) for row in rows])
+    for name, keep in (("within_locus", (decoy == 0)), ("off_target", (y == 0) | (decoy == 1))):
+        subset_y, subset_prob = y[keep], prob[keep]
+        overall[name] = {
+            "rows": int(keep.sum()), "incorrect_rows": int(subset_y.sum()),
+            "prevalence_incorrect": float(subset_y.mean()) if keep.any() else None,
+            "pr_auc_incorrect": float(average_precision_score(subset_y, subset_prob)) if 0 < subset_y.sum() < len(subset_y) else None,
+            "roc_auc": float(roc_auc_score(subset_y, subset_prob)) if 0 < subset_y.sum() < len(subset_y) else None,
+        }
     breakdown = {}
     for key in ("setting", "aligner", "decoy"):
         values = np.array([str(row[key]) for row in rows])
@@ -190,7 +269,7 @@ def load_rows(path: Path) -> list[dict]:
         return list(csv.DictReader(handle))
 
 
-def plot(results: list[dict], output_dir: Path) -> list[str]:
+def plot(results: list[dict], output_dir: Path, grouping: str = "haplotype") -> list[str]:
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -201,7 +280,7 @@ def plot(results: list[dict], output_dir: Path) -> list[str]:
         coverage, risk = risk_coverage(result["y"], result["prob_incorrect"])
         axis.plot(coverage, risk, label=result["model"])
     axis.set(xlabel="Fraction of alignments accepted (lowest p(incorrect) first)", ylabel="Error rate among accepted",
-             title="Model A risk-coverage (held-out haplotype folds)")
+             title=f"Model A risk-coverage ({grouping} folds)")
     axis.legend(fontsize=8); axis.grid(alpha=0.3); figure.tight_layout()
     path = output_dir / "risk_coverage.png"; figure.savefig(path, dpi=150); plt.close(figure); written.append(str(path))
 
@@ -219,7 +298,7 @@ def plot(results: list[dict], output_dir: Path) -> list[str]:
     return written
 
 
-def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: dict) -> None:
+def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: dict, grouping: str = "haplotype", mapq: dict | None = None) -> None:
     """Markdown report whose every number comes from the rows and summaries passed in."""
     counts = Counter(row["label"] for row in rows)
     incorrect = [row for row in rows if row["label"] == "incorrect"]
@@ -229,11 +308,14 @@ def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: d
         return "–" if value is None else f"{value:.{digits}f}"
 
     table = []
+    split_table = []
     notes = []
     for summary in summaries:
         o = summary["overall"]
         table.append(f"| {summary['model']} | {number(o['pr_auc_incorrect'])} | {number(o['roc_auc'])} | {number(o['brier'], 4)} | "
                      f"{number(o['ece'], 4)} | {number(o['coverage'])} | {number(o['accepted_error_rate'], 4)} | {number(o['incorrect_caught'])} |")
+        split_table.append(f"| {summary['model']} | {number(o['within_locus']['pr_auc_incorrect'])} | {number(o['within_locus']['roc_auc'])} | "
+                           f"{number(o['off_target']['pr_auc_incorrect'])} | {number(o['off_target']['roc_auc'])} |")
         finite = [t for t in summary["thresholds"] if math.isfinite(t["low"]) and math.isfinite(t["high"])]
         collapsed = sum(t["low"] == t["high"] for t in finite)
         if collapsed:
@@ -251,10 +333,14 @@ def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: d
         f"(not used), {counts.get('unprojectable', 0)} unprojectable (not used).", "",
         f"{decoy_incorrect} of {len(incorrect)} incorrect alignments are off-target: a read aligned to another gene's graph, "
         "where its true locus was not available to the aligner. The rest are within-locus misplacements.", "",
-        f"Evaluation: GroupKFold over source haplotypes; isotonic calibration and thresholds on a haplotype-disjoint part of each "
+        f"Evaluation: {GROUPINGS[grouping]}; isotonic calibration and thresholds on a group-disjoint part of each "
         f"training fold. Targets: error among accepted <= {targets['max_accept_error']}, rejection precision >= {targets['min_reject_precision']}.", "",
         "| Model | PR-AUC (incorrect) | ROC-AUC | Brier | ECE | Coverage | Error among accepted | Incorrect caught |",
         "|---|---|---|---|---|---|---|---|", *table, "",
+        "## Within-locus and off-target errors separately", "",
+        "Both columns share the same correct rows, but within-locus incorrect rows are far rarer, so compare each column with its own prevalence.", "",
+        "| Model | Within-locus PR-AUC | Within-locus ROC-AUC | Off-target PR-AUC | Off-target ROC-AUC |", "|---|---|---|---|---|", *split_table, "",
+        *_mapq_section(mapq, number),
         "## Notes", "", *(notes or ["- none"]), "",
         "## Limits", "",
         "- The incorrect class is dominated by off-target reads on single-locus graphs, so the models mainly learn that low identity "
@@ -264,10 +350,25 @@ def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: d
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
 
 
+def _mapq_section(mapq: dict | None, number) -> list[str]:
+    if not mapq:
+        return []
+    lines = ["## Plain MAPQ thresholds (no training)", "",
+             f"Accept when MAPQ >= Q. `{mapq['compared_model']} at same coverage` is that model's error among the same share of alignments, chosen by lowest p(incorrect).", "",
+             f"| Q | Coverage | Error among accepted | Incorrect caught | {mapq['compared_model']} at same coverage |", "|---|---|---|---|---|"]
+    lines += [f"| {row['threshold']} | {number(row['coverage'])} | {number(row['accepted_error_rate'], 4)} | {number(row['incorrect_caught'])} | {number(row['model_error_at_same_coverage'], 4)} |"
+              for row in mapq["all"]]
+    for aligner, rows in mapq["by_aligner"].items():
+        lines += ["", f"`{aligner}` only:", "", "| Q | Coverage | Error among accepted | Incorrect caught |", "|---|---|---|---|"]
+        lines += [f"| {row['threshold']} | {number(row['coverage'])} | {number(row['accepted_error_rate'], 4)} | {number(row['incorrect_caught'])} |" for row in rows]
+    return [*lines, ""]
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Train and evaluate Model A (alignment reliability) with group-disjoint CV.")
     parser.add_argument("--features", type=Path, default=DEFAULT_DIR / "alignment_features.csv.gz")
-    parser.add_argument("--output-dir", type=Path, default=DEFAULT_DIR)
+    parser.add_argument("--output-dir", type=Path, default=None, help="Default: outputs/ml_alignment/regrouped/<grouping>.")
+    parser.add_argument("--grouping", choices=tuple(GROUPINGS), default="window")
     parser.add_argument("--models", nargs="+", choices=tuple(MODEL_FEATURES), default=list(MODEL_FEATURES))
     parser.add_argument("--folds", type=int, default=5)
     parser.add_argument("--seed", type=int, default=0)
@@ -276,22 +377,34 @@ def main(argv: list[str] | None = None) -> None:
     args = parser.parse_args(argv)
 
     rows = load_rows(args.features)
-    output_dir = ensure_dir(args.output_dir.resolve())
+    output_dir = ensure_dir(output_dir_for(args.output_dir, args.grouping).resolve())
     results = [cross_validate(rows, model, n_splits=args.folds, seed=args.seed, max_accept_error=args.max_accept_error,
-                              min_reject_precision=args.min_reject_precision) for model in args.models]
+                              min_reject_precision=args.min_reject_precision, grouping=args.grouping) for model in args.models]
     summaries = [summarize(result) for result in results]
-    plots = plot(results, output_dir)
+    plots = plot(results, output_dir, args.grouping)
+    compared = results[-1]
+    y, labelled = compared["y"], compared["rows"]
+    mapq_values = np.array([float(row["mapq"]) for row in labelled])
+    aligners = np.array([row["aligner"] for row in labelled])
+    mapq = {
+        "compared_model": compared["model"],
+        "all": [{**row, "model_error_at_same_coverage": model_error_at_coverage(y, compared["prob_incorrect"], row["coverage"])}
+                for row in mapq_threshold_sweep(y, mapq_values)],
+        "by_aligner": {aligner: mapq_threshold_sweep(y[aligners == aligner], mapq_values[aligners == aligner]) for aligner in sorted(set(aligners))},
+    }
     write_json(output_dir / "model_results.json", {
         "command": "python " + " ".join([project_relative(Path(__file__)), *(argv if argv is not None else sys.argv[1:])]),
         "features_file": project_relative(args.features),
         "label_counts": dict(Counter(row["label"] for row in rows)),
         "targets": {"max_accept_error": args.max_accept_error, "min_reject_precision": args.min_reject_precision},
-        "evaluation": f"GroupKFold({args.folds}) over source haplotypes; calibration and thresholds on a haplotype-disjoint quarter of each training fold",
+        "grouping": args.grouping,
+        "evaluation": f"{GROUPINGS[args.grouping]}; calibration and thresholds on a group-disjoint quarter of each training fold",
+        "mapq_threshold_sweep": mapq,
         "models": summaries,
         "plots": [project_relative(Path(path)) for path in plots],
     })
     write_report(output_dir / "REPORT.md", rows, summaries,
-                 {"max_accept_error": args.max_accept_error, "min_reject_precision": args.min_reject_precision})
+                 {"max_accept_error": args.max_accept_error, "min_reject_precision": args.min_reject_precision}, args.grouping, mapq)
     print(json.dumps({summary["model"]: {key: summary["overall"][key] for key in
                       ("pr_auc_incorrect", "brier", "ece", "coverage", "accepted_error_rate", "incorrect_caught")}
                       for summary in summaries}, indent=2))

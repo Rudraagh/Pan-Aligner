@@ -27,6 +27,9 @@ else:
     ar = None
 
 
+GENES = ("APP", "PSEN1", "PSEN2")
+
+
 def _rows(n_groups=10, per_group=30, seed=0):
     rng = np.random.default_rng(seed)
     rows = []
@@ -36,7 +39,9 @@ def _rows(n_groups=10, per_group=30, seed=0):
             mapq = int(rng.integers(0, 10)) if incorrect else int(rng.integers(40, 61))
             row = {column: 1.0 for column in FEATURE_COLUMNS}
             row.update({"mapq": mapq, "identity": 0.7 if incorrect else 0.95, "group": f"g{group}", "aligner": "panaligner",
-                        "label": "incorrect" if incorrect else "correct", "setting": "s", "decoy": 0})
+                        "label": "incorrect" if incorrect else "correct", "setting": "s", "decoy": 0,
+                        "own_gene": GENES[group % 3], "graph_gene": GENES[group % 3],
+                        "read": f"g{group}.S1_{index}!ref!{group * 25000 + index * 100}!{group * 25000 + index * 100 + 1000}!+"})
             rows.append(row)
     rows.append({**rows[0], "label": "unaligned"})
     rows.append({**rows[1], "label": "unprojectable"})
@@ -88,6 +93,76 @@ class CrossValidationTests(unittest.TestCase):
 
     def test_mapq_baseline_uses_mapq_only(self) -> None:
         self.assertEqual(ar.MODEL_FEATURES["mapq_only"], ["mapq"])
+
+
+@unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
+class GroupingTests(unittest.TestCase):
+    def _labelled(self):
+        rows = [row for row in _rows() if row["label"] in ("correct", "incorrect")]
+        rows[0] = {**rows[0], "decoy": 1, "graph_gene": "PSEN2", "label": "incorrect"}  # APP read on the PSEN2 graph
+        return rows
+
+    def test_window_folds_keep_windows_apart_and_purge_neighbours(self) -> None:
+        rows = self._labelled()
+        folds, _ = ar.evaluation_folds(rows, "window", n_splits=3)
+        key = [(row["own_gene"], ar.window_index(row)) for row in rows]
+        tested = []
+        for train, test in folds:
+            tested.extend(test.tolist())
+            test_keys = {key[i] for i in test}
+            for i in train:
+                gene, index = key[i]
+                self.assertFalse({(gene, index - 1), (gene, index), (gene, index + 1)} & test_keys)
+        self.assertEqual(sorted(tested), list(range(len(rows))))
+
+    def test_leave_one_gene_out_removes_the_gene_and_its_graph_from_training(self) -> None:
+        rows = self._labelled()
+        folds, _ = ar.evaluation_folds(rows, "leave_one_gene_out", n_splits=3)
+        self.assertEqual(len(folds), 3)
+        tested = []
+        for train, test in folds:
+            tested.extend(test.tolist())
+            genes = {rows[i]["own_gene"] for i in test}
+            self.assertEqual(len(genes), 1)
+            gene = genes.pop()
+            self.assertFalse(any(rows[i]["own_gene"] == gene or rows[i]["graph_gene"] == gene for i in train))
+        self.assertEqual(sorted(tested), list(range(len(rows))))
+
+    def test_cross_validate_accepts_each_grouping(self) -> None:
+        for grouping in ("haplotype", "window", "leave_one_gene_out"):
+            with self.subTest(grouping=grouping):
+                result = ar.cross_validate(_rows(n_groups=12), "logistic", n_splits=3, seed=0, grouping=grouping)
+                self.assertEqual(result["grouping"], grouping)
+                self.assertEqual(len(result["prob_incorrect"]), len(result["y"]))
+
+    def test_default_output_never_overwrites_the_committed_results(self) -> None:
+        path = ar.output_dir_for(None, "window")
+        self.assertEqual(path, ar.DEFAULT_DIR / "regrouped" / "window")
+        self.assertEqual(ar.output_dir_for(Path("x"), "window"), Path("x"))
+
+
+@unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
+class MapqThresholdTests(unittest.TestCase):
+    def test_threshold_sweep_known_answers(self) -> None:
+        y, mapq = np.array([0, 0, 1, 1]), np.array([60, 30, 60, 0])
+        sweep = {row["threshold"]: row for row in ar.mapq_threshold_sweep(y, mapq, thresholds=(0, 30, 60))}
+        self.assertEqual((sweep[0]["coverage"], sweep[0]["accepted_error_rate"], sweep[0]["incorrect_caught"]), (1.0, 0.5, 0.0))
+        self.assertAlmostEqual(sweep[30]["accepted_error_rate"], 1 / 3)
+        self.assertEqual((sweep[30]["coverage"], sweep[30]["incorrect_caught"]), (0.75, 0.5))
+        self.assertEqual((sweep[60]["coverage"], sweep[60]["accepted_error_rate"]), (0.5, 0.5))
+
+    def test_model_error_at_matching_coverage(self) -> None:
+        y, prob = np.array([0, 0, 1, 1]), np.array([0.1, 0.2, 0.9, 0.3])
+        self.assertEqual(ar.model_error_at_coverage(y, prob, 0.5), 0.0)
+        self.assertAlmostEqual(ar.model_error_at_coverage(y, prob, 0.75), 1 / 3)
+
+    def test_summary_separates_within_locus_from_off_target(self) -> None:
+        rows = _rows()
+        rows[0] = {**rows[0], "decoy": 1}
+        overall = ar.summarize(ar.cross_validate(rows, "logistic", n_splits=5, seed=0))["overall"]
+        self.assertEqual(overall["off_target"]["incorrect_rows"], 1)
+        self.assertEqual(overall["within_locus"]["incorrect_rows"], sum(r["label"] == "incorrect" for r in rows) - 1)
+        self.assertIn("pr_auc_incorrect", overall["within_locus"])
 
 
 @unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
