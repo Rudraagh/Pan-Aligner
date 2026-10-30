@@ -163,7 +163,7 @@ Defaults are `alpha=.35`, `beta=.35`, `gamma=.30`; `validate_anchor_weights` rej
 
 Candidates are ranked deterministically by `(-final_score, -consistency_score, -depth, node_id, anchor_id)`.  Greedy selection rejects a candidate if the absolute difference in **mean minimizer position** from any accepted anchor is less than `min_spacing`, stops at `max_anchors`, then returns selected anchors ordered by `(mean_position,node_id,anchor_id)`.  Ties therefore do not rely on dictionary iteration.
 
-Complexity is `O(V + total_path_visits + V log V + VA)` where `V` is node/candidate count and `A` is accepted anchors (spacing scan); with small anchor budgets, the last factor is bounded.  `U` is not biological specificity, `D` depends on this dataset/path representation, and `C` inherits the structural circularity.  Anchor coverage is the fraction of input assembly IDs appearing in any selected anchor’s `haplotypes`, so it can be low even when graph consistency is high.
+Complexity is `O(V + total_path_visits + V log V + VA)` where `V` is node/candidate count and `A` is accepted anchors (spacing scan); with small anchor budgets, the last factor is bounded.  `U` is not biological specificity, `D` depends on this dataset/path representation, and `C` inherits the structural circularity.  Anchor coverage is the fraction of input assembly IDs appearing in any selected anchor’s `haplotypes`, so it can be low even when graph consistency is high.  Because `U` favours private nodes that cover one haplotype each, coverage mostly tracked the `max_anchors` cap (APP 12/36 haplotypes).  Since commit `22076bc` anchor coverage is **reported only**: it is not part of `Q`, not diagnosed and not an acceptance condition, because no aligner consumes the selected anchors.
 
 ## 8. PG-SCUnK-style controller
 
@@ -171,7 +171,7 @@ Complexity is `O(V + total_path_visits + V log V + VA)` where `V` is node/candid
 
 `canonical_configuration()` makes an immutable ordered tuple over `k, window_size, min_node_support, max_anchors, min_anchor_spacing, anchor_alpha, anchor_beta, anchor_gamma`; float values are rounded to 12 decimals.  `visited` prevents recomputing the same configuration.  Each candidate actually calls `build_proposed_pangenome_graph`, so it rebuilds the graph rather than re-labeling an old score.
 
-Diagnostic signals are: anchor coverage, node consistency, node support ratio, edge consistency, path consistency, and `1 - min(1, branching_node_ratio)`.  The smallest signal (with fixed priority tie-breaking) chooses an action.  Anchor weakness proposes lower spacing, larger anchor budget, or a normalized alpha boost.  Path weakness proposes lower `k` and/or window.  Other weaknesses propose lower `k`, lower window, or lower support.  This is a small deterministic neighbourhood—not Bayesian optimisation, gradient descent, or exhaustive search.
+Diagnostic signals are: node consistency, node support ratio, edge consistency, path consistency, and `1 - min(1, branching_node_ratio)`.  The smallest signal (with fixed priority tie-breaking) chooses an action label.  Every action proposes the same neighbourhood: `k - 2`, `window - 1`, or both (floored at 3 and 2).  Only `k` and `window_size` are searched: `min_node_support` only labels rescued nodes (no node is removed, so it never changes `Q`), and anchor settings are not scored.  The other fields stay in the configuration key and are still passed to the builder.  This is a small deterministic neighbourhood—not Bayesian optimisation, gradient descent, or exhaustive search.
 
 ```text
 pending = [initial]; visited = {}; best = -infinity
@@ -185,38 +185,37 @@ while pending and round < max_rounds:
 return protected best graph, plus final candidate record and trajectory
 ```
 
-Acceptance is stricter than the overall threshold: `_quality_passes` requires overall quality >= `.72`, anchor coverage >= `.70`, node consistency >= `.45`, and path consistency >= `.45` by default.  Thus a high quality score alone does not mean accepted.  Stopping reasons are `quality_threshold_reached`, `max_rounds_reached`, `no_unseen_configurations`, or `stagnation_patience_exceeded`; default maximum rounds is 3 and default stagnation patience is 2.
+Acceptance: `_quality_passes` requires overall quality >= `.72`, node consistency >= `.45`, and path consistency >= `.45` by default.  (Before commit `22076bc` it also required anchor coverage >= `.70`; that gate was removed with the anchor term.)  Stopping reasons are `quality_threshold_reached`, `max_rounds_reached`, `no_unseen_configurations`, or `stagnation_patience_exceeded`; default maximum rounds is 3 and default stagnation patience is 2.
 
 Best-so-far protection matters because the final evaluated candidate can be worse.  `best_graph` is returned separately from `final_graph`; final evaluation serializes the best graph.  A duplicate candidate is skipped; an immediate threshold success ends after its first accepted evaluation; worse candidates remain in the audit trail but do not replace best.
 
 ### Stress-demo trace
 
-`outputs/proposed_step5_pgscunk_demo/experiment_metadata.json` labels the four short controlled-substitution haplotypes **DEMONSTRATION ONLY — not a biological benchmark**.  It began at `Q=0.67796875`, target `.99`, `k=6, window=5, support=2`.  Seven unique configurations were rebuilt in three rounds.  The best was candidate `c006`, round 3: `k=4, window=4, support=2`, `Q=0.80341146`; the final candidate `c007` was worse (`Q=.76959245`).  It stopped at `max_rounds_reached`, not success.  This demonstrates rebuilding, diagnostics and best-so-far retention; it does not validate a gene or disease claim.
+`outputs/proposed_step5_pgscunk_demo/experiment_metadata.json` labels the four short controlled-substitution haplotypes **DEMONSTRATION ONLY — not a biological benchmark**.  It began at `Q=0.67796875`, target `.99`, `k=6, window=5, support=2`.  Seven unique configurations were rebuilt in three rounds.  The best was candidate `c006`, round 3: `k=4, window=4, support=2`, `Q=0.80341146`; the final candidate `c007` was worse (`Q=.76959245`).  It stopped at `max_rounds_reached`, not success.  This demonstrates rebuilding, diagnostics and best-so-far retention; it does not validate a gene or disease claim.  **These demo figures were produced with the older formula (anchor term, anchor/support retuning) and have not been regenerated since commit `22076bc`.**  It is currently the only run in which the controller actually retunes anything (see Section 10).
 
 ## 9. Exact quality function and validation
 
 The source in `graph_constructor.py` calculates:
 
 ```text
-Q = .25 mean_node_consistency + .20 mean_edge_consistency
-  + .15 mean_path_consistency + .15 mean_node_support_ratio
-  + .15 anchor_coverage_ratio
-  + .10 (1 - min(1, branching_node_ratio))
+Q = ( .25 mean_node_consistency + .20 mean_edge_consistency
+    + .15 mean_path_consistency + .15 mean_node_support_ratio
+    + .10 (1 - min(1, branching_node_ratio)) ) / .85
 ```
 
-`mean_node_support_ratio` averages `node.support / assembly_count`; `branching_node_ratio` is nodes with more than one outgoing edge divided by nodes.  This differs from graph consistency `C(G)`, which uses only node/edge/path consistency `.40/.30/.30`.  Anchor coverage is separate.  `validation.json` is a software/data-integrity check: paths are valid, score fields are in range, PG-SCUnK keys are unique, selected anchor positions obey spacing, best tracking is consistent, and CSV/JSON report counts/quality agree.  Validation is not biological correctness, statistical significance, or benchmark accuracy.
+`mean_node_support_ratio` averages `node.support / assembly_count`; `branching_node_ratio` is nodes with more than one outgoing edge divided by nodes.  This differs from graph consistency `C(G)`, which uses only node/edge/path consistency `.40/.30/.30`.  Until commit `22076bc`, `Q` also had a `.15 anchor_coverage_ratio` term; it was removed and the remaining original weights (sum `.85`) were rescaled to sum to 1, keeping their proportions.  Anchor coverage is still reported in `quality.json`.  Two inputs are constant by construction (path transition fraction and node local path consistency are always 1, so every path score is at least `.40`), which keeps `Q` high; `tests/test_metric_definitions.py` pins this.  `validation.json` is a software/data-integrity check: paths are valid, score fields are in range, PG-SCUnK keys are unique, selected anchor positions obey spacing, best tracking is consistent, and CSV/JSON report counts/quality agree.  Validation is not biological correctness, statistical significance, or benchmark accuracy.
 
 ## 10. Final real-data evaluation
 
-Source: `outputs/proposed_final_evaluation/proposed_final_summary.json`; each per-gene `validation.json` passed.  The final evaluator uses all listed train-manifest inputs and forces CPU.
+Source: `outputs/proposed_final_evaluation/proposed_final_summary.json` (regenerated at commit `22076bc` with `python proposed_methodology.py --final-proposed-evaluation --backend cpu`, 194 s); each per-gene `validation.json` passed.  The final evaluator uses all listed train-manifest inputs and the requested minimizer backend (CPU in this run).
 
-| Gene | Assemblies | Nodes | Edges | rescued/private | anchors | node / edge / path C | graph C | anchor cov. | Q | rounds/configs | accepted | backend |
+| Gene | Assemblies | Nodes | Edges | rescued/private | anchors | node / edge / path C | graph C | anchor cov. (reported) | Q | rounds/configs | accepted | backend |
 |---|---:|---:|---:|---:|---:|---|---:|---:|---:|---|---|---|
-| APP | 36 | 72,646 | 79,053 | 116 / 116 | 12 | .98248 / .99867 / .98755 | .98886 | .33333 | .88639 | 2 / 4 | no | cpu |
-| PSEN1 | 124 | 21,397 | 23,118 | 417 / 417 | 16 | .98380 / .98488 / .98879 | .98562 | .10484 | .84871 | 3 / 7 | no | cpu |
-| PSEN2 | 14 | 15,635 | 16,089 | 46 / 46 | 12 | .98929 / .98891 / .99217 | .99004 | 1.00000 | .98851 | 1 / 1 | yes | cpu |
+| APP | 36 | 72,646 | 79,053 | 116 / 116 | 12 | .98248 / .99867 / .98755 | .98886 | .33333 | .98399 | 1 / 1 | yes | cpu |
+| PSEN1 | 124 | 21,397 | 23,118 | 417 / 417 | 12 | .98380 / .98488 / .98879 | .98562 | .08871 | .97999 | 1 / 1 | yes | cpu |
+| PSEN2 | 14 | 15,635 | 16,089 | 46 / 46 | 12 | .98929 / .98891 / .99217 | .99004 | 1.00000 | .98648 | 1 / 1 | yes | cpu |
 
-PSEN2 is the strongest result by Q, graph consistency, path consistency and acceptance: its anchor coverage meets `.70`.  PSEN1 is weakest by Q because its selected anchors cover only about 10.5% of paths, despite high structural consistency; it increased its anchor limit from 12 to 16 in the best configuration, yet did not satisfy coverage and stopped at the 3-round limit.  APP is notable/surprising: very high graph consistency and nearly perfect edge consistency coexist with only one-third anchor coverage, so it is not accepted.  This is exactly why “Q is high” must not be conflated with controller acceptance.
+All three genes pass on their initial configuration, so **the controller performs no retuning on the real inputs**; its retuning has only been exercised on the synthetic stress demo.  The `.72` threshold is far below these scores, which are high largely because of the constant-by-construction terms (Section 9) and because the inputs are closely related locus sequences (the held-out haplotypes in `outputs/truth_eval/REPORT.md` differ from the reference by only one or two small variants).  The graphs themselves are unchanged from the earlier run (same node and edge counts).  In the earlier run (old formula), APP (`Q = .88639`) and PSEN1 (`Q = .84871`) were rejected only by the anchor-coverage gate, which mainly reflected the anchor cap; PSEN2 (`Q = .98851`) passed.  Differences between the three genes are small and carry no biological meaning.
 
 The run covered 174 assemblies.  It validates serialisation and structural properties, not a held-out biological ground truth.  The baseline alignment metrics in `outputs/evaluation/` are intentionally separate and not numerically interchangeable with this table.
 
@@ -345,8 +344,8 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | N. Why dictionaries/sets? | They aggregate nodes/edges and guarantee each assembly supports an item once. | `defaultdict`, sets. |
 | O. What do tests prove? | Deterministic implementation behaviour and report invariants on selected cases. | test table; not biological performance. |
 | P. Why preserve baseline? | It keeps established alignment-oriented outputs distinct for future fair comparison. | `baseline_proposed_comparison.md`. |
-| Q. Why APP not accepted? | Anchor coverage is .333, below `.70`, despite Q .886 and high structural consistency. | APP summary; exact answer. |
-| Q. Why PSEN1 only ~10% anchors? | The selected 16 anchors cover only .10484 of assembly IDs under current score/spacing; controller ran 7 configs but hit max rounds. | PSEN1 summary; no speculative biology. |
+| Q. Why was anchor coverage removed from Q? | No aligner consumes the selected anchors, and because `U` favours private nodes, coverage mostly tracked the `max_anchors` cap (APP 12/36, PSEN1 11/124). It previously rejected APP and PSEN1 for that reason alone. | commit `22076bc`; `test_metric_definitions.py`. |
+| Q. Why does the controller not retune on real data? | All three genes exceed the `.72` threshold on the initial configuration (Q ≈ .98), so it stops after one evaluation. | final summary; stress demo is the only retuning run. |
 | R. Why not simply PanAligner? | PanAligner is retained for alignment; this prototype explores an alignment-free, path/quality-control layer. | baseline scripts; no replacement claim. |
 | S. Is minigraph your algorithm? | No. It is an external baseline tool used in legacy orchestration. | `paper_evaluation.py`, `align.py`. |
 | T. How would GPU be done correctly? | Parallel device k-mer encoding/hashing/window minima and compaction, plus CPU/GPU parity, timing and memory experiments. | future work; safe no current claim. |
@@ -365,9 +364,9 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 
 **Five formulas:** node `(.25,.25,.25,.25)`; edge `(.5,.5)`; path `(.4,.3,.3)`; graph `(.4,.3,.3)`; anchor `.35U+.35D+.30C`; Q weights `.25,.20,.15,.15,.15,.10`.
 
-**Must know parameters:** default final initial `k=11`, window `6`, support `2`, anchors `12`, spacing `4.0`, weights `.35/.35/.30`, threshold `.72`, anchor-coverage gate `.70`, tolerance `1e-4`, max rounds `3`.
+**Must know parameters:** default final initial `k=11`, window `6`, support `2`, anchors `12`, spacing `4.0`, weights `.35/.35/.30`, threshold `.72` (no anchor-coverage gate since `22076bc`), searched parameters `k` and `window` only, tolerance `1e-4`, max rounds `3`.
 
-**20 must-know questions:** What is a minimizer? Why paths? What is rescued? Why not GPU claim? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why APP fails? Why PSEN1 fails? Why PSEN2 passes? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required?
+**20 must-know questions:** What is a minimizer? Why paths? What is rescued? Why not GPU claim? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required?
 
 ## 19. CLAIMS I MUST NOT MAKE
 
@@ -379,8 +378,9 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “Our graph is biologically correct because paths validate.” | “Path validation checks internal graph/path integrity; biological correctness needs independent evidence.” |
 | “Private nodes are real variants.” | “Private low-support nodes are retained observed structure and may include real divergence or artefacts.” |
 | “PG-SCUnK learns optimal parameters.” | “The project-local controller deterministically explores a small heuristic neighbourhood.” |
-| “APP succeeded because Q is high.” | “APP’s Q is high but it was not accepted because anchor coverage was below the required gate.” |
-| “PSEN1 is biologically worse.” | “Under this anchor-selection metric PSEN1 had low selected-anchor coverage; no biological conclusion follows.” |
+| “All three genes are accepted, so the graphs are high quality.” | “All three pass a structural-coherence threshold on the first configuration; the score is high partly by construction and is not biological accuracy.” |
+| “The feedback loop improved the real-data graphs.” | “On APP/PSEN1/PSEN2 the controller accepted the initial configuration; retuning was only demonstrated on a synthetic stress demo.” |
+| “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
 | “The proposed method beats PanAligner.” | “No direct biological performance comparison is established by these non-interchangeable metrics.” |
 | “Forward GFA means strand handling is solved.” | “The current GFA emits forward `+` paths/links; orientation-aware modelling is future work.” |
 

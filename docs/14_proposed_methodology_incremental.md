@@ -123,9 +123,9 @@ Current behavior:
   - node consistency
   - edge consistency
   - support ratio
-  - anchor coverage
+  - anchor coverage (reported only; not part of the overall score or acceptance since commit `22076bc`)
   - branching ratio
-  - overall quality score
+  - overall quality score (structure-only: node, edge, path, support and branching terms)
 - decides whether the graph meets threshold
 - retunes parameters if quality is insufficient
 - reconstructs the graph using updated parameters
@@ -213,14 +213,14 @@ The proposed graph builder is a lightweight alignment-free abstraction based on 
 
 ### Quality-feedback limitation
 
-The PG-SCUnK controller currently retunes a practical subset of parameters:
+The PG-SCUnK controller retunes only:
 
 - `k`
 - `window_size`
-- `min_node_support`
-- `min_anchor_spacing`
 
-This is enough to demonstrate the feedback-loop idea honestly, but it is not yet a full graph-optimization framework.
+`min_node_support` is not searched because it only labels nodes as rescued (no node is removed), so it never changes the quality score. Anchor settings are not searched because anchor coverage is no longer scored.
+
+On the real APP/PSEN1/PSEN2 inputs every gene passes the 0.72 threshold on its initial configuration (overall quality about 0.98), so the controller performs no retuning there; retuning has only been exercised on the synthetic stress demo. It is not a graph-optimization framework.
 
 ## Recommended current framing
 
