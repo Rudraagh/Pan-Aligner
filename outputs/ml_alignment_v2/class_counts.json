@@ -1,0 +1,149 @@
+{
+  "totals": {
+    "correct": 189184,
+    "unaligned": 664204,
+    "incorrect": 1588
+  },
+  "by_condition": [
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 438
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 47226
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 21080
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 230
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 2522
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 146
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 47518
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 21915
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 16
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 1901
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 417
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 236911
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 78982
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 287
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 39395
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 51
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 237277
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 67207
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 3
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 51454
+    }
+  ]
+}
