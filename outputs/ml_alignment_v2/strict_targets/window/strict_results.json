@@ -1,0 +1,1444 @@
+{
+  "grouping": "window",
+  "evaluation": "GroupKFold over 20 kb windows of the read's true position, with adjacent windows removed from training",
+  "seed": 0,
+  "resamples": 200,
+  "rows": 190772,
+  "incorrect_rows": 1588,
+  "within_locus_incorrect": 536,
+  "off_target_incorrect": 1052,
+  "threshold_selection": "fit 60%, calibration 20%, thresholds 20% of each training fold, disjoint by group; test fold never used",
+  "calibration": {
+    "ece": 0.0015159821865300908,
+    "brier": 0.0025770892176167613,
+    "mean_predicted": 0.00975165884024577,
+    "observed": 0.00832407271507349
+  },
+  "targets": [
+    {
+      "target": "error_0.5pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.005,
+      "min_reject_precision": 0.95,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 1.0,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.9166666666666667,
+          "high": 0.9166666666666667
+        },
+        {
+          "fold": 2,
+          "low": 0.9733463425887012,
+          "high": 0.9733463425887012
+        },
+        {
+          "fold": 3,
+          "low": 1.0,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.7582847836490665,
+          "high": 0.7582847836490665
+        }
+      ],
+      "abstention": {
+        "abstentions": 0,
+        "abstention_share": 0.0,
+        "folds_with_band": 0,
+        "folds": 5,
+        "accepted_error_rate": 0.0030145245272677444,
+        "abstained_error_rate": null,
+        "rejected_error_rate": 0.9921875,
+        "meaningful": false
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 189748,
+          "incorrect": 1024,
+          "insufficient_evidence": 0
+        },
+        "accepted_error_rate": 0.0030145245272677444,
+        "incorrect_accepted": 572,
+        "incorrect_abstained": 0,
+        "incorrect_rejected": 1016,
+        "correct_rejected": 8,
+        "correct_abstained": 0
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 189290,
+          "incorrect": 430,
+          "insufficient_evidence": 0
+        },
+        "accepted_error_rate": 0.0006022505150826774,
+        "incorrect_accepted": 114,
+        "incorrect_abstained": 0,
+        "incorrect_rejected": 422,
+        "correct_rejected": 8,
+        "correct_abstained": 0
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 458,
+          "incorrect": 594,
+          "insufficient_evidence": 0
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 458,
+        "incorrect_abstained": 0,
+        "incorrect_rejected": 594,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.5pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.005,
+      "min_reject_precision": 0.95,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.1568627450980392,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.38461538461538464,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": 0.16666666666666666,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.11793611793611794,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": 0.05630026809651475,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 2360,
+        "abstention_share": 0.012370788165978235,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.007334989278814513,
+        "abstained_error_rate": 0.08728813559322034,
+        "rejected_error_rate": null,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 188412,
+          "incorrect": 0,
+          "insufficient_evidence": 2360
+        },
+        "accepted_error_rate": 0.007334989278814513,
+        "incorrect_accepted": 1382,
+        "incorrect_abstained": 206,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 2154
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 187486,
+          "incorrect": 0,
+          "insufficient_evidence": 2234
+        },
+        "accepted_error_rate": 0.002432181602893016,
+        "incorrect_accepted": 456,
+        "incorrect_abstained": 80,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 2154
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 926,
+          "incorrect": 0,
+          "insufficient_evidence": 126
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 926,
+        "incorrect_abstained": 126,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.2pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.002,
+      "min_reject_precision": 0.99,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.7555555555555555,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.8333333333333334,
+          "high": 1.0
+        },
+        {
+          "fold": 2,
+          "low": 0.6166621053395159,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.9230769230769231,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.7582847836490665,
+          "high": 0.7582847836490665
+        }
+      ],
+      "abstention": {
+        "abstentions": 234,
+        "abstention_share": 0.0012265950978130962,
+        "folds_with_band": 4,
+        "folds": 5,
+        "accepted_error_rate": 0.002920739358280876,
+        "abstained_error_rate": 0.7777777777777778,
+        "rejected_error_rate": 0.9906976744186047,
+        "meaningful": false
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 189678,
+          "incorrect": 860,
+          "insufficient_evidence": 234
+        },
+        "accepted_error_rate": 0.002920739358280876,
+        "incorrect_accepted": 554,
+        "incorrect_abstained": 182,
+        "incorrect_rejected": 852,
+        "correct_rejected": 8,
+        "correct_abstained": 52
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 189231,
+          "incorrect": 352,
+          "insufficient_evidence": 137
+        },
+        "accepted_error_rate": 0.0005654464649026851,
+        "incorrect_accepted": 107,
+        "incorrect_abstained": 85,
+        "incorrect_rejected": 344,
+        "correct_rejected": 8,
+        "correct_abstained": 52
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 447,
+          "incorrect": 508,
+          "insufficient_evidence": 97
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 447,
+        "incorrect_abstained": 97,
+        "incorrect_rejected": 508,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.2pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.002,
+      "min_reject_precision": 0.99,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.08181818181818182,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.09734513274336283,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": 0.08526187576126674,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.06550218340611354,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": 0.03571428571428571,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 7191,
+        "abstention_share": 0.03769421089048707,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.0044176684951057026,
+        "abstained_error_rate": 0.10805173133083021,
+        "rejected_error_rate": null,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 183581,
+          "incorrect": 0,
+          "insufficient_evidence": 7191
+        },
+        "accepted_error_rate": 0.0044176684951057026,
+        "incorrect_accepted": 811,
+        "incorrect_abstained": 777,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 6414
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 183033,
+          "incorrect": 0,
+          "insufficient_evidence": 6687
+        },
+        "accepted_error_rate": 0.0014368993569465614,
+        "incorrect_accepted": 263,
+        "incorrect_abstained": 273,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 6414
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 548,
+          "incorrect": 0,
+          "insufficient_evidence": 504
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 548,
+        "incorrect_abstained": 504,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.1pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.001,
+      "min_reject_precision": 0.99,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.75,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.8333333333333334,
+          "high": 1.0
+        },
+        {
+          "fold": 2,
+          "low": 0.5080682536479485,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.9230769230769231,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.7582847836490665,
+          "high": 0.7582847836490665
+        }
+      ],
+      "abstention": {
+        "abstentions": 316,
+        "abstention_share": 0.0016564275679869164,
+        "folds_with_band": 4,
+        "folds": 5,
+        "accepted_error_rate": 0.002732125150319627,
+        "abstained_error_rate": 0.689873417721519,
+        "rejected_error_rate": 0.9906976744186047,
+        "meaningful": false
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 189596,
+          "incorrect": 860,
+          "insufficient_evidence": 316
+        },
+        "accepted_error_rate": 0.002732125150319627,
+        "incorrect_accepted": 518,
+        "incorrect_abstained": 218,
+        "incorrect_rejected": 852,
+        "correct_rejected": 8,
+        "correct_abstained": 98
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 189171,
+          "incorrect": 352,
+          "insufficient_evidence": 197
+        },
+        "accepted_error_rate": 0.0004916186941973135,
+        "incorrect_accepted": 93,
+        "incorrect_abstained": 99,
+        "incorrect_rejected": 344,
+        "correct_rejected": 8,
+        "correct_abstained": 98
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 425,
+          "incorrect": 508,
+          "insufficient_evidence": 119
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 425,
+        "incorrect_abstained": 119,
+        "incorrect_rejected": 508,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.1pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.001,
+      "min_reject_precision": 0.99,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.03333333333333333,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.08433734939759036,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": 0.06666666666666667,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.0625,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": 7.995522507395858e-05,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 12977,
+        "abstention_share": 0.06802360933470321,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.0029022188475491435,
+        "abstained_error_rate": 0.08260769052939816,
+        "rejected_error_rate": null,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 177795,
+          "incorrect": 0,
+          "insufficient_evidence": 12977
+        },
+        "accepted_error_rate": 0.0029022188475491435,
+        "incorrect_accepted": 516,
+        "incorrect_abstained": 1072,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 11905
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 177415,
+          "incorrect": 0,
+          "insufficient_evidence": 12305
+        },
+        "accepted_error_rate": 0.0007665642702139052,
+        "incorrect_accepted": 136,
+        "incorrect_abstained": 400,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 11905
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 380,
+          "incorrect": 0,
+          "insufficient_evidence": 672
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 380,
+        "incorrect_abstained": 672,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.05pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.0005,
+      "min_reject_precision": 0.995,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.6,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.498128854254839,
+          "high": 1.0
+        },
+        {
+          "fold": 2,
+          "low": 0.006825407959699596,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.8,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.2774251454769686,
+          "high": 0.7380562102395689
+        }
+      ],
+      "abstention": {
+        "abstentions": 37464,
+        "abstention_share": 0.19638102027551213,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.002722239714525609,
+        "abstained_error_rate": 0.008568225496476617,
+        "rejected_error_rate": 0.9906976744186047,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 152448,
+          "incorrect": 860,
+          "insufficient_evidence": 37464
+        },
+        "accepted_error_rate": 0.002722239714525609,
+        "incorrect_accepted": 415,
+        "incorrect_abstained": 321,
+        "incorrect_rejected": 852,
+        "correct_rejected": 8,
+        "correct_abstained": 37143
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 152070,
+          "incorrect": 352,
+          "insufficient_evidence": 37298
+        },
+        "accepted_error_rate": 0.00024330900243309004,
+        "incorrect_accepted": 37,
+        "incorrect_abstained": 155,
+        "incorrect_rejected": 344,
+        "correct_rejected": 8,
+        "correct_abstained": 37143
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 378,
+          "incorrect": 508,
+          "insufficient_evidence": 166
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 378,
+        "incorrect_abstained": 166,
+        "incorrect_rejected": 508,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "error_0.05pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.0005,
+      "min_reject_precision": 0.995,
+      "target_coverage": null,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.02279202279202279,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.08433734939759036,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": -Infinity,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.05309734513274336,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": -Infinity,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 82559,
+        "abstention_share": 0.4327626695741513,
+        "folds_with_band": 3,
+        "folds": 5,
+        "accepted_error_rate": 0.0014600833541256596,
+        "abstained_error_rate": 0.01732094623239138,
+        "rejected_error_rate": null,
+        "meaningful": false
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 108213,
+          "incorrect": 0,
+          "insufficient_evidence": 82559
+        },
+        "accepted_error_rate": 0.0014600833541256596,
+        "incorrect_accepted": 158,
+        "incorrect_abstained": 1430,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 81129
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 108136,
+          "incorrect": 0,
+          "insufficient_evidence": 81584
+        },
+        "accepted_error_rate": 0.000749056743360213,
+        "incorrect_accepted": 81,
+        "incorrect_abstained": 455,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 81129
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 77,
+          "incorrect": 0,
+          "insufficient_evidence": 975
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 77,
+        "incorrect_abstained": 975,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "coverage_95pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.01,
+      "min_reject_precision": 0.99,
+      "target_coverage": 0.95,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.015228426395939087,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.0,
+          "high": 1.0
+        },
+        {
+          "fold": 2,
+          "low": 0.006825409136740867,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.0020663911478469538,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.0,
+          "high": 0.8690281051197845
+        }
+      ],
+      "abstention": {
+        "abstentions": 4704,
+        "abstention_share": 0.024657706581678655,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.0014739945251631922,
+        "abstained_error_rate": 0.09885204081632654,
+        "rejected_error_rate": 0.9918319719953326,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 185211,
+          "incorrect": 857,
+          "insufficient_evidence": 4704
+        },
+        "accepted_error_rate": 0.0014739945251631922,
+        "incorrect_accepted": 273,
+        "incorrect_abstained": 465,
+        "incorrect_rejected": 850,
+        "correct_rejected": 7,
+        "correct_abstained": 4239
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 184941,
+          "incorrect": 349,
+          "insufficient_evidence": 4430
+        },
+        "accepted_error_rate": 1.6221389524226645e-05,
+        "incorrect_accepted": 3,
+        "incorrect_abstained": 191,
+        "incorrect_rejected": 342,
+        "correct_rejected": 7,
+        "correct_abstained": 4239
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 270,
+          "incorrect": 508,
+          "insufficient_evidence": 274
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 270,
+        "incorrect_abstained": 274,
+        "incorrect_rejected": 508,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "coverage_95pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.01,
+      "min_reject_precision": 0.99,
+      "target_coverage": 0.95,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.03333333333333333,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.08433734939759036,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": 0.18076285240464346,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.05309734513274336,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": 0.020161290322580645,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 8183,
+        "abstention_share": 0.04289413540771182,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.003762548674892792,
+        "abstained_error_rate": 0.11010631797629232,
+        "rejected_error_rate": null,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 182589,
+          "incorrect": 0,
+          "insufficient_evidence": 8183
+        },
+        "accepted_error_rate": 0.003762548674892792,
+        "incorrect_accepted": 687,
+        "incorrect_abstained": 901,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 7282
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 182107,
+          "incorrect": 0,
+          "insufficient_evidence": 7613
+        },
+        "accepted_error_rate": 0.0011257118067949062,
+        "incorrect_accepted": 205,
+        "incorrect_abstained": 331,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 7282
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 482,
+          "incorrect": 0,
+          "insufficient_evidence": 570
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 482,
+        "incorrect_abstained": 570,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "coverage_90pct",
+      "model": "gradient_boosting",
+      "max_accept_error": 0.01,
+      "min_reject_precision": 0.99,
+      "target_coverage": 0.9,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.0008410428931875525,
+          "high": 1.0
+        },
+        {
+          "fold": 1,
+          "low": 0.0,
+          "high": 1.0
+        },
+        {
+          "fold": 2,
+          "low": 0.006825409136740867,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.0020663911478469538,
+          "high": 1.0
+        },
+        {
+          "fold": 4,
+          "low": 0.0,
+          "high": 0.8690281051197845
+        }
+      ],
+      "abstention": {
+        "abstentions": 6624,
+        "abstention_share": 0.03472207661501688,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.001473067417385469,
+        "abstained_error_rate": 0.07065217391304347,
+        "rejected_error_rate": 0.9918319719953326,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 183291,
+          "incorrect": 857,
+          "insufficient_evidence": 6624
+        },
+        "accepted_error_rate": 0.001473067417385469,
+        "incorrect_accepted": 270,
+        "incorrect_abstained": 468,
+        "incorrect_rejected": 850,
+        "correct_rejected": 7,
+        "correct_abstained": 6156
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 183024,
+          "incorrect": 349,
+          "insufficient_evidence": 6347
+        },
+        "accepted_error_rate": 1.6391292945187516e-05,
+        "incorrect_accepted": 3,
+        "incorrect_abstained": 191,
+        "incorrect_rejected": 342,
+        "correct_rejected": 7,
+        "correct_abstained": 6156
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 267,
+          "incorrect": 508,
+          "insufficient_evidence": 277
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 267,
+        "incorrect_abstained": 277,
+        "incorrect_rejected": 508,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    },
+    {
+      "target": "coverage_90pct",
+      "model": "mapq_only",
+      "max_accept_error": 0.01,
+      "min_reject_precision": 0.99,
+      "target_coverage": 0.9,
+      "thresholds": [
+        {
+          "fold": 0,
+          "low": 0.007120253164556962,
+          "high": Infinity
+        },
+        {
+          "fold": 1,
+          "low": 0.01054481546572935,
+          "high": Infinity
+        },
+        {
+          "fold": 2,
+          "low": 0.08526187576126674,
+          "high": Infinity
+        },
+        {
+          "fold": 3,
+          "low": 0.013452914798206279,
+          "high": Infinity
+        },
+        {
+          "fold": 4,
+          "low": 7.995522507395858e-05,
+          "high": Infinity
+        }
+      ],
+      "abstention": {
+        "abstentions": 14891,
+        "abstention_share": 0.07805652821168725,
+        "folds_with_band": 5,
+        "folds": 5,
+        "accepted_error_rate": 0.0022117226988702587,
+        "abstained_error_rate": 0.08051843395339467,
+        "rejected_error_rate": null,
+        "meaningful": true
+      },
+      "overall": {
+        "rows": 190772,
+        "incorrect_rows": 1588,
+        "decisions": {
+          "correct": 175881,
+          "incorrect": 0,
+          "insufficient_evidence": 14891
+        },
+        "accepted_error_rate": 0.0022117226988702587,
+        "incorrect_accepted": 389,
+        "incorrect_abstained": 1199,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 13692
+      },
+      "within_locus": {
+        "rows": 189720,
+        "incorrect_rows": 536,
+        "decisions": {
+          "correct": 175581,
+          "incorrect": 0,
+          "insufficient_evidence": 14139
+        },
+        "accepted_error_rate": 0.0005068885585570193,
+        "incorrect_accepted": 89,
+        "incorrect_abstained": 447,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 13692
+      },
+      "off_target": {
+        "rows": 1052,
+        "incorrect_rows": 1052,
+        "decisions": {
+          "correct": 300,
+          "incorrect": 0,
+          "insufficient_evidence": 752
+        },
+        "accepted_error_rate": 1.0,
+        "incorrect_accepted": 300,
+        "incorrect_abstained": 752,
+        "incorrect_rejected": 0,
+        "correct_rejected": 0,
+        "correct_abstained": 0
+      }
+    }
+  ],
+  "mapq_comparison": [
+    {
+      "threshold": 10,
+      "coverage": 0.9800547250120563,
+      "mapq_error": 0.005605267239673311,
+      "model_error": 0.001573707879187423,
+      "mapq_accepted_within_locus": 355,
+      "mapq_accepted_off_target": 693,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 288.2314410480349,
+      "difference_ci95": [
+        -0.005345544914020595,
+        -0.002647609504838059
+      ]
+    },
+    {
+      "threshold": 20,
+      "coverage": 0.9618759566393391,
+      "mapq_error": 0.0040381691453359415,
+      "model_error": 0.0015531419789753622,
+      "mapq_accepted_within_locus": 231,
+      "mapq_accepted_off_target": 510,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 279.0,
+      "difference_ci95": [
+        -0.0035351188743093843,
+        -0.0014062740991077354
+      ]
+    },
+    {
+      "threshold": 30,
+      "coverage": 0.9455161134757721,
+      "mapq_error": 0.0029549058089123953,
+      "model_error": 0.0015800153012008116,
+      "mapq_accepted_within_locus": 147,
+      "mapq_accepted_off_target": 386,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 279.0,
+      "difference_ci95": [
+        -0.0020511053052169334,
+        -0.0006625548854889183
+      ]
+    },
+    {
+      "threshold": 40,
+      "coverage": 0.9302518189252091,
+      "mapq_error": 0.0024173644529092895,
+      "model_error": 0.0016059414197649128,
+      "mapq_accepted_within_locus": 104,
+      "mapq_accepted_off_target": 325,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 279.0,
+      "difference_ci95": [
+        -0.001303430092377845,
+        -0.00024230703029883406
+      ]
+    },
+    {
+      "threshold": 50,
+      "coverage": 0.9162508124882058,
+      "mapq_error": 0.0019108098057724764,
+      "model_error": 0.0016304814210932807,
+      "mapq_accepted_within_locus": 70,
+      "mapq_accepted_off_target": 264,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 279.0,
+      "difference_ci95": [
+        -0.0006079960947674216,
+        0.00016021039196710508
+      ]
+    },
+    {
+      "threshold": 60,
+      "coverage": 0.8669406411842409,
+      "mapq_error": 0.001281834232229666,
+      "model_error": 0.0017232205480445981,
+      "mapq_accepted_within_locus": 35,
+      "mapq_accepted_off_target": 177,
+      "model_accepted_within_locus": 6.0,
+      "model_accepted_off_target": 279.0,
+      "difference_ci95": [
+        -0.00013334636809678619,
+        0.0013893580661582877
+      ]
+    }
+  ],
+  "mapq_comparison_by_aligner": {
+    "minigraph": [
+      {
+        "threshold": 10,
+        "coverage": 0.9625470749452846,
+        "mapq_error": 0.008572745429405438,
+        "model_error": 0.002068930199211349,
+        "mapq_accepted_within_locus": 336,
+        "mapq_accepted_off_target": 501,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.00861034878979681,
+          -0.004470161961370891
+        ]
+      },
+      {
+        "threshold": 20,
+        "coverage": 0.9283967900309561,
+        "mapq_error": 0.005649297554448822,
+        "model_error": 0.0021450340338320713,
+        "mapq_accepted_within_locus": 212,
+        "mapq_accepted_off_target": 320,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.0051214190334463875,
+          -0.0020597221861172947
+        ]
+      },
+      {
+        "threshold": 30,
+        "coverage": 0.8979434903484039,
+        "mapq_error": 0.0038317120836169607,
+        "model_error": 0.002217781779056235,
+        "mapq_accepted_within_locus": 128,
+        "mapq_accepted_off_target": 221,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.002492312506138242,
+          -0.0008152588531210899
+        ]
+      },
+      {
+        "threshold": 40,
+        "coverage": 0.8696689472957785,
+        "mapq_error": 0.002890697621692702,
+        "model_error": 0.0022898859591448067,
+        "mapq_accepted_within_locus": 85,
+        "mapq_accepted_off_target": 170,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.0012986307022251876,
+          5.785969906020709e-05
+        ]
+      },
+      {
+        "threshold": 50,
+        "coverage": 0.8457223416211527,
+        "mapq_error": 0.0022381535233432417,
+        "model_error": 0.0023547240193507023,
+        "mapq_accepted_within_locus": 54,
+        "mapq_accepted_off_target": 138,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.0005780732634376763,
+          0.0010226179497371697
+        ]
+      },
+      {
+        "threshold": 60,
+        "coverage": 0.8218250290829505,
+        "mapq_error": 0.001727426494403858,
+        "model_error": 0.0024231954990943006,
+        "mapq_accepted_within_locus": 31,
+        "mapq_accepted_off_target": 113,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 198.0,
+        "difference_ci95": [
+          -0.00020818227582231394,
+          0.0021226537655559784
+        ]
+      }
+    ],
+    "panaligner": [
+      {
+        "threshold": 10,
+        "coverage": 0.9999328393292888,
+        "mapq_error": 0.0023619755518739086,
+        "model_error": 0.0023534326121128282,
+        "mapq_accepted_within_locus": 19,
+        "mapq_accepted_off_target": 192,
+        "model_accepted_within_locus": 17.81578947368421,
+        "model_accepted_off_target": 192.42105263157893,
+        "difference_ci95": [
+          -3.788007758290751e-05,
+          4.572026916839225e-06
+        ]
+      },
+      {
+        "threshold": 20,
+        "coverage": 0.9998880655488146,
+        "mapq_error": 0.0023396919219057853,
+        "model_error": 0.002310526787145187,
+        "mapq_accepted_within_locus": 19,
+        "mapq_accepted_off_target": 190,
+        "model_accepted_within_locus": 17.026315789473685,
+        "model_accepted_off_target": 189.36842105263156,
+        "difference_ci95": [
+          -8.279818660619353e-05,
+          4.677001260814016e-06
+        ]
+      },
+      {
+        "threshold": 30,
+        "coverage": 0.9995298753050214,
+        "mapq_error": 0.002060562623185809,
+        "model_error": 0.001967141806316544,
+        "mapq_accepted_within_locus": 19,
+        "mapq_accepted_off_target": 165,
+        "model_accepted_within_locus": 10.710526315789473,
+        "model_accepted_off_target": 164.94736842105263,
+        "difference_ci95": [
+          -0.00018921371075156788,
+          -1.5712237736397844e-05
+        ]
+      },
+      {
+        "threshold": 40,
+        "coverage": 0.9990373637198057,
+        "mapq_error": 0.0019495361448482948,
+        "model_error": 0.001556900929269153,
+        "mapq_accepted_within_locus": 19,
+        "mapq_accepted_off_target": 155,
+        "model_accepted_within_locus": 4.0,
+        "model_accepted_off_target": 134.95652173913044,
+        "difference_ci95": [
+          -0.0006118312201118137,
+          -4.413757123153967e-05
+        ]
+      },
+      {
+        "threshold": 50,
+        "coverage": 0.9963285500011193,
+        "mapq_error": 0.00159532636782384,
+        "model_error": 0.0012002396734449314,
+        "mapq_accepted_within_locus": 16,
+        "mapq_accepted_off_target": 126,
+        "model_accepted_within_locus": 3.0,
+        "model_accepted_off_target": 103.83333333333334,
+        "difference_ci95": [
+          -0.0011353380412021823,
+          9.682655221876003e-05
+        ]
+      },
+      {
+        "threshold": 60,
+        "coverage": 0.9181647227383644,
+        "mapq_error": 0.0008289953308057103,
+        "model_error": 0.0010118619478952054,
+        "mapq_accepted_within_locus": 4,
+        "mapq_accepted_off_target": 64,
+        "model_accepted_within_locus": 2.0,
+        "model_accepted_off_target": 81.0,
+        "difference_ci95": [
+          -8.348964823448638e-05,
+          0.0006838117426595006
+        ]
+      }
+    ]
+  },
+  "mapq_comparison_verdict": "Gradient boosting does not have reliably lower error than the plain MAPQ threshold, not at every compared coverage, so these results do not support using it instead of MAPQ.",
+  "fold_groups": [
+    {
+      "fold": 0,
+      "test_groups": [
+        "APP:14",
+        "APP:5",
+        "APP:7",
+        "PSEN1:0"
+      ],
+      "calibration_groups": [
+        "APP:10",
+        "PSEN1:2",
+        "PSEN2:2"
+      ],
+      "threshold_groups": [
+        "APP:12",
+        "APP:3",
+        "PSEN2:0"
+      ]
+    },
+    {
+      "fold": 1,
+      "test_groups": [
+        "APP:2",
+        "APP:6",
+        "PSEN1:2",
+        "PSEN2:0"
+      ],
+      "calibration_groups": [
+        "APP:11",
+        "PSEN1:4"
+      ],
+      "threshold_groups": [
+        "APP:10",
+        "APP:12",
+        "APP:13"
+      ]
+    },
+    {
+      "fold": 2,
+      "test_groups": [
+        "APP:12",
+        "APP:8",
+        "PSEN1:1",
+        "PSEN2:1"
+      ],
+      "calibration_groups": [
+        "APP:1",
+        "APP:3"
+      ],
+      "threshold_groups": [
+        "APP:0",
+        "APP:2",
+        "PSEN1:3"
+      ]
+    },
+    {
+      "fold": 3,
+      "test_groups": [
+        "APP:0",
+        "APP:11",
+        "APP:13",
+        "PSEN1:3"
+      ],
+      "calibration_groups": [
+        "APP:3",
+        "APP:8",
+        "PSEN2:2"
+      ],
+      "threshold_groups": [
+        "APP:4",
+        "APP:6",
+        "APP:7"
+      ]
+    },
+    {
+      "fold": 4,
+      "test_groups": [
+        "APP:1",
+        "APP:10",
+        "APP:3",
+        "APP:4",
+        "APP:9",
+        "PSEN1:4",
+        "PSEN2:2"
+      ],
+      "calibration_groups": [
+        "APP:6",
+        "APP:7"
+      ],
+      "threshold_groups": [
+        "APP:14",
+        "PSEN1:1"
+      ]
+    }
+  ]
+}
