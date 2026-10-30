@@ -18,7 +18,7 @@ The repository is intentionally presented as a PanAligner paper implementation p
 Alongside the existing workflow, the repository now also contains an **optional proposed-methodology prototype** for the project architecture:
 
 - haplotype-resolved assemblies
-- GPU-ready k-mer/minimizer engine with honest CPU fallback
+- k-mer/minimizer engine with a CPU reference and an optional CUDA (CuPy) path
 - alignment-free graph construction
 - haplotype-consistency-aware scoring
 - intelligent anchor selection
@@ -29,7 +29,8 @@ Important notes:
 - this new stack is **additive** and does not replace the working `main.py` PanAligner workflow
 - it is implemented as a separate modular research prototype under `scripts/proposed/`
 - it should be described as **our proposed implementation**, not as an exact reproduction of PanAligner's internal algorithms
-- the GPU path is currently an incremental backend interface with deterministic CPU fallback when no compatible GPU backend is available
+- only minimizer extraction can run on the GPU: its output matched the CPU reference exactly on one laptop GPU, with a minimizer-only speed-up (`docs/15_gpu_minimizer.md`, `outputs/gpu_validation/laptop/`); graph construction and every later stage run on the CPU, and HPC GPUs are untested
+- the default backend is `cpu`; `gpu` fails if CUDA/CuPy is unusable, and `auto` falls back to CPU and records why
 
 ## Core scope
 
@@ -187,7 +188,21 @@ Meaning:
 - `--full-pipeline`: preprocess, split, build graphs, run theory modules, execute PanAligner on held-out queries, generate evaluation outputs, and write final reports
 - `--theory-only`: run only the educational reproductions of paper concepts
 - `--evaluate`: run the held-out PanAligner alignment evaluation without rerunning the theory suite
-- `--custom-query-analysis`: accept a custom query FASTA or inline DNA sequence, check whether it aligns to the current graphs, compute healthy/unhealthy scores, and generate a score plot plus JSON summary
+- `--custom-query-analysis`: accept a custom query FASTA or inline DNA sequence, check whether it aligns to the current graphs, compute healthy/unhealthy scores, and generate a score plot plus JSON summary. The healthy/unhealthy result is a hand-weighted score comparison and its confidence is a score margin, not a probability or a diagnosis.
+
+Forwarding modes pass every remaining argument to an existing tool, so each option is defined once. The mode must be the first argument; `python main.py <mode> --help` lists the tool's options.
+
+```bash
+python3 main.py --proposed --final-proposed-evaluation --backend cpu
+python3 main.py --shared-query-eval --genes PSEN2
+python3 main.py --simulate-truth-reads --source heldout   # Linux/WSL only
+python3 main.py --truth-eval --source heldout             # Linux/WSL only
+```
+
+- `--proposed`: the proposed alignment-free methodology (`proposed_methodology.py`)
+- `--shared-query-eval`: alignment-free comparison of the proposed and minigraph graphs on held-out haplotypes (`scripts/shared_query_eval.py`)
+- `--simulate-truth-reads`: PBSIM2 reads with true intervals (`scripts/simulate_truth_reads.py`)
+- `--truth-eval`: `paftools.js mapeval` correctness scoring of PanAligner and minigraph (`scripts/truth_eval.py`)
 
 ## Desktop GUI
 
@@ -218,21 +233,23 @@ The GUI currently remains focused on the stable PanAligner-centered workflow. Th
 
 ## Proposed methodology runner
 
-The new prototype can be run independently with:
+The prototype runs through `main.py --proposed` (or directly as `python3 proposed_methodology.py` with the same options):
 
 ```bash
-python3 proposed_methodology.py --dataset-manifest data/metadata/train_manifest.json
+python3 main.py --proposed --dataset-manifest data/metadata/train_manifest.json
+python3 main.py --proposed --final-proposed-evaluation --backend cpu
+python3 main.py --proposed --pg-scunk-stress-demo
 ```
 
 Useful options:
 
 - `--gene PSEN2`
-- `--backend cpu`
-- `--max-assemblies-per-bucket 8`
+- `--backend cpu` (default), `gpu` or `auto`; only minimizer extraction uses the GPU
+- `--max-assemblies-per-bucket 8` (normal runs only; rejected with `--final-proposed-evaluation`, which uses every assembly)
 - `--quality-threshold 0.72`
 - `--max-rounds 3`
 
-This writes separate outputs under `outputs/proposed/` and does not overwrite the current PanAligner reports or evaluation artifacts.
+A normal run writes `outputs/proposed/`; `--final-proposed-evaluation` writes `outputs/proposed_final_evaluation/`; the stress demo writes `outputs/proposed_step5_pgscunk_demo/`. None of them overwrite the PanAligner reports or evaluation artifacts. The overall quality score is a structure-only coherence score, not biological accuracy; on the real APP/PSEN1/PSEN2 inputs every gene passes the threshold on its initial configuration, so the feedback loop performs no retuning there.
 
 ## Workflow overview
 
@@ -347,7 +364,11 @@ This executes the actual PanAligner command shape:
   - mean alignment score
   - per-gene summaries
 
-This evaluation is paper-aligned because it focuses on sequence-to-graph alignment behavior rather than downstream classification.
+This evaluation focuses on sequence-to-graph alignment behavior rather than downstream classification. It has no ground truth: coverage is the aligned query interval divided by query length, and identity is matches divided by alignment block length.
+
+### 9. Truth-labelled correctness (locus scale)
+
+`scripts/simulate_truth_reads.py` and `scripts/truth_eval.py` follow the paper's own scripts: PBSIM2 reads with embedded true intervals, mapping with PanAligner and minigraph, and scoring with `paftools.js mapeval`. They need Linux tools, so on Windows run them inside WSL. Results and their limits are in `outputs/truth_eval/REPORT.md`: at locus scale the two aligners are effectively tied, and this is not the paper's whole-genome benchmark.
 
 ## Output directories
 
@@ -363,6 +384,14 @@ The main workflow produces:
   educational theory outputs and plots
 - `outputs/reports/`
   final written reports
+- `outputs/truth_eval/`
+  locus-scale truth-labelled correctness results (simulated reads and per-seed GAFs are regenerable and not versioned)
+- `outputs/shared_query_eval/`
+  alignment-free proposed vs minigraph comparison on held-out haplotypes
+- `outputs/proposed_final_evaluation/`, `outputs/proposed_step5_pgscunk_demo/`
+  proposed-methodology results and the synthetic feedback-loop demo
+- `outputs/gpu_validation/laptop/`
+  CPU/GPU minimizer parity and minimizer-only benchmark on one laptop GPU
 
 ## Key generated files
 

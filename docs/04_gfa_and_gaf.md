@@ -95,10 +95,10 @@ The script `scripts/parse_gaf.py` defines an `AlignmentResult` object and comput
 ### Coverage
 
 ```text
-alignment_block_length / query_length
+(query_end - query_start) / query_length
 ```
 
-This tells how much of the query was aligned.
+This tells how much of the query was aligned. The alignment block length is not used here because it includes deletions, so block length divided by query length could exceed 1.
 
 ### Identity
 

@@ -193,7 +193,7 @@ Best-so-far protection matters because the final evaluated candidate can be wors
 
 ### Stress-demo trace
 
-`outputs/proposed_step5_pgscunk_demo/experiment_metadata.json` labels the four short controlled-substitution haplotypes **DEMONSTRATION ONLY — not a biological benchmark**.  It began at `Q=0.67796875`, target `.99`, `k=6, window=5, support=2`.  Seven unique configurations were rebuilt in three rounds.  The best was candidate `c006`, round 3: `k=4, window=4, support=2`, `Q=0.80341146`; the final candidate `c007` was worse (`Q=.76959245`).  It stopped at `max_rounds_reached`, not success.  This demonstrates rebuilding, diagnostics and best-so-far retention; it does not validate a gene or disease claim.  **These demo figures were produced with the older formula (anchor term, anchor/support retuning) and have not been regenerated since commit `22076bc`.**  It is currently the only run in which the controller actually retunes anything (see Section 10).
+`outputs/proposed_step5_pgscunk_demo/experiment_metadata.json` labels the four short controlled-substitution haplotypes **DEMONSTRATION ONLY — not a biological benchmark**.  Regenerated at commit `f84cb42` with `python main.py --proposed --pg-scunk-stress-demo --backend cpu` (current structure-only formula).  It began at `Q=0.70938`, target `.99`, `k=6, window=5`.  Seven unique configurations were rebuilt in three rounds, varying only `k` and `window`.  The best was candidate `c004`, round 2: `k=4, window=4`, `Q=0.76872`; round 3 tried `k=3` and/or `window=3` and all were worse (the final candidate `c007` had `Q=0.66806`).  It stopped at `no_unseen_configurations`, not success.  This demonstrates rebuilding, diagnostics and best-so-far retention; it does not validate a gene or disease claim.  It is currently the only run in which the controller actually retunes anything (see Section 10).  (With the old formula, the same demo had reached `Q=0.80341` at `c006`.)
 
 ## 9. Exact quality function and validation
 
@@ -339,7 +339,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | J. What prevents infinite loops? | `visited`, finite candidate generation, `max_rounds`, and stagnation stopping. | `canonical_configuration`, loop. |
 | J. Why visited set? | It prevents duplicate expensive graph rebuilds and cycles caused by parameter clamping. | `visited`; follow-up canonical floats. |
 | J. Can it optimize a bad objective? | Yes; it optimizes its Q, so objective validity must be tested independently. | Q formula; future external validation. |
-| J. Best vs final candidate? | The final tried candidate may be worse; the returned graph is protected best-so-far. | `best_graph`, `final_graph`; stress `c006/c007`. |
+| J. Best vs final candidate? | The final tried candidate may be worse; the returned graph is protected best-so-far. | `best_graph`, `final_graph`; stress `c004/c007`. |
 | K. Is this global optimization? | No, it is deterministic local neighbourhood search. | candidate generator; safe: “bounded heuristic.” |
 | L. Complexity? | Current minimizers are roughly `O(sum Lw)` and store `O(sum L)` records; graph/report costs depend on distinct nodes, edges and path visits. | loops in engine/constructor. |
 | M. Why dataclasses? | They make stage contracts explicit and serializable with `asdict`. | `models.py`; follow-up mutability. |

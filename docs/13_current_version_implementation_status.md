@@ -397,7 +397,7 @@ Compared with the full PanAligner paper benchmark suite, the current version doe
 
 - the exact large-scale 10H, 40H, 80H, and 95H benchmark reproduction
 - full multi-aligner runtime and memory comparison tables
-- the complete paftools-based truth-scoring workflow from simulated reads
+- the paftools-based truth-scoring workflow at whole-genome scale (a locus-scale version for PanAligner and minigraph now exists: `outputs/truth_eval/REPORT.md`), or GraphAligner in that workflow
 - all paper figures and all reported benchmark tables
 - full correctness benchmarking against the exact published external datasets
 

@@ -42,7 +42,7 @@ This means:
 
 ## What was implemented
 
-### 1. GPU-ready k-mer / minimizer engine
+### 1. k-mer / minimizer engine with an optional CUDA path
 
 Implemented in:
 
@@ -50,14 +50,14 @@ Implemented in:
 
 Current behavior:
 
-- computes deterministic k-mers and minimizers
-- exposes backend selection: `auto`, `cpu`, or `gpu`
-- honestly reports which backend was actually used
-- falls back to CPU when a GPU backend such as CuPy is unavailable
+- computes deterministic k-mers and minimizers (CPU reference)
+- exposes backend selection: `cpu` (default), `gpu`, or `auto`
+- `gpu` runs CuPy CUDA kernels for hashing, window minima and duplicate compaction, and fails clearly if CUDA is unusable; `auto` falls back to CPU and records why
+- reports which backend was actually used, per stage, in the graph metadata
 
 Important honesty note:
 
-The current implementation is a **GPU-ready backend interface with deterministic CPU fallback**, not a full CUDA-optimized production kernel.
+Only minimizer extraction can run on the GPU. Its output matched the CPU reference exactly on one laptop GPU, with a 2.8–12.4× minimizer-only speed-up limited by Python record construction (`docs/15_gpu_minimizer.md`). Graph construction and every later stage run on the CPU, and HPC GPUs are untested.
 
 ### 2. Haplotype-consistency scorer
 
@@ -201,7 +201,7 @@ A real-data smoke check was also run against the existing `train_manifest.json` 
 
 ### GPU limitation
 
-The GPU contribution is currently an incremental backend-ready implementation. It does not yet include a full low-level CUDA or ROCm production kernel.
+The GPU path covers minimizer extraction only and has been checked on one laptop GPU. It has not been validated on HPC GPUs, its speed-up is capped by Python record construction, and it does not speed up graph construction or the PanAligner workflow. There is no ROCm path.
 
 ### Biological limitation
 
@@ -226,4 +226,4 @@ On the real APP/PSEN1/PSEN2 inputs every gene passes the 0.72 threshold on its i
 
 The safest and most accurate way to present the project now is:
 
-**The repository contains a stable PanAligner-centered reproduction workflow, plus a new modular prototype of our proposed alignment-free methodology with GPU-ready minimizer computation, haplotype-consistency-aware graph construction and anchoring, and PG-SCUnK-style quality feedback.**
+**The repository contains a stable PanAligner-centered reproduction workflow, plus a new modular prototype of our proposed alignment-free methodology with minimizer computation that has an optional, laptop-checked CUDA path, haplotype-consistency-aware graph construction and anchoring, and PG-SCUnK-style quality feedback.**

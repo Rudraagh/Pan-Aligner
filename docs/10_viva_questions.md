@@ -381,9 +381,9 @@ Easy way to remember: `L = link`
 
 ### 37. What is coverage in your GAF parser?
 
-Short answer: Aligned block length divided by query length.
+Short answer: Aligned query interval (`query_end - query_start`) divided by query length.
 
-Detailed answer: Coverage measures how much of the query was aligned. If nearly the whole query aligns, coverage approaches 1.
+Detailed answer: Coverage measures how much of the query was aligned. If nearly the whole query aligns, coverage approaches 1. It deliberately does not use the GAF alignment block length, which includes deletions and could push the ratio above 1.
 
 Follow-up questions: Can coverage be close to 1 with low identity? What does that mean?
 

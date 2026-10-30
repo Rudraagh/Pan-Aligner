@@ -87,7 +87,7 @@ Residue matches divided by alignment block length.
 
 ### Coverage
 
-Alignment block length divided by query length.
+Aligned query interval (`query_end - query_start`) divided by query length, so it stays within [0, 1]. The alignment block length is not used because it includes deletions.
 
 ### Mapping quality
 
