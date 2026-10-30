@@ -1,0 +1,82 @@
+{
+  "command": "python scripts/ml/variant_feasibility.py",
+  "label_source": "Label source, version and criteria are unknown; results describe recovery of these labels, not disease association.",
+  "rows": 220,
+  "random_split_nearest_neighbour": {
+    "test_rows": 46,
+    "correct": 33,
+    "balanced_accuracy": 0.717391304347826
+  },
+  "seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "n_splits": 5,
+  "target_accuracy": 0.8,
+  "window_bp": 1000,
+  "models": {
+    "majority": {
+      "balanced_accuracy_mean": 0.48090909090909084,
+      "balanced_accuracy_sd": 0.0020327890704543426,
+      "mcc_mean": -0.038838855975868024,
+      "mcc_sd": 0.004007833084074976
+    },
+    "nearest_neighbour": {
+      "balanced_accuracy_mean": 0.6281818181818182,
+      "balanced_accuracy_sd": 0.009315409787235994,
+      "mcc_mean": 0.2564275000537012,
+      "mcc_sd": 0.018536994482098335
+    },
+    "position_only": {
+      "balanced_accuracy_mean": 0.5,
+      "balanced_accuracy_sd": 0.025913077843162203,
+      "mcc_mean": -0.00039076731370484496,
+      "mcc_sd": 0.05251368635881088,
+      "roc_auc_mean": 0.4895371900826446,
+      "roc_auc_sd": 0.04417239791605759,
+      "brier_mean": 0.2710765015190814,
+      "brier_sd": 0.01020627911975588,
+      "coverage_mean": 0.0,
+      "coverage_sd": 0.0,
+      "confident_rows_mean": 0.0,
+      "confident_rows_sd": 0.0,
+      "confident_accuracy_mean": null,
+      "confident_accuracy_sd": 0.0
+    },
+    "context_only": {
+      "balanced_accuracy_mean": 0.55,
+      "balanced_accuracy_sd": 0.015414386325284727,
+      "mcc_mean": 0.10271011247746034,
+      "mcc_sd": 0.03176273987722871,
+      "roc_auc_mean": 0.5559173553719008,
+      "roc_auc_sd": 0.021026651511009863,
+      "brier_mean": 0.2597978060705385,
+      "brier_sd": 0.009387346370240015,
+      "coverage_mean": 0.0009090909090909091,
+      "coverage_sd": 0.0020327890704543543,
+      "confident_rows_mean": 0.2,
+      "confident_rows_sd": 0.4472135954999579,
+      "confident_accuracy_mean": 1.0,
+      "confident_accuracy_sd": 0.0
+    },
+    "context_and_position": {
+      "balanced_accuracy_mean": 0.5545454545454545,
+      "balanced_accuracy_sd": 0.008503766788122605,
+      "mcc_mean": 0.10948670507370986,
+      "mcc_sd": 0.01678502209275214,
+      "roc_auc_mean": 0.5818842975206612,
+      "roc_auc_sd": 0.014679882197386447,
+      "brier_mean": 0.2585646471580144,
+      "brier_sd": 0.005693034454836509,
+      "coverage_mean": 0.0018181818181818182,
+      "coverage_sd": 0.002489647988659846,
+      "confident_rows_mean": 0.4,
+      "confident_rows_sd": 0.5477225575051661,
+      "confident_accuracy_mean": 1.0,
+      "confident_accuracy_sd": 0.0
+    }
+  }
+}

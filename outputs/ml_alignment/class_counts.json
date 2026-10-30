@@ -1,0 +1,387 @@
+{
+  "totals": {
+    "correct": 113295,
+    "incorrect": 14073,
+    "unaligned": 259920
+  },
+  "by_condition": [
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 62
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 7222
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3260
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 33
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 349
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 19
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 7265
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3410
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 2
+    },
+    {
+      "setting": "acc75_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 230
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 67
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 35681
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 11875
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 47
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 5952
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 14
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 35734
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 10078
+    },
+    {
+      "setting": "acc75_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 7796
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 390
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 6894
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3611
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 4
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 27
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 356
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 6928
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3621
+    },
+    {
+      "setting": "acc85_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 21
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 474
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 35274
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 17343
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 5
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 526
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 104
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 35644
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 17154
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 2
+    },
+    {
+      "setting": "acc85_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 718
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 2077
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 5207
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3642
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 3569
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 3715
+    },
+    {
+      "setting": "acc95_len10000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 3642
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 3953
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "minigraph",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 31795
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "correct",
+      "rows": 17840
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 2
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "minigraph",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 32
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "incorrect",
+      "rows": 2892
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "panaligner",
+      "graph": "decoy",
+      "label": "unaligned",
+      "rows": 32856
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "correct",
+      "rows": 17819
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "incorrect",
+      "rows": 1
+    },
+    {
+      "setting": "acc95_len2000",
+      "aligner": "panaligner",
+      "graph": "own",
+      "label": "unaligned",
+      "rows": 54
+    }
+  ]
+}
