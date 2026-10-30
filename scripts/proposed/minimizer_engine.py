@@ -98,8 +98,14 @@ void window_minima(const unsigned long long* hashes, const int kmer_count,
 '''
 
 
-def _compute_gpu_minimizers(sequence: str, k: int, window_size: int, assembly_id: str, cp) -> list[MinimizerRecord]:
-    """Run SHA-1-prefix hashing, window minima, and duplicate compaction on CUDA."""
+def _compute_gpu_minimizers(sequence: str, k: int, window_size: int, assembly_id: str, cp, timings: dict | None = None) -> list[MinimizerRecord]:
+    """Run SHA-1-prefix hashing, window minima, and duplicate compaction on CUDA.
+
+    If `timings` is a dict, CUDA-event times (ms) for each device phase are added
+    to it; Python record construction afterwards is not included.
+    """
+    import numpy as np
+
     if k <= 0:
         raise ValueError("k must be positive.")
     if window_size <= 0:
@@ -112,15 +118,31 @@ def _compute_gpu_minimizers(sequence: str, k: int, window_size: int, assembly_id
         raise ValueError("GPU minimizer mode supports ASCII sequence characters only.") from exc
     if k > 55:
         raise ValueError("GPU minimizer mode currently supports k <= 55 because its SHA-1 kernel uses one message block.")
+    if len(sequence) >= 2**31:
+        raise ValueError("GPU minimizer mode supports sequences shorter than 2^31 bases (32-bit kernel indices).")
 
+    marks: list[tuple[str, object]] = []
+
+    def mark(phase: str) -> None:
+        if timings is not None:
+            event = cp.cuda.Event()
+            event.record()
+            marks.append((phase, event))
+
+    mark("start")
     sequence_device = cp.asarray(bytearray(encoded), dtype=cp.uint8)
+    mark("host_to_device")
     kmer_count = len(sequence) - k + 1
     hashes = cp.empty(kmer_count, dtype=cp.uint64)
     threads = 128
-    cp.RawKernel(_CUDA_KERNELS, "sha1_prefix64")(((kmer_count + threads - 1) // threads,), (threads,), (sequence_device, len(sequence), k, hashes))
+    # Scalars are passed as int32 to match the kernels' `int` parameters; CuPy
+    # would otherwise pass Python ints as long long without checking.
+    cp.RawKernel(_CUDA_KERNELS, "sha1_prefix64")(((kmer_count + threads - 1) // threads,), (threads,), (sequence_device, np.int32(len(sequence)), np.int32(k), hashes))
+    mark("hash_kernel")
     window_count = kmer_count - window_size + 1 if kmer_count >= window_size else 1
     positions = cp.empty(window_count, dtype=cp.int32)
-    cp.RawKernel(_CUDA_KERNELS, "window_minima")(((window_count + threads - 1) // threads,), (threads,), (hashes, kmer_count, window_size, window_count, positions))
+    cp.RawKernel(_CUDA_KERNELS, "window_minima")(((window_count + threads - 1) // threads,), (threads,), (hashes, np.int32(kmer_count), np.int32(window_size), np.int32(window_count), positions))
+    mark("window_kernel")
 
     # Keep compaction on the device; only compacted minimizers cross to Python.
     keep = cp.empty(window_count, dtype=cp.bool_)
@@ -130,9 +152,15 @@ def _compute_gpu_minimizers(sequence: str, k: int, window_size: int, assembly_id
     selected_positions = positions[keep]
     selected_hashes = hashes[selected_positions]
     selected_window_starts = cp.arange(window_count, dtype=cp.int32)[keep]
+    mark("compaction")
     host_positions = cp.asnumpy(selected_positions).tolist()
     host_hashes = cp.asnumpy(selected_hashes).tolist()
     host_window_starts = cp.asnumpy(selected_window_starts).tolist()
+    mark("device_to_host")
+    if timings is not None:
+        marks[-1][1].synchronize()
+        for (_, start), (phase, end) in zip(marks, marks[1:]):
+            timings[f"{phase}_ms"] = cp.cuda.get_elapsed_time(start, end)
     return [
         MinimizerRecord(sequence[position : position + k], int(hash_value), int(position), int(window_start), assembly_id)
         for position, hash_value, window_start in zip(host_positions, host_hashes, host_window_starts)
