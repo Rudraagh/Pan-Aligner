@@ -219,6 +219,51 @@ def plot(results: list[dict], output_dir: Path) -> list[str]:
     return written
 
 
+def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: dict) -> None:
+    """Markdown report whose every number comes from the rows and summaries passed in."""
+    counts = Counter(row["label"] for row in rows)
+    incorrect = [row for row in rows if row["label"] == "incorrect"]
+    decoy_incorrect = sum(int(row["decoy"]) == 1 for row in incorrect)
+
+    def number(value, digits=3):
+        return "–" if value is None else f"{value:.{digits}f}"
+
+    table = []
+    notes = []
+    for summary in summaries:
+        o = summary["overall"]
+        table.append(f"| {summary['model']} | {number(o['pr_auc_incorrect'])} | {number(o['roc_auc'])} | {number(o['brier'], 4)} | "
+                     f"{number(o['ece'], 4)} | {number(o['coverage'])} | {number(o['accepted_error_rate'], 4)} | {number(o['incorrect_caught'])} |")
+        finite = [t for t in summary["thresholds"] if math.isfinite(t["low"]) and math.isfinite(t["high"])]
+        collapsed = sum(t["low"] == t["high"] for t in finite)
+        if collapsed:
+            notes.append(f"- `{summary['model']}`: abstention band collapsed in {collapsed} of {len(summary['thresholds'])} folds "
+                         "(the accept and reject targets overlapped), so `insufficient_evidence` was not used there.")
+        own = summary["breakdown"].get("decoy", {}).get("0")
+        if own and own["incorrect_rows"]:
+            notes.append(f"- `{summary['model']}` on within-locus alignments: {own['incorrect_rows']} incorrect of {own['rows']}; "
+                         f"caught {number(own['incorrect_caught'])}, {own['incorrect_accepted']} accepted as correct, "
+                         f"{own['decisions']['incorrect']} flagged incorrect in total.")
+    lines = [
+        "# Model A: alignment reliability", "",
+        "Labels come from simulation truth (PBSIM2 reads from the held-out haplotypes), never from the aligners being judged.", "",
+        f"Rows: {counts.get('correct', 0)} correct, {counts.get('incorrect', 0)} incorrect, {counts.get('unaligned', 0)} unaligned "
+        f"(not used), {counts.get('unprojectable', 0)} unprojectable (not used).", "",
+        f"{decoy_incorrect} of {len(incorrect)} incorrect alignments are off-target: a read aligned to another gene's graph, "
+        "where its true locus was not available to the aligner. The rest are within-locus misplacements.", "",
+        f"Evaluation: GroupKFold over source haplotypes; isotonic calibration and thresholds on a haplotype-disjoint part of each "
+        f"training fold. Targets: error among accepted <= {targets['max_accept_error']}, rejection precision >= {targets['min_reject_precision']}.", "",
+        "| Model | PR-AUC (incorrect) | ROC-AUC | Brier | ECE | Coverage | Error among accepted | Incorrect caught |",
+        "|---|---|---|---|---|---|---|---|", *table, "",
+        "## Notes", "", *(notes or ["- none"]), "",
+        "## Limits", "",
+        "- The incorrect class is dominated by off-target reads on single-locus graphs, so the models mainly learn that low identity "
+        "and coverage mean wrong. This is evidence about detecting off-target or contaminating reads, not about whole-genome alignment.",
+        "- Simulated reads (PBSIM2, locus scale); real sequencing data and whole-genome graphs are not covered.",
+    ]
+    path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
 def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Train and evaluate Model A (alignment reliability) with group-disjoint CV.")
     parser.add_argument("--features", type=Path, default=DEFAULT_DIR / "alignment_features.csv.gz")
@@ -245,6 +290,8 @@ def main(argv: list[str] | None = None) -> None:
         "models": summaries,
         "plots": [project_relative(Path(path)) for path in plots],
     })
+    write_report(output_dir / "REPORT.md", rows, summaries,
+                 {"max_accept_error": args.max_accept_error, "min_reject_precision": args.min_reject_precision})
     print(json.dumps({summary["model"]: {key: summary["overall"][key] for key in
                       ("pr_auc_incorrect", "brier", "ece", "coverage", "accepted_error_rate", "incorrect_caught")}
                       for summary in summaries}, indent=2))

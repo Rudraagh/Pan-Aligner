@@ -90,5 +90,27 @@ class CrossValidationTests(unittest.TestCase):
         self.assertEqual(ar.MODEL_FEATURES["mapq_only"], ["mapq"])
 
 
+@unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
+class ReportTests(unittest.TestCase):
+    def test_report_states_numbers_and_caveats_from_the_results(self) -> None:
+        import tempfile
+
+        rows = _rows()
+        for row in rows[:12]:
+            row["decoy"] = 1 if row["label"] == "incorrect" else 0
+        summaries = [ar.summarize(ar.cross_validate(rows, name, n_splits=5, seed=0)) for name in ("mapq_only", "logistic")]
+        summaries[1]["thresholds"] = [{"fold": 0, "low": 0.4, "high": 0.4}, {"fold": 1, "low": 0.1, "high": 0.9}]
+        with tempfile.TemporaryDirectory() as tmp:
+            path = Path(tmp) / "REPORT.md"
+            ar.write_report(path, rows, summaries, {"max_accept_error": 0.01, "min_reject_precision": 0.9})
+            text = path.read_text(encoding="utf-8")
+        for expected in ("mapq_only", "logistic", f"{summaries[1]['overall']['pr_auc_incorrect']:.3f}",
+                         "simulation truth", "abstention band collapsed in 1 of 2 folds", "off-target"):
+            with self.subTest(expected=expected):
+                self.assertIn(expected, text)
+        labelled = [row for row in rows if row["label"] == "incorrect"]
+        self.assertIn(f"{sum(int(row['decoy']) == 1 for row in labelled)} of {len(labelled)} incorrect", text)
+
+
 if __name__ == "__main__":
     unittest.main()
