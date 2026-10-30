@@ -1,13 +1,13 @@
 {
-  "initial_quality": 0.8863945133027433,
-  "best_quality": 0.8863945133027433,
-  "final_quality": 0.8863945133027433,
+  "initial_quality": 0.983993545062051,
+  "best_quality": 0.983993545062051,
+  "final_quality": 0.983993545062051,
   "threshold": 0.72,
-  "threshold_reached": false,
+  "threshold_reached": true,
   "best_round": 1,
-  "total_rounds": 2,
-  "unique_configurations_evaluated": 4,
-  "stagnation_reason": "no_unseen_configurations",
+  "total_rounds": 1,
+  "unique_configurations_evaluated": 1,
+  "stagnation_reason": "quality_threshold_reached",
   "best_configuration": {
     "k": 11,
     "window_size": 6,
@@ -24,9 +24,9 @@
     "min_node_support": 2,
     "max_anchors": 12,
     "min_anchor_spacing": 4.0,
-    "anchor_alpha": 0.409090909091,
-    "anchor_beta": 0.318181818182,
-    "anchor_gamma": 0.272727272727
+    "anchor_alpha": 0.35,
+    "anchor_beta": 0.35,
+    "anchor_gamma": 0.3
   },
   "best_evaluation": {
     "round": 1,
@@ -42,7 +42,7 @@
       "anchor_beta": 0.35,
       "anchor_gamma": 0.3
     },
-    "overall_quality": 0.8863945133027433,
+    "overall_quality": 0.983993545062051,
     "mean_node_consistency": 0.9824772593730914,
     "mean_edge_consistency": 0.9986665064366099,
     "mean_path_consistency": 0.9875519332991859,
@@ -51,28 +51,28 @@
     "edge_count": 79053,
     "path_count": 36,
     "anchor_count": 12,
-    "accepted": false,
+    "accepted": true,
     "is_best_so_far": true,
     "quality_delta": null,
-    "weakest_component": "anchor_coverage",
+    "weakest_component": "branch_coherence",
     "action": "initial_evaluation",
     "reason": "Evaluate adaptive/default configuration."
   },
   "final_evaluation": {
-    "round": 2,
-    "candidate_id": "c004",
-    "configuration_key": "{\"anchor_alpha\":0.409090909091,\"anchor_beta\":0.318181818182,\"anchor_gamma\":0.272727272727,\"k\":11,\"max_anchors\":12,\"min_anchor_spacing\":4.0,\"min_node_support\":2,\"window_size\":6}",
+    "round": 1,
+    "candidate_id": "c001",
+    "configuration_key": "{\"anchor_alpha\":0.35,\"anchor_beta\":0.35,\"anchor_gamma\":0.3,\"k\":11,\"max_anchors\":12,\"min_anchor_spacing\":4.0,\"min_node_support\":2,\"window_size\":6}",
     "parameters": {
       "k": 11,
       "window_size": 6,
       "min_node_support": 2,
       "max_anchors": 12,
       "min_anchor_spacing": 4.0,
-      "anchor_alpha": 0.409090909091,
-      "anchor_beta": 0.318181818182,
-      "anchor_gamma": 0.272727272727
+      "anchor_alpha": 0.35,
+      "anchor_beta": 0.35,
+      "anchor_gamma": 0.3
     },
-    "overall_quality": 0.8863945133027433,
+    "overall_quality": 0.983993545062051,
     "mean_node_consistency": 0.9824772593730914,
     "mean_edge_consistency": 0.9986665064366099,
     "mean_path_consistency": 0.9875519332991859,
@@ -81,51 +81,37 @@
     "edge_count": 79053,
     "path_count": 36,
     "anchor_count": 12,
-    "accepted": false,
-    "is_best_so_far": false,
-    "quality_delta": 0.0,
-    "weakest_component": "anchor_coverage",
-    "action": "retune_anchor_selection",
-    "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."
+    "accepted": true,
+    "is_best_so_far": true,
+    "quality_delta": null,
+    "weakest_component": "branch_coherence",
+    "action": "initial_evaluation",
+    "reason": "Evaluate adaptive/default configuration."
   },
   "diagnostic_mapping": {
-    "anchor_coverage": {
-      "action": "retune_anchor_selection",
-      "parameters": [
-        "min_anchor_spacing",
-        "max_anchors",
-        "anchor_alpha",
-        "anchor_beta",
-        "anchor_gamma"
-      ],
-      "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."
-    },
     "node_consistency": {
       "action": "retune_minimizer_nodes",
       "parameters": [
         "k",
-        "window_size",
-        "min_node_support"
+        "window_size"
       ],
-      "reason": "Node context coherence is low; vary k, window size, and minimum node support."
+      "reason": "Node context coherence is low; vary k and window size."
     },
     "node_support": {
       "action": "retune_node_support",
       "parameters": [
         "k",
-        "window_size",
-        "min_node_support"
+        "window_size"
       ],
-      "reason": "Cross-path node support is low; vary k, window size, and minimum node support."
+      "reason": "Cross-path node support is low; vary k and window size."
     },
     "edge_structural_coherence": {
       "action": "retune_graph_transitions",
       "parameters": [
         "k",
-        "window_size",
-        "min_node_support"
+        "window_size"
       ],
-      "reason": "Observed-path edge support is weak; vary k, window size, and minimum node support."
+      "reason": "Observed-path edge support is weak; vary k and window size."
     },
     "path_structural_coherence": {
       "action": "retune_path_resolution",
@@ -139,10 +125,9 @@
       "action": "retune_graph_branching",
       "parameters": [
         "k",
-        "window_size",
-        "min_node_support"
+        "window_size"
       ],
-      "reason": "Branching is high; vary k, window size, and minimum node support."
+      "reason": "Branching is high; vary k and window size."
     }
   },
   "quality_interpretation": "Path and edge consistency are observed-path structural coherence measures; because edges are constructed from observed paths, they are not independent biological correctness evidence."

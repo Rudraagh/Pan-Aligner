@@ -9,7 +9,7 @@
     "gamma": 0.3
   },
   "candidate_anchor_count": 21397,
-  "selected_anchor_count": 16,
+  "selected_anchor_count": 12,
   "mean_uniqueness": 0.019989989552349062,
   "mean_depth": 0.03204735682136795,
   "mean_consistency": 0.9837970609195076,

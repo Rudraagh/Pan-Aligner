@@ -8,8 +8,8 @@
   "low_consistency_node_fraction": 0.0,
   "low_consistency_edge_fraction": 0.00592611817631283,
   "mean_node_support_ratio": 0.9800100104476509,
-  "anchor_count": 16,
-  "anchor_coverage_ratio": 0.10483870967741936,
+  "anchor_count": 12,
+  "anchor_coverage_ratio": 0.08870967741935484,
   "branching_node_ratio": 0.052577464130485585,
-  "overall_quality_score": 0.8487145687279948
+  "overall_quality_score": 0.9799867791486846
 }
