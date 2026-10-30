@@ -1,6 +1,6 @@
 # Phase 1 — Truth-labelled correctness at locus scale
 
-Generated 2026-10-29 on the laptop (WSL2 Ubuntu 24.04). Code: `scripts/simulate_truth_reads.py`, `scripts/truth_eval.py` (uncommitted when run; see each `results/*/run_manifest.json` for git state, tool versions and input checksums).
+Generated 2026-10-29 on the laptop (WSL2 Ubuntu 24.04) with code that was not yet committed. Reproduced on 2026-10-30 from commit `344361b` (no uncommitted code) with `python3 main.py --simulate-truth-reads --source reference`, `--simulate-truth-reads --source heldout --depth 10`, then `--truth-eval --source reference` and `--truth-eval --source heldout`: all 18 read sets were byte-identical and all 72 runs gave identical counts. Code: `scripts/simulate_truth_reads.py`, `scripts/truth_eval.py`; see each `results/*/run_manifest.json` for git state, tool versions and input checksums (its `dirty_paths` counts untracked and modified output files, not code).
 
 ## What was done
 
