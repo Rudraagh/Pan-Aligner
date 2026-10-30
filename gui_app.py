@@ -20,9 +20,36 @@ DEFAULT_CUSTOM_OUTPUT = OUTPUTS_DIR / "alignments" / "custom_query"
 PAPER_COVERAGE_REPORT = ROOT / "docs" / "paper_coverage_audit.md"
 PAFTOOLS_READINESS_REPORT = OUTPUTS_DIR / "evaluation" / "paftools_readiness_report.txt"
 DATASET_REPRODUCTION_REPORT = OUTPUTS_DIR / "evaluation" / "dataset_specific_reproduction_report.txt"
+TRUTH_EVAL_REPORT = OUTPUTS_DIR / "truth_eval" / "REPORT.md"
 DEFAULT_MINIGRAPH_BIN = ROOT / "tools" / "minigraph_wsl.cmd"
 DEFAULT_PANALIGNER_BIN = ROOT / "tools" / "panaligner_wsl.cmd"
 LATEST_GUI_RUN_PATH = OUTPUTS_DIR / "gui" / "latest_run.json"
+
+# Project-mode radio buttons. The last three run main.py's forwarding modes; the
+# truth-labelled modes are not offered because they need Linux tools (WSL).
+PIPELINE_MODES = (
+    ("Full Pipeline", "--full-pipeline"),
+    ("Theory Only", "--theory-only"),
+    ("Evaluate", "--evaluate"),
+    ("Proposed Final Evaluation", "proposed-final"),
+    ("Proposed Stress Demo (synthetic, not a benchmark)", "proposed-demo"),
+    ("Shared Held-out Query Comparison", "shared-query"),
+)
+FORWARDED_GUI_MODES = {
+    "proposed-final": ["--proposed", "--final-proposed-evaluation"],
+    "proposed-demo": ["--proposed", "--pg-scunk-stress-demo"],
+    "shared-query": ["--shared-query-eval"],
+}
+MINIMIZER_BACKENDS = ("cpu", "gpu", "auto")
+
+
+def build_forwarded_command(mode: str, backend: str, python: str = sys.executable) -> list[str]:
+    """main.py command for a forwarded GUI mode; the forwarding flag must come first."""
+    if mode not in FORWARDED_GUI_MODES:
+        raise ValueError(f"Unknown forwarded GUI mode: {mode}")
+    if backend not in MINIMIZER_BACKENDS:
+        raise ValueError(f"backend must be one of {', '.join(MINIMIZER_BACKENDS)}")
+    return [python, str(MAIN_SCRIPT), *FORWARDED_GUI_MODES[mode], "--backend", backend]
 
 
 def open_path(target: Path) -> None:
@@ -62,6 +89,7 @@ class PanAlignerGUI:
         self.split_seed_var = tk.StringVar(value="42")
         self.test_fraction_var = tk.StringVar(value="0.20")
         self.hybrid_var = tk.BooleanVar(value=False)
+        self.backend_var = tk.StringVar(value="cpu")
         self.minigraph_var = tk.StringVar(value=str(DEFAULT_MINIGRAPH_BIN) if DEFAULT_MINIGRAPH_BIN.exists() else "")
         self.panaligner_var = tk.StringVar(value=str(DEFAULT_PANALIGNER_BIN) if DEFAULT_PANALIGNER_BIN.exists() else "")
         self.theory_graph_var = tk.StringVar(value="")
@@ -129,11 +157,7 @@ class PanAlignerGUI:
         mode_frame = ttk.LabelFrame(parent, text="Run Mode", style="Section.TLabelframe", padding=12)
         mode_frame.pack(fill="x", pady=(0, 10))
 
-        for text, value in (
-            ("Full Pipeline", "--full-pipeline"),
-            ("Theory Only", "--theory-only"),
-            ("Evaluate", "--evaluate"),
-        ):
+        for text, value in PIPELINE_MODES:
             ttk.Radiobutton(mode_frame, text=text, value=value, variable=self.pipeline_mode).pack(anchor="w", pady=2)
 
         settings = ttk.LabelFrame(parent, text="Settings", style="Section.TLabelframe", padding=12)
@@ -150,6 +174,14 @@ class PanAlignerGUI:
             text="Use local hybrid approximation (Minigraph first, PanAligner fallback)",
             variable=self.hybrid_var,
         ).grid(row=6, column=0, columnspan=2, sticky="w", pady=(8, 2))
+        ttk.Label(settings, text="Minimizer Backend").grid(row=7, column=0, sticky="w", padx=(0, 10), pady=6)
+        backend_row = ttk.Frame(settings)
+        backend_row.grid(row=7, column=1, sticky="ew", pady=6)
+        ttk.Combobox(backend_row, textvariable=self.backend_var, values=MINIMIZER_BACKENDS, state="readonly", width=8).pack(side="left")
+        ttk.Label(
+            backend_row,
+            text="Proposed and shared-query modes only; only minimizer extraction uses the GPU. gpu needs CuPy in this Python and fails otherwise.",
+        ).pack(side="left", padx=(8, 0))
 
         input_frame = ttk.LabelFrame(parent, text="Optional Input FASTAs", style="Section.TLabelframe", padding=12)
         input_frame.pack(fill="x", pady=(0, 10))
@@ -446,7 +478,12 @@ class PanAlignerGUI:
         return args
 
     def run_pipeline_mode(self) -> None:
-        command = [sys.executable, str(MAIN_SCRIPT), self.pipeline_mode.get()]
+        mode = self.pipeline_mode.get()
+        if mode in FORWARDED_GUI_MODES:
+            # Forwarded tools take their own options; the baseline settings below do not apply.
+            self._start_process(build_forwarded_command(mode, self.backend_var.get()), "Running project mode")
+            return
+        command = [sys.executable, str(MAIN_SCRIPT), mode]
         command.extend(self._build_common_args())
 
         if self.split_seed_var.get().strip():
@@ -719,7 +756,6 @@ class PanAlignerGUI:
         self._set_text_widget(self.cheatsheet_metrics_text, metrics_text)
         self._set_text_widget(self.cheatsheet_local_text, local_text)
         self._set_text_widget(self.cheatsheet_audit_text, audit_text)
-        self._write_paper_coverage_report(audit_text)
 
     def _build_metrics_cheatsheet(self, metrics: dict | None) -> str:
         lines = [
@@ -784,38 +820,11 @@ class PanAlignerGUI:
         return "\n".join(lines) + "\n"
 
     def _build_paper_coverage_audit(self) -> str:
-        lines = [
-            "Paper Coverage Audit",
-            "====================",
-            "Paper checked: Rajput et al. (2024), 'Co-linear chaining on pangenome graphs'",
-            "",
-            "Implemented or reasonably reproduced in this project",
-            "- Real minigraph graph construction and real PanAligner execution are wired into the pipeline.",
-            "- GAF parsing is implemented, including identity, coverage, mapping quality, normalized score, traversed nodes, and best-alignment selection.",
-            "- Held-out evaluation is implemented for the local gene datasets and writes alignment_metrics.json, alignment_records.json, and evaluation_report.txt.",
-            "- Dataset-specific paper-style local artifacts are now generated: local graph property tables, mapping-quality cutoff sweep CSV/PNG outputs, and a local reproduction report.",
-            "- Graph statistics and PNG visualizations are implemented for built graphs and example alignments.",
-            "- Educational reproductions exist for SCCs, DFS back-edge removal, DAG approximation, path cover, anchors, precedence, chaining, gap-cost analysis, and convergence plots.",
-            "",
-            "Partially reproduced",
-            "- The paper's algorithmic ideas are demonstrated, but several graph-theory stages are implemented as simplified educational demos rather than the exact PanAligner preprocessing pipeline from the paper.",
-            "- The project evaluates held-out alignments on APP/PSEN1/PSEN2 locus data, not the paper's whole-genome 10H/40H/80H/95H benchmark suite.",
-            "- The GUI and reports expose alignment-rate, identity, coverage, MAPQ, and score, but they do not reproduce the paper's exact correctness pipeline based on simulated reads and paftools truth checking.",
-            "",
-            "Missing compared with the paper's reported results and outputs",
-            "- Table 1 graph-scale benchmark properties for 10H, 40H, 80H, and 95H are not generated by this project.",
-            "- Table 2 path-cover ranges, anchor-count statistics, and iteration counts for last2reach, D, and chaining are not computed on the real graphs here.",
-            "- Figure 5 lower-bound vs computed-path-cover comparison is not implemented for the real graphs.",
-            "- Tables 3 and 4 runtime, memory, unaligned-read, and incorrectly-aligned-read comparisons versus Minigraph and GraphAligner are not implemented.",
-            "- The exact Fig. 6 paper comparison against multiple aligners and correctness percentages is not implemented, although local MQ cutoff sweep plots are now generated for this dataset.",
-            "- Table 5 DAG benchmarking versus Minichain, GraphChainer, Minigraph, and GraphAligner is not implemented.",
-            "- A local approximation of the hybrid Minigraph-PanAligner idea is implemented for this dataset, but it is not the paper's full benchmarked hybrid workflow.",
-            "- The paper's benchmark data generation with PBSIM2 and correctness evaluation with paftools are not implemented in the current workflow.",
-            "",
-            "Bottom line",
-            "This repo reproduces the paper at a workflow-and-concepts level, but not at the paper's full benchmark/results level. It is accurate to present it as a partial practical reproduction plus a theory/demo layer, not as a complete reimplementation of every experiment, table, and figure in the paper.",
-        ]
-        return "\n".join(lines) + "\n"
+        """Show the tracked audit document; the GUI never writes it."""
+        try:
+            return PAPER_COVERAGE_REPORT.read_text(encoding="utf-8")
+        except FileNotFoundError:
+            return f"Paper coverage audit not found: {PAPER_COVERAGE_REPORT}\n"
 
     def _build_local_reproduction_summary(self, paper_style_results: dict | None, paftools_readiness: dict | None) -> str:
         lines = [
@@ -882,24 +891,29 @@ class PanAlignerGUI:
                 ]
             )
 
-        lines.extend(["", "PafTools status"])
+        lines.extend(["", "PafTools readiness of the original labelled FASTAs (no truth coordinates)"])
         if paftools_readiness:
             lines.extend(
                 [
                     f"- runnable: {paftools_readiness.get('paftools_runnable', False)}",
-                    f"- exact paper-style correctness eval possible: {paftools_readiness.get('exact_paper_style_paftools_correctness_eval_possible', False)}",
+                    f"- truth scoring possible on the labelled FASTAs themselves: {paftools_readiness.get('exact_paper_style_paftools_correctness_eval_possible', False)}",
                 ]
             )
-            limitation = paftools_readiness.get("why_not_possible", "")
-            if limitation:
-                lines.extend(["", "Why exact paftools scoring is left out", limitation])
         else:
             lines.append("- readiness report not found yet")
-        return "\n".join(lines) + "\n"
 
-    def _write_paper_coverage_report(self, content: str) -> None:
-        PAPER_COVERAGE_REPORT.parent.mkdir(parents=True, exist_ok=True)
-        PAPER_COVERAGE_REPORT.write_text(content, encoding="utf-8")
+        lines.extend(["", "Truth-labelled evaluation (locus scale)"])
+        if TRUTH_EVAL_REPORT.exists():
+            lines.extend(
+                [
+                    f"- PBSIM2 reads with true intervals, scored with paftools mapeval: {TRUTH_EVAL_REPORT}",
+                    "- PanAligner and minigraph are effectively tied at locus scale; this is not the paper's whole-genome benchmark.",
+                    "- Runs on Linux/WSL only: python3 main.py --simulate-truth-reads / --truth-eval",
+                ]
+            )
+        else:
+            lines.append("- not run yet (Linux/WSL only: python3 main.py --simulate-truth-reads, then --truth-eval)")
+        return "\n".join(lines) + "\n"
 
     def _refresh_images(self) -> None:
         self.latest_run = self._load_json(LATEST_GUI_RUN_PATH)
@@ -1066,7 +1080,8 @@ class PanAlignerGUI:
 
     def _open_paper_coverage_report(self) -> None:
         if not PAPER_COVERAGE_REPORT.exists():
-            self._write_paper_coverage_report(self._build_paper_coverage_audit())
+            messagebox.showinfo("Paper coverage audit", f"Not found: {PAPER_COVERAGE_REPORT}")
+            return
         open_path(PAPER_COVERAGE_REPORT)
 
     def _open_paftools_readiness_report(self) -> None:
