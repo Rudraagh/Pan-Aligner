@@ -1,5 +1,7 @@
 # Model A: alignment reliability
 
+> **Weak split.** These results use haplotype folds, which put the same locus on both sides because every haplotype is the same reference plus one variant. They are optimistic. See `outputs/ml_alignment/regrouped/` and `docs/17_ml_layer.md`.
+
 Labels come from simulation truth (PBSIM2 reads from the held-out haplotypes), never from the aligners being judged.
 
 Rows: 113295 correct, 14073 incorrect, 259920 unaligned (not used), 0 unprojectable (not used).

@@ -260,8 +260,8 @@ A normal run writes `outputs/proposed/`; `--final-proposed-evaluation` writes `o
 
 Two separate research tasks, described in full in `docs/17_ml_layer.md`. Install `requirements-ml.txt` first.
 
-- **Model A, alignment reliability** (`correct` / `incorrect` / `insufficient_evidence`). Labels come from simulation truth: PBSIM2 reads from the held-out haplotypes, aligned to their own and to other genes' graphs. Evaluated with folds over source haplotypes against a MAPQ-only baseline: PR-AUC for incorrect alignments is 0.995 (gradient boosting) vs 0.569 (MAPQ). Almost all incorrect examples are off-target reads, so this is evidence for detecting off-target alignments, not for whole-genome alignment accuracy.
-- **Model B, healthy/disease-associated classification**: a feasibility study only. Each labelled sequence is the reference plus one variant, the labels' source is unknown, and the labels correlate with position. Under window-grouped CV no model recovers the labels from sequence context (balanced accuracy 0.55 context-only; 0.63 for the nearest training variant). It is research label recovery, not diagnosis.
+- **Model A, alignment reliability** (`correct` / `incorrect` / `insufficient_evidence`). Labels come from simulation truth: PBSIM2 reads from the held-out haplotypes, aligned to their own and to other genes' graphs. Evaluated with folds over 20 kb windows of true position: PR-AUC for incorrect alignments is 0.979 (gradient boosting) and 0.986 (logistic) vs 0.564 (MAPQ only), falling to 0.929 and 0.956 when a whole gene is held out. The first results (0.995) used a weaker haplotype split and were optimistic. Almost all incorrect examples are off-target reads, so this is evidence for detecting off-target alignments, not for whole-genome alignment accuracy.
+- **Model B, healthy/disease-associated classification**: a feasibility study only. Each labelled sequence is the reference plus one variant, the labels' source is unknown, and the labels correlate with position. Under window-grouped CV no model recovers the labels from sequence context (balanced accuracy 0.55 context-only; 0.63–0.65 for position-based baselines, falling as windows grow). It is research label recovery, not diagnosis.
 
 The older healthy/unhealthy ML scripts (`scripts/pipeline.py`, `extract_features.py`, `train_ml.py`, `predict_ml.py`, `evaluate.py`) are legacy, leak the label, and print a warning when run.
 
@@ -407,7 +407,7 @@ The main workflow produces:
 - `outputs/gpu_validation/laptop/`
   CPU/GPU minimizer parity and minimizer-only benchmark on one laptop GPU
 - `outputs/ml_alignment/`
-  Model A dataset manifest, class counts, results, plots and report (`sensitivity_strict/` for stricter targets; simulated reads and the features file are regenerable and not versioned)
+  Model A dataset manifest, class counts, results, plots and report. `regrouped/window/` and `regrouped/leave_one_gene_out/` hold the current evaluation; the top-level results and `sensitivity_strict/` use the weaker haplotype split. Simulated reads and the features file are regenerable and not versioned
 - `outputs/ml_variant/`
   Model B feasibility study: variant table, results and report
 

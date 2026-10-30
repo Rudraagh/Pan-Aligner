@@ -226,18 +226,19 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 **Model A, alignment reliability.**
 - **Data and labels:** labels come only from simulation truth. PBSIM2 reads from the 46 held-out haplotypes are aligned by PanAligner and minigraph to their own gene's graph and to the other two genes' graphs as decoys. That gives 113,295 correct, 14,073 incorrect (13,977 off-target, 96 within-locus) and 259,920 unaligned rows.
 - **Features:** only things visible after alignment.
-- **Evaluation:** folds over source haplotypes, isotonic calibration on a held-back part of each training fold, and a MAPQ-only baseline.
-- **Results:** PR-AUC for the incorrect class is 0.995 (gradient boosting) vs 0.569 (MAPQ only).
-- **Abstention:** with the 1% / 90% targets the "insufficient evidence" band never opened. With 0.1% / 99% it covers about 2% of alignments, and held-out error among accepted is 0.12–0.17%, above the 0.1% target.
+- **Evaluation:** folds over 20 kb windows of true position with neighbouring windows removed, plus a leave-one-gene-out test; isotonic calibration on a held-back part of each training fold; a MAPQ-only model and a plain MAPQ threshold as baselines.
+- **Results:** PR-AUC for the incorrect class is 0.979 (gradient boosting) and 0.986 (logistic) vs 0.564 (MAPQ only) under window folds, and 0.929 and 0.956 when a gene is held out. The first figure of 0.995 used a haplotype split that was too weak, because every haplotype is the same reference plus one variant.
+- **Compared with MAPQ 60:** at the same 89.6% coverage, error among accepted is 0.84% (gradient boosting, window folds) vs 4.24%.
+- **Abstention:** with the 1% / 90% targets the "insufficient evidence" band never opened. With 0.1% / 99% it covers about 2% of alignments, and held-out error among accepted is 0.12–0.17%, above the 0.1% target; that run used only the weak haplotype split.
 
 **Model B, healthy/disease-associated classification.** A feasibility study only.
 - **Data:** each of the 220 labelled sequences is the reference plus one variant.
 - **Labels:** their source is unknown, and they cluster by position.
-- **Results under 1 kb window-grouped CV:** context-only balanced accuracy 0.550; the nearest training variant 0.628; almost every prediction "uncertain".
+- **Results under 1 kb window-grouped CV:** context-only balanced accuracy 0.550; the nearest training variant 0.628 and a 5-nearest position vote 0.646; almost every prediction "uncertain". At 20 kb windows these fall to 0.453, 0.450 and 0.591.
 
 **Safe claim:** "Model A detects off-target alignments on simulated, locus-scale reads far better than MAPQ alone. Model B shows the healthy/unhealthy labels cannot be recovered from sequence context without leakage; it is research label recovery, not diagnosis."
 
-Examiner attack: *"Your 0.995 PR-AUC looks too good."* Answer: "Almost every incorrect alignment is an off-target read aligned to a single-locus graph, which low identity and coverage give away. It says nothing about whole-genome misplacement; only 96 within-locus errors exist, too few for strong claims."
+Examiner attack: *"Your PR-AUC of about 0.98 looks too good."* Answer: "Our first figure of 0.995 was optimistic because of a weak split, which we replaced. Almost every incorrect alignment is an off-target read aligned to a single-locus graph, which low identity and coverage give away. It says nothing about whole-genome misplacement; only 96 within-locus errors exist, too few for strong claims."
 
 ## 11. Testing evidence
 
@@ -401,7 +402,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “All three genes are accepted, so the graphs are high quality.” | “All three pass a structural-coherence threshold on the first configuration; the score is high partly by construction and is not biological accuracy.” |
 | “The feedback loop improved the real-data graphs.” | “On APP/PSEN1/PSEN2 the controller accepted the initial configuration; retuning was only demonstrated on a synthetic stress demo.” |
 | “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
-| “Our model detects misaligned reads with 0.995 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
+| “Our model detects misaligned reads with 0.98 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
 | “Model B classifies disease-associated variants.” | “The labels’ source is unknown and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
 | “The ML predicts Alzheimer’s risk.” | “Nothing in this project is a clinical or diagnostic prediction.” |
 | “The proposed method beats PanAligner.” | “No direct biological performance comparison is established by these non-interchangeable metrics.” |

@@ -14,8 +14,9 @@ The older healthy/unhealthy ML path (`scripts/pipeline.py`, `extract_features.py
 ```bash
 pip install -r requirements-ml.txt                       # numpy, scikit-learn >= 1.6
 python3 main.py --ml-alignment-data --threads 8          # Linux/WSL only: simulate, align, label (~6 min)
-python main.py --ml-alignment                            # Model A training and evaluation
-python main.py --ml-alignment --output-dir outputs/ml_alignment/sensitivity_strict --max-accept-error 0.001 --min-reject-precision 0.99
+python main.py --ml-alignment                            # Model A, 20 kb window folds (writes outputs/ml_alignment/regrouped/window/)
+python main.py --ml-alignment --grouping leave_one_gene_out
+python main.py --ml-alignment --grouping haplotype --output-dir outputs/ml_alignment/sensitivity_strict --max-accept-error 0.001 --min-reject-precision 0.99
 python main.py --ml-variant                              # Model B feasibility study
 ```
 
@@ -41,39 +42,52 @@ python main.py --ml-variant                              # Model B feasibility s
 
 **Features** are only what is visible after alignment: MAPQ, query length and coverage, matches, block length, identity, NM rate, chain minimizers (`cm`), best and second chain scores (`s1`, `s2`) and their ratio, divergence (`dv`), path segments, off-reference path, number of alignments for the read, and which aligner produced it. Simulation settings, the decoy flag and the genes are never features.
 
-**Evaluation** (`scripts/ml/alignment_reliability.py`):
+**Evaluation** (`scripts/ml/alignment_reliability.py`), with three groupings:
 
-- GroupKFold(5) over source haplotypes.
-- Inside each training fold, a haplotype-disjoint quarter calibrates the probabilities (isotonic, `CalibratedClassifierCV(FrozenEstimator(model))`) and sets two thresholds:
-  - accept as `correct` while error among accepted stays within the target;
-  - reject as `incorrect` while rejection precision stays at or above the target;
-  - anything between them is `insufficient_evidence`, an abstention band rather than a trained class.
-- A MAPQ-only model calibrated the same way is the baseline.
+- `window` (default): folds over 20 kb windows of the read's true position, with reads from adjacent windows removed from training.
+- `leave_one_gene_out`: test on one gene's reads, training without that gene's reads or graph. This is the hardest test.
+- `haplotype`: folds over source haplotypes. **This is the grouping behind the first results, and it is too weak:** every haplotype is the same reference plus one variant, so the same locus is on both sides of a split. It is kept only for comparison.
 
-**Results** (`outputs/ml_alignment/REPORT.md`, `model_results.json`):
+Inside each training fold, a group-disjoint quarter calibrates the probabilities (isotonic, `CalibratedClassifierCV(FrozenEstimator(model))`) and sets two thresholds:
 
-| Model | PR-AUC (incorrect) | ROC-AUC | Brier | ECE |
-|---|---|---|---|---|
-| MAPQ only | 0.569 | 0.813 | 0.0572 | 0.0076 |
-| Logistic regression | 0.994 | 0.999 | 0.0047 | 0.0016 |
-| Gradient boosting | 0.995 | 0.999 | 0.0033 | 0.0015 |
+- accept as `correct` while error among accepted stays within the target;
+- reject as `incorrect` while rejection precision stays at or above the target;
+- anything between them is `insufficient_evidence`, an abstention band rather than a trained class.
 
-| Targets (error among accepted / rejection precision) | Model | Coverage | Held-out error among accepted | Incorrect caught | Within-locus caught (of 96) |
-|---|---|---|---|---|---|
-| 1% / 90% | MAPQ only | 0.1% | – | 0.9% | 1 |
-| | Logistic | 100% | 0.38% | 96.9% | 89 |
-| | Gradient boosting | 100% | 0.31% | 97.5% | 96 |
-| 0.1% / 99% (`sensitivity_strict/`) | MAPQ only | 0% | – | 0% | 0 |
-| | Logistic | 97.9% | 0.17% | 92.6% | 81 |
-| | Gradient boosting | 98.2% | 0.12% | 97.2% | 96 |
+There are two baselines: a MAPQ-only model calibrated the same way, and a plain MAPQ threshold sweep with no training.
+
+**Results by grouping**, at the default targets (1% error among accepted, 90% rejection precision). Within-locus PR-AUC is measured against a prevalence of about 0.085%.
+
+| Grouping | Model | PR-AUC (incorrect) | ROC-AUC | Brier | ECE | Within-locus PR-AUC | Error among accepted | Incorrect caught |
+|---|---|---|---|---|---|---|---|---|
+| Window (`regrouped/window/`) | MAPQ only | 0.564 | 0.803 | 0.0575 | 0.0081 | 0.037 | – | 0% |
+| | Logistic | 0.986 | 0.996 | 0.0076 | 0.0055 | 0.465 | 0.57% | 95.4% |
+| | Gradient boosting | 0.979 | 0.994 | 0.0086 | 0.0068 | 0.881 | 0.69% | 94.4% |
+| Leave one gene out (`regrouped/leave_one_gene_out/`) | MAPQ only | 0.549 | 0.789 | 0.0623 | 0.0478 | 0.038 | 6.79% | 0% |
+| | Logistic | 0.956 | 0.982 | 0.0111 | 0.0097 | 0.261 | 1.09% | 91.1% |
+| | Gradient boosting | 0.929 | 0.957 | 0.0116 | 0.0102 | 0.502 | 1.32% | 89.3% |
+| Haplotype, weak (`outputs/ml_alignment/`) | MAPQ only | 0.569 | 0.813 | 0.0572 | 0.0076 | 0.037 | – | 0.9% |
+| | Logistic | 0.994 | 0.999 | 0.0047 | 0.0016 | 0.588 | 0.38% | 96.9% |
+| | Gradient boosting | 0.995 | 0.999 | 0.0033 | 0.0015 | 0.856 | 0.31% | 97.5% |
+
+**Plain MAPQ thresholds** (no training, so the same under every grouping). Accepting only MAPQ 60:
+
+| Aligner | Coverage | Error among accepted | Incorrect caught |
+|---|---|---|---|
+| Both | 89.6% | 4.24% | 65.7% |
+| PanAligner | 93.2% | 6.75% | 43.4% |
+| Minigraph | 86.1% | 1.60% | 87.5% |
+
+At that same 89.6% coverage, gradient boosting's error is 0.84% (window) and 1.04% (leave one gene out), against 4.24% for MAPQ 60.
 
 What the results show:
 
-- **Defaults:** with 1% / 90% the accept and reject thresholds overlapped in all five folds, so `insufficient_evidence` was never used and the decision was binary.
-- **Stricter targets:** with 0.1% / 99% the abstention band opened for about 2% of alignments. The held-out error (0.12–0.17%) was still above the 0.1% target, so thresholds set on calibration data did not fully carry over to unseen haplotypes.
-- **Within-locus false alarms:** gradient boosting caught all 96 within-locus misplacements under both targets, but also flagged 136 (defaults) and 112 (strict) correct within-locus alignments as incorrect.
-- **MAPQ alone met neither target**, so it abstained on almost everything.
-- **PanAligner's off-target alignments look confident:** in the features file (regenerable, not committed) they have median MAPQ 60 and median identity 0.19. Minigraph's are short, about 176 bp with MAPQ around 20. This is why MAPQ alone is a weak reliability signal here.
+- **The first 0.995 was optimistic.** Stricter grouping lowers gradient boosting's PR-AUC to 0.979 (window) and 0.929 (leave one gene out). The models still clearly beat MAPQ.
+- **The hardest test misses the 1% target.** Leaving a gene out gives 1.09–1.32% error among accepted, and the MAPQ-only model's 6.79% shows the calibration thresholds don't transfer across genes either.
+- **Logistic regression is more stable overall.** It beats gradient boosting on overall PR-AUC under both stricter groupings, while gradient boosting is ahead on within-locus PR-AUC.
+- **False alarms on within-locus reads rise.** Gradient boosting still catches all 96 within-locus misplacements, but flags 619 correct within-locus alignments as incorrect under window folds and 417 when leaving a gene out, up from 136.
+- **The abstention band barely opens at the defaults.** The accept and reject thresholds overlap in all folds for logistic regression, and in all but one window fold for gradient boosting. The stricter 0.1% / 99% targets (`sensitivity_strict/`) opened it for about 2% of alignments, but that run used only the weak haplotype grouping, with held-out error of 0.12–0.17%.
+- **PanAligner's off-target alignments look confident:** in the features file (regenerable, not committed) they have median MAPQ 60 and median identity 0.19. Minigraph's are short, about 176 bp with MAPQ around 20. That is why MAPQ is especially weak for PanAligner.
 
 **Limits:**
 
@@ -85,24 +99,49 @@ What the results show:
 
 **The data:** each of the 220 labelled sequences (110 unhealthy) is its locus's GRCh38 reference with one inserted variant: 205 SNVs, 3 multi-SNV, 4 insertions, 8 deletions. **The source, version and criteria of the healthy/unhealthy labels are unknown.** Results therefore describe recovery of these labels, never disease association.
 
-**The study** (`scripts/ml/variant_feasibility.py`, results at commit `7caa878`, generated by the code at `d3cf31a`):
+**The study** (`scripts/ml/variant_feasibility.py`, full results in `outputs/ml_variant/REPORT.md`):
 
 - **Features:** each example is reduced to its variant: gene, relative position, SNV/indel, length change, transition/transversion, local GC (±50 bp) and CpG context.
-- **Splits:** StratifiedGroupKFold(5) over 1 kb genomic windows, repeated with seeds 0–4.
-- **"Uncertain":** logistic models answer `uncertain` when |p − 0.5| is below a margin chosen by inner grouped CV for 80% accuracy.
+- **Splits:** StratifiedGroupKFold(5) over genomic windows (1 kb, with 5 and 20 kb as a sensitivity check), repeated with seeds 0–4.
+- **Interval:** 95% interval resampling whole windows, using the first seed's predictions.
+- **"Uncertain":** logistic models answer `uncertain` when |p − 0.5| is below a margin chosen by inner grouped CV for 80% accuracy. Their outputs are named `healthy_label` and `unhealthy_label`, because they only predict these labels.
+- **Context models** are confound diagnostics, not a classifier. No scientifically valid classifier is claimed.
 
-| Model | Balanced accuracy (mean ± SD) | MCC | Confident predictions (mean of 220) |
+Class balance is even within each gene: APP 23/23, PSEN1 78/78, PSEN2 9/9.
+
+| Model (1 kb windows) | Balanced accuracy (mean ± SD) | 95% interval | MCC | Confident predictions (mean of 220) |
+|---|---|---|---|---|
+| Majority class | 0.481 ± 0.002 | 0.359–0.604 | −0.039 | – |
+| Nearest training variant (same gene) | 0.628 ± 0.009 | 0.505–0.752 | 0.256 | – |
+| Position vote (5 nearest, same gene) | 0.646 ± 0.014 | 0.551–0.761 | 0.338 | – |
+| Position-only logistic (linear) | 0.500 ± 0.026 | 0.406–0.645 | 0.000 | 0.0 |
+| Context-only logistic | 0.550 ± 0.015 | 0.502–0.649 | 0.103 | 0.2 |
+| Context + position logistic | 0.555 ± 0.009 | 0.483–0.648 | 0.109 | 0.4 |
+
+| Gene: balanced accuracy | APP | PSEN1 | PSEN2 |
 |---|---|---|---|
-| Majority class | 0.481 ± 0.002 | −0.039 | – |
-| Nearest training variant (same gene) | 0.628 ± 0.009 | 0.256 | – |
-| Position-only logistic | 0.500 ± 0.026 | 0.000 | 0.0 |
-| Context-only logistic | 0.550 ± 0.015 | 0.103 | 0.2 |
-| Context + position logistic | 0.555 ± 0.009 | 0.109 | 0.4 |
+| Nearest training variant | 0.783 | 0.577 | 0.678 |
+| Position vote | 0.696 | 0.632 | 0.644 |
+| Context-only logistic | 0.470 | 0.587 | 0.433 |
 
-**Conclusion:**
+| Window kept out | Nearest training variant | Position vote | Context-only logistic |
+|---|---|---|---|
+| 1 kb | 0.628 | 0.646 | 0.550 |
+| 5 kb | 0.570 | 0.602 | 0.528 |
+| 20 kb | 0.450 | 0.591 | 0.453 |
 
-- **No model recovers the labels from sequence context.** The best signal is the nearest training variant, which reflects where the labelled variants were chosen: they cluster by position, and some clusters are wider than 1 kb.
-- **The models abstain on almost everything:** on average 0–0.4 of 220 predictions are confident.
+**Confounding:**
+
+- **Position:** AUC of position against the label is 0.951 for PSEN2, 0.669 for APP and 0.622 for PSEN1. APP's value understates the clustering, because AUC only measures a one-directional split: its unhealthy-label variants all lie at positions 11,228–17,076, inside the healthy-label range of 153–101,774.
+- **Variant type:** deletions are 6 unhealthy to 2 healthy, and all 3 multi-SNV sequences are unhealthy; insertions are 2 and 2, and SNVs 99 and 106. Type could therefore carry some of the label, though the counts are small.
 - **The original random split leaks.** On the seed-42 per-sequence split, the nearest-training-variant rule gets 33 of 46 test labels right (balanced accuracy 0.717), because neighbouring variants fall on both sides.
+
+**Conclusion and limits:**
+
+- **No model recovers the labels from sequence context.** Context-only reaches 0.550 at 1 kb and 0.453 at 20 kb, and it is at or below chance on APP (0.470) and PSEN2 (0.433), with wide intervals.
+- **The strongest signal is position, and it weakens as windows grow.** It reflects where the labelled variants were chosen rather than anything learned about variant effect.
+- **The models abstain on almost everything:** on average 0–0.4 of 220 predictions are confident, so "accuracy when confident" carries no weight.
+- **Intervals are wide and regions few**, especially for PSEN2's 18 variants.
+- **These are not real haplotypes.** Nothing here generalises to real genomes or individuals.
 
 A meaningful Model B would need a documented label source and variant-level annotations (exon/intron, codon consequence, conservation, allele frequency), none of which are in the repository.
