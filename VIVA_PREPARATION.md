@@ -235,7 +235,7 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 
 **Model B, healthy/disease-associated classification.** A feasibility study only.
 - **Data:** each of the 220 labelled sequences is the reference plus one variant.
-- **Labels:** their source is unknown, and they cluster by position.
+- **Labels:** their source is undocumented; they agree with current ClinVar classes but cluster by position and consequence.
 - **Results under 1 kb window-grouped CV:** context-only balanced accuracy 0.550; the nearest training variant 0.628 and a 5-nearest position vote 0.646; almost every prediction "uncertain". At 20 kb windows these fall to 0.453, 0.450 and 0.591.
 
 **Safe claim:** "Model A detects off-target alignments on simulated, locus-scale reads far better than MAPQ alone. Model B shows the healthy/unhealthy labels cannot be recovered from sequence context without leakage; it is research label recovery, not diagnosis."
@@ -406,7 +406,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
 | “Our model replaces MAPQ.” | “On simulated locus-scale reads it beats MAPQ when few alignments are discarded, but MAPQ 60 is about equal at its own operating point.” |
 | “Our model detects misaligned reads with 0.98 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
-| “Model B classifies disease-associated variants.” | “The labels’ source is unknown and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
+| “Model B classifies disease-associated variants.” | “The labels’ origin is undocumented, they reflect variant classifications rather than patients, and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
 | “The ML predicts Alzheimer’s risk.” | “Nothing in this project is a clinical or diagnostic prediction.” |
 | “The proposed method beats PanAligner.” | “No direct biological performance comparison is established by these non-interchangeable metrics.” |
 | “Forward GFA means strand handling is solved.” | “The current GFA emits forward `+` paths/links; orientation-aware modelling is future work.” |

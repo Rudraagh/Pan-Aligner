@@ -5,7 +5,7 @@ The project has two separate ML tasks. Both live in `scripts/ml/` and are reacha
 | Task | Question | Status |
 |---|---|---|
 | Model A, alignment reliability | Is this alignment correct, incorrect, or is there insufficient evidence? | Trained and evaluated on simulated reads with independent truth |
-| Model B, healthy/disease-associated classification | Can the healthy/unhealthy labels be recovered from the variant? | Feasibility study only: the labels' source is unknown and no model recovers them |
+| Model B, healthy/disease-associated classification | Can the healthy/unhealthy labels be recovered from the variant? | Feasibility study only: the labels' source is undocumented, though they agree with current ClinVar classes, and no model recovers them from sequence context |
 
 The older healthy/unhealthy ML path (`scripts/pipeline.py`, `extract_features.py`, `train_ml.py`, `predict_ml.py`, `evaluate.py`) is legacy and leaks the label; see `docs/13_current_version_implementation_status.md`. It is not part of this layer.
 
@@ -202,7 +202,7 @@ What these results show:
 
 ## Model B: feasibility study (research label recovery, not diagnosis)
 
-**The data:** each of the 220 labelled sequences (110 unhealthy) is its locus's GRCh38 reference with one inserted variant: 205 SNVs, 3 multi-SNV, 4 insertions, 8 deletions. **The source, version and criteria of the healthy/unhealthy labels are unknown.** Results therefore describe recovery of these labels, never disease association.
+**The data:** each of the 220 labelled sequences (110 unhealthy) is its locus's GRCh38 reference with one inserted variant: 205 SNVs, 3 multi-SNV, 4 insertions, 8 deletions. **The source, version and criteria of the healthy/unhealthy labels are unknown.** A 2026-10-30 audit found 216 of 220 sequences correspond to ClinVar records with the same alleles and no contradicted label, which does not establish origin. See `outputs/model_b_provenance/PROVENANCE_REPORT.md`. Results therefore describe recovery of these labels, never disease association.
 
 **The study** (`scripts/ml/variant_feasibility.py`, full results in `outputs/ml_variant/REPORT.md`):
 
@@ -249,4 +249,4 @@ Class balance is even within each gene: APP 23/23, PSEN1 78/78, PSEN2 9/9.
 - **Intervals are wide and regions few**, especially for PSEN2's 18 variants.
 - **These are not real haplotypes.** Nothing here generalises to real genomes or individuals.
 
-A meaningful Model B would need a documented label source and variant-level annotations (exon/intron, codon consequence, conservation, allele frequency), none of which are in the repository.
+A meaningful Model B would need a documented label source and variant-level annotations (exon/intron, codon consequence, conservation, allele frequency), none of which are in the repository's dataset. The audit shows consequence and allele frequency differ strongly by class, so they would need treating as potential leakage.
