@@ -13,10 +13,13 @@ if str(SCRIPTS_DIR) not in sys.path:
 from common import METADATA_DIR, OUTPUTS_DIR
 from proposed.workflow import run_proposed_methodology
 from proposed.stress_experiment import run_pg_scunk_stress_experiment
-from proposed.final_evaluation import run_final_proposed_evaluation
+from proposed.final_evaluation import FINAL_EVALUATION_GENES, run_final_proposed_evaluation
 
 
-def main() -> None:
+DEFAULT_MAX_ASSEMBLIES_PER_BUCKET = 8
+
+
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(
         description=(
             "Run the proposed alignment-free methodology stack with minimizer computation, "
@@ -42,8 +45,8 @@ def main() -> None:
     parser.add_argument(
         "--max-assemblies-per-bucket",
         type=int,
-        default=8,
-        help="Optional cap per healthy/unhealthy bucket to keep the proposed workflow lightweight.",
+        default=None,
+        help=f"Cap per healthy/unhealthy bucket for the normal workflow (default {DEFAULT_MAX_ASSEMBLIES_PER_BUCKET}). Not allowed with --final-proposed-evaluation, which uses every assembly.",
     )
     parser.add_argument(
         "--quality-threshold",
@@ -63,18 +66,33 @@ def main() -> None:
         default=None,
         help="Directory for proposed-methodology artifacts; the stress demo defaults to outputs/proposed_step5_pgscunk_demo.",
     )
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
 
     if args.pg_scunk_stress_demo:
         result = run_pg_scunk_stress_experiment(
             output_dir=args.output_dir.resolve() if args.output_dir else None,
             quality_threshold=args.demo_quality_threshold,
             max_rounds=args.max_rounds,
+            backend=args.backend,
         )
         print(json.dumps({key: value for key, value in result.items() if key != "feedback"}, indent=2))
         return
     if args.final_proposed_evaluation:
-        result = run_final_proposed_evaluation(output_dir=args.output_dir.resolve() if args.output_dir else None, backend=args.backend)
+        if args.max_assemblies_per_bucket is not None:
+            parser.error("--max-assemblies-per-bucket cannot be used with --final-proposed-evaluation, which uses every assembly.")
+        result = run_final_proposed_evaluation(
+            output_dir=args.output_dir.resolve() if args.output_dir else None,
+            backend=args.backend,
+            dataset_manifest=args.dataset_manifest.resolve(),
+            genes=(args.gene.upper(),) if args.gene else FINAL_EVALUATION_GENES,
+            quality_threshold=args.quality_threshold,
+            max_rounds=args.max_rounds,
+            improvement_tolerance=args.improvement_tolerance,
+            stagnation_patience=args.stagnation_patience,
+            anchor_alpha=args.anchor_alpha,
+            anchor_beta=args.anchor_beta,
+            anchor_gamma=args.anchor_gamma,
+        )
         print(json.dumps({key: value for key, value in result.items() if key != "details"}, indent=2))
         return
 
@@ -83,7 +101,9 @@ def main() -> None:
         output_dir=args.output_dir.resolve() if args.output_dir else None,
         gene=args.gene,
         backend=args.backend,
-        max_assemblies_per_bucket=args.max_assemblies_per_bucket,
+        max_assemblies_per_bucket=(
+            DEFAULT_MAX_ASSEMBLIES_PER_BUCKET if args.max_assemblies_per_bucket is None else args.max_assemblies_per_bucket
+        ),
         quality_threshold=args.quality_threshold,
         max_rounds=args.max_rounds,
         improvement_tolerance=args.improvement_tolerance,

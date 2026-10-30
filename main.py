@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import argparse
+import importlib
 import json
 import sys
 from pathlib import Path
@@ -223,9 +224,34 @@ def print_json_summary(payload: dict) -> None:
     print(json.dumps(payload, indent=2))
 
 
-def main() -> None:
+# Modes that hand every remaining argument to an existing tool's own CLI, so each
+# option is defined once. Run `python main.py <mode> --help` for the tool's options.
+FORWARDED_MODES = {
+    "--proposed": ("proposed_methodology", "Proposed alignment-free methodology (proposed_methodology.py)."),
+    "--shared-query-eval": ("shared_query_eval", "Shared held-out-query comparison of proposed and minigraph graphs (scripts/shared_query_eval.py)."),
+    "--simulate-truth-reads": ("simulate_truth_reads", "PBSIM2 truth-labelled read simulation (scripts/simulate_truth_reads.py; Linux/WSL only)."),
+    "--truth-eval": ("truth_eval", "Truth-labelled PanAligner/minigraph correctness scoring (scripts/truth_eval.py; Linux/WSL only)."),
+}
+LINUX_ONLY_MODES = {"--simulate-truth-reads", "--truth-eval"}
+
+
+def run_forwarded_mode(mode: str, argv: list[str]) -> None:
+    if mode in LINUX_ONLY_MODES and sys.platform.startswith("win"):
+        raise SystemExit(f"{mode} needs Linux tools (PBSIM2, k8, PanAligner, minigraph); run it inside WSL: python3 main.py {mode} ...")
+    module_name, _ = FORWARDED_MODES[mode]
+    importlib.import_module(module_name).main(argv)
+
+
+def main(argv: list[str] | None = None) -> None:
+    argv = sys.argv[1:] if argv is None else argv
+    if argv and argv[0] in FORWARDED_MODES:
+        run_forwarded_mode(argv[0], argv[1:])
+        return
+
     parser = argparse.ArgumentParser(description="Single entry point for the PanAligner paper reproduction project.")
     mode = parser.add_mutually_exclusive_group(required=True)
+    for flag, (_, description) in FORWARDED_MODES.items():
+        mode.add_argument(flag, action="store_true", help=f"{description} Must be the first argument; the rest go to that tool.")
     mode.add_argument("--full-pipeline", action="store_true", help="Run preprocessing, graph construction, theory modules, PanAligner execution, evaluation, and report generation.")
     mode.add_argument("--theory-only", action="store_true", help="Run only the educational PanAligner theory reproductions.")
     mode.add_argument("--evaluate", action="store_true", help="Run the held-out PanAligner evaluation workflow on the current train/test split.")
@@ -244,7 +270,10 @@ def main() -> None:
     parser.add_argument("--query-argument", type=str, default=None, help="Optional note or argument to include in custom query outputs.")
     parser.add_argument("--gene", type=str, default=None, help="Optional gene override for custom query analysis.")
     parser.add_argument("--output-dir", type=Path, default=None, help="Output directory for custom query analysis artifacts.")
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
+    misplaced = [flag for flag in FORWARDED_MODES if getattr(args, flag.lstrip("-").replace("-", "_"))]
+    if misplaced:
+        parser.error(f"{misplaced[0]} must be the first argument.")
 
     if args.theory_only:
         theory_result = run_theory_suite(args.theory_graph.resolve() if args.theory_graph else None)

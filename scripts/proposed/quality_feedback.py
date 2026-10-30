@@ -77,7 +77,7 @@ def _evaluation(round_index: int, candidate_id: str, candidate: dict, graph: Pro
     return {"round": round_index, "candidate_id": candidate_id, "configuration_key": configuration_key_text(candidate["configuration_key"]), "parameters": dict(candidate["parameters"]), "overall_quality": quality["overall_quality_score"], "mean_node_consistency": quality["mean_node_consistency"], "mean_edge_consistency": quality["mean_edge_consistency"], "mean_path_consistency": quality["mean_path_consistency"], "anchor_coverage": quality["anchor_coverage_ratio"], "node_count": quality["node_count"], "edge_count": quality["edge_count"], "path_count": len(graph.paths), "anchor_count": quality["anchor_count"], "accepted": False, "is_best_so_far": improved, "quality_delta": quality_delta, "weakest_component": diagnosis["weakest_component"], "action": candidate["action"], "reason": candidate["reason"]}
 
 
-def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_parameters: dict | None = None, backend: str = "auto", quality_threshold: float = 0.72, max_rounds: int = 3, improvement_tolerance: float = DEFAULT_IMPROVEMENT_TOLERANCE, stagnation_patience: int = DEFAULT_STAGNATION_PATIENCE) -> dict:
+def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_parameters: dict | None = None, backend: str = "cpu", quality_threshold: float = 0.72, max_rounds: int = 3, improvement_tolerance: float = DEFAULT_IMPROVEMENT_TOLERANCE, stagnation_patience: int = DEFAULT_STAGNATION_PATIENCE) -> dict:
     """Run deterministic feedback search; always return the protected best-so-far graph.
 
     Meaningful improvement is Q > best_Q + tolerance. Stops on threshold success,

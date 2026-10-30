@@ -205,7 +205,7 @@ def simulate_gene(gene: str, seed: int, args: argparse.Namespace) -> dict:
     }
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Simulate truth-labelled PBSIM2 reads for the local gene regions.")
     parser.add_argument("--source", choices=("reference", "heldout"), default="reference")
     parser.add_argument("--genes", nargs="+", default=list(GENES), choices=GENES)
@@ -217,7 +217,7 @@ def main() -> None:
     parser.add_argument("--model", type=Path, default=DEFAULT_MODEL)
     parser.add_argument("--test-manifest", type=Path, default=METADATA_DIR / "test_manifest.json")
     parser.add_argument("--output-dir", type=Path, default=TRUTH_DIR)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     args.output_dir = args.output_dir.resolve()
 
     runs = [simulate_gene(gene, seed, args) for gene in args.genes for seed in args.seeds]

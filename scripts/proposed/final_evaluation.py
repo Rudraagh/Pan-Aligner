@@ -5,12 +5,16 @@ import json
 import time
 from pathlib import Path
 
-from common import OUTPUTS_DIR, ensure_dir, read_json, write_json
+from common import OUTPUTS_DIR, ensure_dir, project_relative, read_json, write_json
 from visualize import visualize_graph
 
+from .anchor_selection import DEFAULT_ALPHA, DEFAULT_BETA, DEFAULT_GAMMA
 from .graph_constructor import validate_proposed_graph, write_proposed_graph_bundle
-from .quality_feedback import run_pg_scunk_feedback_loop, write_pg_scunk_reports
+from .quality_feedback import DEFAULT_IMPROVEMENT_TOLERANCE, DEFAULT_STAGNATION_PATIENCE, run_pg_scunk_feedback_loop, write_pg_scunk_reports
 from .workflow import load_assembly_inputs
+
+
+FINAL_EVALUATION_GENES = ("APP", "PSEN1", "PSEN2")
 
 
 SUMMARY_FIELDS = [
@@ -88,7 +92,7 @@ def _backend_statement(backend_requested: str, rows: list[dict]) -> str:
     )
 
 
-def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, baseline_exists: bool, backend_requested: str = "cpu") -> None:
+def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, baseline_exists: bool, backend_requested: str = "cpu", manifest_label: str = "data/metadata/train_manifest.json") -> None:
     table = "\n".join(
         f"| {row['gene']} | {row['input_assembly_count']} | {row['node_count']} | {row['edge_count']} | {row['overall_quality']:.6f} | {row['backend_used']} |"
         for row in rows
@@ -102,7 +106,7 @@ def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, b
         "This is a proposed-only, alignment-free evaluation bundle. It is not a biological benchmark and does not overwrite or merge with the minigraph/PanAligner baseline.\n\n"
         "## Datasets and results\n\n| Gene | Assemblies / paths | Nodes | Edges | Overall structural quality | Backend |\n|---|---:|---:|---:|---:|---|\n"
         f"{table}\n\n"
-        "All assemblies currently listed in `data/metadata/train_manifest.json` were used, without the older eight-per-bucket cap.\n\n"
+        f"All assemblies currently listed in `{manifest_label}` were used, without the older eight-per-bucket cap.\n\n"
         "## Pipeline\n\nFASTA inputs → deterministic minimizers → path-preserving proposed graph → Step 2 structural/path coherence → Step 3 anchors → Step 4 PG-SCUnK controller.\n\n"
         "## Interpretation and limitations\n\nGraph/path consistency is structural coherence derived from observed minimizer paths, not independent biological correctness. "
         f"{_backend_statement(backend_requested, rows)} Baseline alignment metrics and proposed structural metrics are not directly interchangeable.\n\n"
@@ -111,16 +115,30 @@ def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, b
     )
 
 
-def run_final_proposed_evaluation(*, output_dir: Path | None = None, backend: str = "cpu", genes: tuple[str, ...] = ("APP", "PSEN1", "PSEN2")) -> dict:
-    """Run all available APP/PSEN1/PSEN2 inputs with the unchanged proposed stack.
+def run_final_proposed_evaluation(
+    *,
+    output_dir: Path | None = None,
+    backend: str = "cpu",
+    genes: tuple[str, ...] = FINAL_EVALUATION_GENES,
+    dataset_manifest: Path | None = None,
+    quality_threshold: float = 0.72,
+    max_rounds: int = 3,
+    improvement_tolerance: float = DEFAULT_IMPROVEMENT_TOLERANCE,
+    stagnation_patience: int = DEFAULT_STAGNATION_PATIENCE,
+    anchor_alpha: float = DEFAULT_ALPHA,
+    anchor_beta: float = DEFAULT_BETA,
+    anchor_gamma: float = DEFAULT_GAMMA,
+) -> dict:
+    """Run every assembly in the manifest (default: the train manifest) for each gene.
 
     `backend` selects minimizer extraction only (cpu default; gpu raises if CUDA is
     unusable; auto falls back to CPU and records why in graph.metadata["backend"]).
+    The defaults reproduce the committed outputs/proposed_final_evaluation run.
     """
     if backend.lower() not in {"auto", "cpu", "gpu"}:
         raise ValueError("backend must be one of: auto, cpu, gpu.")
     root = Path(__file__).resolve().parents[2]
-    manifest = root / "data" / "metadata" / "train_manifest.json"
+    manifest = Path(dataset_manifest) if dataset_manifest else root / "data" / "metadata" / "train_manifest.json"
     destination = ensure_dir(output_dir or (OUTPUTS_DIR / "proposed_final_evaluation"))
     started = time.perf_counter()
     assemblies = load_assembly_inputs(manifest, max_assemblies_per_bucket=None)
@@ -133,7 +151,15 @@ def run_final_proposed_evaluation(*, output_dir: Path | None = None, backend: st
             raise ValueError(f"No assemblies for {gene} in {manifest}.")
         gene_assemblies = grouped[gene]
         gene_dir = ensure_dir(destination / gene)
-        feedback = run_pg_scunk_feedback_loop(gene_assemblies, backend=backend)
+        feedback = run_pg_scunk_feedback_loop(
+            gene_assemblies,
+            backend=backend,
+            quality_threshold=quality_threshold,
+            max_rounds=max_rounds,
+            improvement_tolerance=improvement_tolerance,
+            stagnation_patience=stagnation_patience,
+            base_parameters={"anchor_alpha": anchor_alpha, "anchor_beta": anchor_beta, "anchor_gamma": anchor_gamma},
+        )
         graph = feedback["best_graph"]
         bundle = write_proposed_graph_bundle(graph, gene_dir)
         visualization = visualize_graph(Path(bundle["graph_gfa"]), gene_dir / f"{gene.lower()}.proposed_graph")
@@ -162,5 +188,5 @@ def run_final_proposed_evaluation(*, output_dir: Path | None = None, backend: st
         + baseline_text + "\n",
         encoding="utf-8",
     )
-    _write_readme(destination, rows, runtime, baseline_metrics.exists(), backend.lower())
+    _write_readme(destination, rows, runtime, baseline_metrics.exists(), backend.lower(), project_relative(manifest))
     return {"output_dir": str(destination.resolve()), "summary_csv": str(summary_csv.resolve()), "summary_json": str(summary_json.resolve()), "runtime_seconds": runtime, "rows": rows, "details": details}

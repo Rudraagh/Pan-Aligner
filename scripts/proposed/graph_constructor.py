@@ -73,7 +73,7 @@ def build_proposed_pangenome_graph(
     anchor_alpha: float = DEFAULT_ALPHA,
     anchor_beta: float = DEFAULT_BETA,
     anchor_gamma: float = DEFAULT_GAMMA,
-    backend: str = "auto",
+    backend: str = "cpu",
 ) -> ProposedGraph:
     if not assemblies:
         raise ValueError("At least one assembly is required.")

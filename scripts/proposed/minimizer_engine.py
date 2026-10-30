@@ -167,7 +167,7 @@ def _compute_gpu_minimizers(sequence: str, k: int, window_size: int, assembly_id
     ]
 
 
-def compute_minimizers(sequence: str, k: int, window_size: int, assembly_id: str, backend: str = "auto") -> dict:
+def compute_minimizers(sequence: str, k: int, window_size: int, assembly_id: str, backend: str = "cpu") -> dict:
     """Return reference-compatible minimizers using CPU or genuine CUDA execution."""
     normalized_backend = backend.lower()
     if normalized_backend not in {"auto", "cpu", "gpu"}:

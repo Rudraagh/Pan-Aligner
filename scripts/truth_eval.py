@@ -224,14 +224,14 @@ def plot_curves(curves: dict[tuple, list[dict]], output_png: Path, title: str) -
     plt.close(figure)
 
 
-def main() -> None:
+def main(argv: list[str] | None = None) -> None:
     parser = argparse.ArgumentParser(description="Score PanAligner and minigraph on truth-labelled simulated reads.")
     parser.add_argument("--source", choices=("reference", "heldout"), default="reference")
     parser.add_argument("--graphs", nargs="+", choices=("combined", "linear"), default=["combined", "linear"])
     parser.add_argument("--aligners", nargs="+", choices=tuple(ALIGNERS), default=list(ALIGNERS))
     parser.add_argument("--threads", type=int, default=4)
     parser.add_argument("--output-dir", type=Path, default=TRUTH_DIR)
-    args = parser.parse_args()
+    args = parser.parse_args(argv)
     output_dir = args.output_dir.resolve()
 
     simulation = read_json(output_dir / "reads" / args.source / "simulation_manifest.json")

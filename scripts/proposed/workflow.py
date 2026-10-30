@@ -75,7 +75,7 @@ def run_proposed_methodology(
     *,
     output_dir: Path | None = None,
     gene: str | None = None,
-    backend: str = "auto",
+    backend: str = "cpu",
     max_assemblies_per_bucket: int | None = 8,
     quality_threshold: float = 0.72,
     max_rounds: int = 3,

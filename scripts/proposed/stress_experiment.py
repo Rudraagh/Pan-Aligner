@@ -19,6 +19,7 @@ def run_pg_scunk_stress_experiment(
     output_dir: Path | None = None,
     quality_threshold: float = DEMO_QUALITY_THRESHOLD,
     max_rounds: int = DEMO_MAX_ROUNDS,
+    backend: str = "cpu",
 ) -> dict:
     """Run a controlled synthetic stress experiment, not a biological benchmark.
 
@@ -35,7 +36,7 @@ def run_pg_scunk_stress_experiment(
     assemblies = load_assembly_inputs(manifest)
     feedback = run_pg_scunk_feedback_loop(
         assemblies,
-        backend="cpu",
+        backend=backend,
         quality_threshold=quality_threshold,
         max_rounds=max_rounds,
     )
