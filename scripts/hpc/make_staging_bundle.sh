@@ -69,16 +69,17 @@ for tool in PanAligner minigraph "${THIRD_PARTY[@]}"; do
   fi
 done
 
+# autocrlf would write CRLF into exported sources on Windows, which breaks configure and depcomp on Linux.
 WORK="$(mktemp -d)"
 trap 'rm -rf "${WORK:?}"' EXIT
 
 pathspec=(.)
 [[ "$WITH_OUTPUTS" == "1" ]] || pathspec+=(':(exclude)outputs')
-git archive --format=tar --prefix="$NAME/" HEAD -- "${pathspec[@]}" | tar -x -C "$WORK"
+git -c core.autocrlf=false archive --format=tar --prefix="$NAME/" HEAD -- "${pathspec[@]}" | tar -x -C "$WORK"
 
 : > "$WORK/$NAME/STAGED_TOOLS.txt"
 for tool in "${TOOLS[@]}" "${THIRD_PARTY[@]}"; do
-  git -C "$ROOT_DIR/$tool" archive --format=tar --prefix="$NAME/$tool/" HEAD | tar -x -C "$WORK"
+  git -c core.autocrlf=false -C "$ROOT_DIR/$tool" archive --format=tar --prefix="$NAME/$tool/" HEAD | tar -x -C "$WORK"
   printf '%s %s %s\n' "$tool" "$(git -C "$ROOT_DIR/$tool" rev-parse HEAD)" "$(git -C "$ROOT_DIR/$tool" remote get-url origin 2>/dev/null || echo unknown)" >> "$WORK/$NAME/STAGED_TOOLS.txt"
 done
 

@@ -42,6 +42,13 @@ class PilotJobs(unittest.TestCase):
         self.assertIn("tools/third_party/pbsim2", text)
         self.assertIn("tools/third_party/minimap2", text)
 
+    def test_bundle_export_cannot_convert_line_endings(self):
+        text = (ROOT / "scripts" / "hpc" / "make_staging_bundle.sh").read_text(encoding="utf-8")
+        archives = [line for line in text.splitlines() if " archive --format" in line]
+        self.assertEqual(len(archives), 2)
+        for line in archives:
+            self.assertIn("core.autocrlf=false", line)
+
 
 if __name__ == "__main__":
     unittest.main()
