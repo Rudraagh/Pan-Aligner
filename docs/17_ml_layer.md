@@ -17,6 +17,7 @@ python3 main.py --ml-alignment-data --threads 8          # Linux/WSL only: simul
 python main.py --ml-alignment                            # Model A, 20 kb window folds (writes outputs/ml_alignment/regrouped/window/)
 python main.py --ml-alignment --grouping leave_one_gene_out
 python main.py --ml-alignment --grouping haplotype --output-dir outputs/ml_alignment/sensitivity_strict --max-accept-error 0.001 --min-reject-precision 0.99
+python main.py --ml-alignment-strict                     # Model A strict targets on the v2 dataset
 python main.py --ml-variant                              # Model B feasibility study
 ```
 
@@ -123,15 +124,81 @@ python main.py --ml-alignment --features outputs/ml_alignment_v2/alignment_featu
 | MAPQ >= 30 | 94.6% | 0.30% | 66.4% | 0.13% / 0.18% |
 | MAPQ = 60 | 86.7% | 0.13% | 86.6% | 0.14% / 0.13% |
 
+The right-hand column orders tied probabilities by row. The strict-target section below replaces it with a tie-aware comparison and intervals.
+
 What v2 shows:
 
 - **Within-locus detection works on simulated reads:** gradient boosting catches about 90% of these errors with few false alarms, including with a whole gene held out. Logistic regression does not hold up.
-- **A plain MAPQ 60 cutoff is about as good at its own operating point.** The model's gain appears when fewer alignments are discarded: at 94.6% accepted, its error is well below MAPQ's. So the model is not a clear replacement for MAPQ.
+- **A plain MAPQ 60 cutoff is about as good at its own operating point.** The model's gain appears when fewer alignments are discarded. So the model is not a clear replacement for MAPQ.
 - **The MAPQ-only model's low PR-AUC overstates MAPQ's weakness,** because most alignments tie at MAPQ 60. The plain threshold is the fairer baseline.
 - **Off-target detection is harder at 75% accuracy** (PR-AUC 0.63–0.72).
 - **Abstention still does not work at the default targets:** the band collapsed in every fold for both learned models, so `insufficient_evidence` was never used. Stricter targets have not been run on v2.
 
 **Limits:** within-locus errors are 96% minigraph's, so PanAligner cannot be judged on them. There is one accuracy level (75%). Errors from the same regions repeat, so the effective sample is far smaller than 536, and PSEN2 has only 16.
+
+### Strict targets on v2
+
+```bash
+python main.py --ml-alignment-strict    # writes outputs/ml_alignment_v2/strict_targets/{window,leave_one_gene_out}/
+```
+
+**Method** (`scripts/ml/strict_targets.py`):
+
+- Each training fold is split by group into 60% fit, 20% calibration and 20% thresholds. Thresholds never see the test fold or the calibrator's rows. The committed results confirm no group overlap in any fold.
+- This trains on less data than the runs above, so its figures differ slightly from them.
+- Six targets were fixed before the run. Equal-coverage comparisons share tied probabilities fairly, and intervals resample whole 20 kb windows.
+- A band counts as meaningful only if it opens in every fold, abstains on at least 0.1% of alignments, and its error rate lies between accepted and rejected.
+
+**Gradient boosting by target** (190,772 alignments; requested coverage targets also require 99% rejection precision):
+
+| Grouping | Target | Accepted | Abstentions | Rejected | Error among accepted | Error among abstained | Folds with band | Meaningful |
+|---|---|---|---|---|---|---|---|---|
+| Window | Error 0.5% | 99.5% | 0 | 1,024 | 0.301% | – | 0/5 | no |
+| | Error 0.2% | 99.4% | 234 | 860 | 0.292% | 77.8% | 4/5 | no |
+| | Error 0.1% | 99.4% | 316 | 860 | 0.273% | 69.0% | 4/5 | no |
+| | Error 0.05% | 79.9% | 37,464 | 860 | 0.272% | 0.86% | 5/5 | yes |
+| | Coverage 95% | 97.1% | 4,704 | 857 | 0.147% | 9.89% | 5/5 | yes |
+| | Coverage 90% | 96.1% | 6,624 | 857 | 0.147% | 7.07% | 5/5 | yes |
+| Leave one gene out | Error 0.5% | 100.0% | 0 | 26 | 0.819% | – | 2/3 | no |
+| | Error 0.2% | 99.4% | 1,095 | 26 | 0.275% | 95.2% | 3/3 | yes |
+| | Error 0.1% | 99.2% | 1,484 | 26 | 0.205% | 79.2% | 3/3 | yes |
+| | Error 0.05% | 53.3% | 89,116 | 26 | 0.286% | 1.43% | 2/3 | no |
+| | Coverage 95% | 99.2% | 1,585 | 26 | 0.187% | 76.3% | 3/3 | yes |
+| | Coverage 90% | 99.2% | 1,585 | 26 | 0.187% | 76.3% | 3/3 | yes |
+
+**Within-locus and off-target errors, split** (accepted / abstained / rejected):
+
+| Grouping | Target | Within-locus errors (536) | Correct within-locus abstained | Off-target errors (1,052) |
+|---|---|---|---|---|
+| Window | Error 0.2% | 107 / 85 / 344 | 52 | 447 / 97 / 508 |
+| | Coverage 95% | 3 / 191 / 342 | 4,239 | 270 / 274 / 508 |
+| | Coverage 90% | 3 / 191 / 342 | 6,156 | 267 / 277 / 508 |
+| Leave one gene out | Error 0.2% | 67 / 456 / 13 | 53 | 454 / 586 / 12 |
+| | Coverage 95% | 1 / 522 / 13 | 375 | 352 / 688 / 12 |
+
+**Against plain MAPQ at equal coverage.** Difference is model minus MAPQ error in percentage points; accepted errors are within-locus / off-target.
+
+| MAPQ >= | Accepted | MAPQ error | Window: model error, difference (95% interval) | Gene held out: model error, difference (95% interval) | MAPQ accepted errors | Window model accepted errors |
+|---|---|---|---|---|---|---|
+| 10 | 98.0% | 0.561% | 0.157%, −0.40 (−0.54 to −0.27) | 0.181%, −0.38 (−0.54 to −0.25) | 355 / 693 | 6 / 288 |
+| 20 | 96.2% | 0.404% | 0.155%, −0.25 (−0.35 to −0.14) | 0.171%, −0.23 (−0.37 to −0.13) | 231 / 510 | 6 / 279 |
+| 30 | 94.6% | 0.295% | 0.158%, −0.14 (−0.21 to −0.07) | 0.167%, −0.13 (−0.25 to −0.05) | 147 / 386 | 6 / 279 |
+| 40 | 93.0% | 0.242% | 0.161%, −0.08 (−0.13 to −0.02) | 0.167%, −0.08 (−0.15 to −0.02) | 104 / 325 | 6 / 279 |
+| 50 | 91.6% | 0.191% | 0.163%, −0.03 (−0.06 to +0.02) | 0.167%, −0.03 (−0.10 to +0.03) | 70 / 264 | 6 / 279 |
+| 60 | 86.7% | 0.128% | 0.172%, +0.04 (−0.01 to +0.14) | 0.167%, +0.04 (−0.03 to +0.09) | 35 / 177 | 6 / 279 |
+
+What these results show:
+
+- **ML does not replace MAPQ on this evidence.** The model is reliably better at MAPQ 10–40, indistinguishable at 50, and nominally worse but statistically unresolved at 60. No operating point shows the model reliably beating MAPQ 60.
+- **The two kinds of error behave differently.** The model almost removes within-locus errors at every coverage compared (6 accepted, against 35–355). But at MAPQ 60 it accepts more off-target errors than the threshold (279 against 177).
+- **By aligner:** the gain is mostly minigraph's. For PanAligner the model is mostly indistinguishable from MAPQ, with intervals excluding zero only at MAPQ 30 and 40 under window folds.
+- **Strict error targets are not achieved.** Error among accepted stays around 0.2–0.3% on held-out data, even when validation thresholds aimed for 0.05–0.2%. Only the 0.5% target under window folds is met.
+- **Why there is a floor:** over half of all rows get a predicted p(incorrect) of exactly 0, yet about 0.25% of them are wrong, nearly all off-target (window folds: 264 of 267 errors in the lowest half). These look like genuine alignments, with median identity about 0.83 and MAPQ 50–60. So overall ECE (0.0015–0.0026) looks good while calibration fails at the low end that strict targets depend on.
+- **Coverage targets are not honoured either.** Because of tied probabilities, requesting 95% or 90% accepted gives 96–97% under window folds and 99.2% with a gene held out.
+- **`insufficient_evidence` is usable only in a limited way.** Coverage targets open it in every fold, and abstained alignments are clearly enriched for errors (7–76%, against 0.83% overall). It catches almost all remaining within-locus errors there, at a cost of up to 6,156 correct within-locus alignments under window folds. But when a gene is held out, it holds errors that should be rejected: only 26 alignments are rejected, and 76% of abstained ones are wrong. The band is not stable enough to report as a dependable three-way classifier.
+- **The meaningful criterion is lenient.** Window error-0.05% passes it, though its abstained error (0.86%) is about the base rate, so that band is not useful in practice. The criterion stays as it was fixed before the run, rather than being changed after seeing results.
+
+**Limits:** thresholds rest on only 2–4 windows per fold. Six targets were compared on one dataset, without a further untouched test set. Figures pool different folds' calibrators, and everything remains simulated, locus-scale and 75% accuracy.
 
 ## Model B: feasibility study (research label recovery, not diagnosis)
 
