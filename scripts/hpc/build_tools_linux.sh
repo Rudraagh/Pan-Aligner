@@ -73,6 +73,31 @@ fi
 (cd "$SRC_DIR/PanAligner" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR -lz -lpthread -lm -fopenmp")
 
 cp "$SRC_DIR/minigraph/minigraph" "$SRC_DIR/PanAligner/PanAligner" "$BIN_DIR/"
+
+# PBSIM2 and minimap2, for the whole-genome-graph pilot. Older bundles do not stage them, so they are optional here.
+PBSIM_SRC="$ROOT_DIR/tools/third_party/pbsim2"
+if [[ -f "$PBSIM_SRC/configure" ]]; then
+  rm -rf "${SRC_DIR:?}/pbsim2"
+  cp -a "$PBSIM_SRC" "$SRC_DIR/pbsim2"
+  # Git export order leaves autotools timestamps arbitrary; stop make trying to regenerate them.
+  (cd "$SRC_DIR/pbsim2" && touch aclocal.m4 configure config.h.in && find . -name Makefile.in -exec touch {} + && sh ./configure >/dev/null && make -j"$JOBS" >/dev/null)
+  cp "$SRC_DIR/pbsim2/src/pbsim" "$BIN_DIR/"
+  rm -rf "${BUILD_ROOT:?}/pbsim2_data"
+  cp -a "$PBSIM_SRC/data" "$BUILD_ROOT/pbsim2_data"
+  echo "pbsim2 built from staged source" >> "$INFO"
+else
+  echo "pbsim2: source not staged, skipped" >> "$INFO"
+fi
+MINIMAP2_SRC="$ROOT_DIR/tools/third_party/minimap2"
+if [[ -f "$MINIMAP2_SRC/Makefile" ]]; then
+  rm -rf "${SRC_DIR:?}/minimap2"
+  cp -a "$MINIMAP2_SRC" "$SRC_DIR/minimap2"
+  (cd "$SRC_DIR/minimap2" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR -lm -lz -lpthread" >/dev/null)
+  cp "$SRC_DIR/minimap2/minimap2" "$BIN_DIR/"
+  echo "minimap2 --version: $("$BIN_DIR/minimap2" --version 2>&1 | head -1)" >> "$INFO"
+else
+  echo "minimap2: source not staged, skipped" >> "$INFO"
+fi
 {
   echo "minigraph --version: $("$BIN_DIR/minigraph" --version 2>&1 | head -1)"
   echo "PanAligner --version: $("$BIN_DIR/PanAligner" --version 2>&1 | head -1)"

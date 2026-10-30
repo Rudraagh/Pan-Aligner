@@ -96,6 +96,21 @@ Download the whole `hpc_runs/<run>/` folder (and the probe/unpack logs) into the
 
 Report failed and skipped steps as they are. A CPU smoke pass says nothing about GPU execution.
 
+## 6b. Model A whole-genome-graph pilot
+
+Plan and pass/fail gates: `outputs/model_a_pilot_plan/20261030_plan_01/PILOT_PLAN.md`. Run the jobs in order from the extracted bundle folder, after the probe, unpack and venv jobs. None of them has run on the cluster yet; resource directives are estimates until the administrator confirms the limits.
+
+| Job (`scripts/hpc/`) | Stage | Requests | Notes |
+|---|---|---|---|
+| `pbs_pilot_0_build_smoke.sh` | Build tools; unit tests; synthetic end-to-end run | 4 CPUs, 8 GB, 1 h | No real data. Its report says `NO_GO`, which is expected on synthetic data. |
+| `pbs_pilot_1_inputs.sh` | Check inputs, extract chr21, compare CHM13 versions, align haplotypes | 16 CPUs, 32 GB, 4 h | Downloads about 7 GB only with `FETCH=1`, which needs approval. Otherwise place the files in `pilot_data/inputs/`. |
+| `pbs_pilot_2_loadtest.sh` | Whole graph, about 1,000 reads per haplotype | 32 CPUs, 64 GB, 1 h | Use its peak memory and read rate to set stage 4's walltime. Check `*.path_examples.txt`. |
+| `pbs_pilot_3_simulate.sh` | All 6 settings, plus a repeat for reproducibility | 4 CPUs, 8 GB, 2 h | |
+| `pbs_pilot_4_align.sh` | Set `ALIGNER=minigraph` or `ALIGNER=PanAligner`; one job each | 32 CPUs, 64 GB, 8 h | Resubmit to resume: finished settings are skipped. |
+| `pbs_pilot_5_label.sh` | Label, k-mer check, go/no-go report | 4 CPUs, 32 GB, 4 h | Result: `runs/*_label_*/pilot_report.json`. |
+
+Set `PILOT_DIR` to scratch if home is small. Results go to `$PILOT_DIR/runs/`; copy those folders back to the laptop. Jobs refuse to overwrite earlier simulation, label and alignment folders.
+
 ## 7. Later — GPU validation (only after the admin confirms `gpuq`)
 
 Probe on `gpuq` first (allocated GPU, `nvidia-smi`, CUDA version), then install the matching CuPy wheel into a per-user environment, run `tests/test_proposed_minimizer_engine.py` and confirm the CUDA parity test **runs** (not skipped) and passes. Benchmarks come after parity, with warm-up, repetitions, and separate kernel/transfer/end-to-end timing.

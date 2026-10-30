@@ -28,6 +28,8 @@ while [[ "${1:-}" == --* ]]; do
 done
 OUT_DIR="${1:-$ROOT_DIR/hpc_staging}"
 TOOLS=(PanAligner minigraph zlib)
+# Git links in this repository, so `git archive` alone leaves them as empty folders.
+THIRD_PARTY=(tools/third_party/pbsim2 tools/third_party/minimap2)
 mkdir -p "$OUT_DIR"
 OUT_DIR="$(cd "$OUT_DIR" && pwd)"  # POSIX form; GNU tar reads "C:/..." as a remote host
 
@@ -55,7 +57,11 @@ for tool in "${TOOLS[@]}"; do
 done
 # Local edits to tool sources would silently be lost by exporting HEAD. zlib's Makefile and
 # zconf.h are rewritten by its ./configure, so those two are expected and ignored.
-for tool in PanAligner minigraph; do
+for tool in PanAligner minigraph "${THIRD_PARTY[@]}"; do
+  if ! git -C "$ROOT_DIR/$tool" rev-parse HEAD >/dev/null 2>&1; then
+    echo "ERROR: $tool/ is not a git checkout; cannot export a pristine source tree." >&2
+    exit 1
+  fi
   if [[ -n "$(git -C "$ROOT_DIR/$tool" status --porcelain --untracked-files=no)" ]]; then
     echo "ERROR: $tool/ has modified tracked sources; refusing to stage HEAD without them." >&2
     git -C "$ROOT_DIR/$tool" status --short --untracked-files=no >&2
@@ -71,7 +77,7 @@ pathspec=(.)
 git archive --format=tar --prefix="$NAME/" HEAD -- "${pathspec[@]}" | tar -x -C "$WORK"
 
 : > "$WORK/$NAME/STAGED_TOOLS.txt"
-for tool in "${TOOLS[@]}"; do
+for tool in "${TOOLS[@]}" "${THIRD_PARTY[@]}"; do
   git -C "$ROOT_DIR/$tool" archive --format=tar --prefix="$NAME/$tool/" HEAD | tar -x -C "$WORK"
   printf '%s %s %s\n' "$tool" "$(git -C "$ROOT_DIR/$tool" rev-parse HEAD)" "$(git -C "$ROOT_DIR/$tool" remote get-url origin 2>/dev/null || echo unknown)" >> "$WORK/$NAME/STAGED_TOOLS.txt"
 done
