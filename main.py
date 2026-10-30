@@ -20,6 +20,7 @@ FORWARDED_MODES = {
     "--truth-eval": ("truth_eval", "Truth-labelled PanAligner/minigraph correctness scoring (scripts/truth_eval.py; Linux/WSL only)."),
     "--ml-alignment-data": ("ml.build_alignment_dataset", "Model A dataset: simulated reads, alignments and truth labels (scripts/ml/build_alignment_dataset.py; Linux/WSL only)."),
     "--ml-alignment": ("ml.alignment_reliability", "Model A alignment reliability: train and evaluate with group-disjoint CV (scripts/ml/alignment_reliability.py; needs requirements-ml.txt)."),
+    "--ml-alignment-strict": ("ml.strict_targets", "Model A strict-target evaluation: validation-only thresholds, abstention and equal-coverage MAPQ comparison (scripts/ml/strict_targets.py; needs requirements-ml.txt)."),
     "--ml-variant": ("ml.variant_feasibility", "Model B feasibility study, research label recovery only (scripts/ml/variant_feasibility.py; needs requirements-ml.txt)."),
 }
 LINUX_ONLY_MODES = {"--simulate-truth-reads", "--truth-eval", "--ml-alignment-data"}

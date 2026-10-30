@@ -186,8 +186,46 @@ def three_way(prob: np.ndarray, low: float, high: float) -> np.ndarray:
     return decision
 
 
+def fold_parts(train: np.ndarray, y: np.ndarray, groups: np.ndarray, *, seed: int, separate_threshold_set: bool) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    """(fit, calibration, thresholds) indices inside a training fold, disjoint by group.
+
+    By default a quarter is held back and used for both calibration and thresholds. With
+    `separate_threshold_set`, 60% fits, 20% calibrates and 20% only sets thresholds, so
+    thresholds never see the rows the calibrator was fitted on.
+    """
+    if not separate_threshold_set:
+        inner = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=seed)
+        fit_part, cal_part = next(inner.split(train, y[train], groups[train]))
+        return train[fit_part], train[cal_part], train[cal_part]
+    inner = GroupShuffleSplit(n_splits=1, test_size=0.4, random_state=seed)
+    fit_part, held = next(inner.split(train, y[train], groups[train]))
+    held_idx = train[held]
+    second = GroupShuffleSplit(n_splits=1, test_size=0.5, random_state=seed + 1000)
+    cal_part, thr_part = next(second.split(held_idx, y[held_idx], groups[held_idx]))
+    return train[fit_part], held_idx[cal_part], held_idx[thr_part]
+
+
+def coverage_threshold(prob: np.ndarray, coverage: float) -> float:
+    """Highest p(incorrect) to accept so that `coverage` of these rows are accepted."""
+    return float(np.quantile(prob, coverage, method="inverted_cdf"))
+
+
+def apply_targets(result: dict, *, max_accept_error: float, min_reject_precision: float, target_coverage: float | None = None) -> tuple[np.ndarray, list[dict]]:
+    """Decisions for other targets without refitting; thresholds come only from each fold's validation part."""
+    decision = np.empty(len(result["y"]), dtype=object)
+    thresholds = []
+    for fold in result["validation"]:
+        low, high = choose_thresholds(fold["prob"], fold["y"], max_accept_error=max_accept_error, min_reject_precision=min_reject_precision)
+        if target_coverage is not None:
+            low = coverage_threshold(fold["prob"], target_coverage)
+        decision[fold["test"]] = three_way(result["prob_incorrect"][fold["test"]], low, high)
+        thresholds.append({"fold": fold["fold"], "low": low, "high": high})
+    return decision, thresholds
+
+
 def cross_validate(rows: list[dict], model_name: str, *, n_splits: int = 5, seed: int = 0,
-                   max_accept_error: float = 0.01, min_reject_precision: float = 0.9, grouping: str = "haplotype") -> dict:
+                   max_accept_error: float = 0.01, min_reject_precision: float = 0.9, grouping: str = "haplotype",
+                   separate_threshold_set: bool = False) -> dict:
     labelled = [row for row in rows if row["label"] in LABELLED]
     names = MODEL_FEATURES[model_name]
     X = build_matrix(labelled, names)
@@ -196,22 +234,24 @@ def cross_validate(rows: list[dict], model_name: str, *, n_splits: int = 5, seed
     prob = np.zeros(len(labelled))
     decision = np.empty(len(labelled), dtype=object)
     thresholds = []
+    validation = []
     for fold, (train, test) in enumerate(folds):
-        inner = GroupShuffleSplit(n_splits=1, test_size=0.25, random_state=seed + fold)
-        fit_part, cal_part = next(inner.split(X[train], y[train], groups[train]))
-        fit_idx, cal_idx = train[fit_part], train[cal_part]
-        for part, idx in (("fit", fit_idx), ("calibration", cal_idx)):
+        fit_idx, cal_idx, thr_idx = fold_parts(train, y, groups, seed=seed + fold, separate_threshold_set=separate_threshold_set)
+        for part, idx in (("fit", fit_idx), ("calibration", cal_idx), ("threshold", thr_idx)):
             if len(set(y[idx])) < 2:
                 raise ValueError(f"fold {fold}: the {part} part has only one class; more incorrect examples are needed")
         estimator = make_estimator(model_name, seed).fit(X[fit_idx], y[fit_idx])
         calibrated = CalibratedClassifierCV(FrozenEstimator(estimator), method="isotonic").fit(X[cal_idx], y[cal_idx])
-        low, high = choose_thresholds(calibrated.predict_proba(X[cal_idx])[:, 1], y[cal_idx],
+        validation_prob = calibrated.predict_proba(X[thr_idx])[:, 1]
+        low, high = choose_thresholds(validation_prob, y[thr_idx],
                                       max_accept_error=max_accept_error, min_reject_precision=min_reject_precision)
         prob[test] = calibrated.predict_proba(X[test])[:, 1]
         decision[test] = three_way(prob[test], low, high)
-        thresholds.append({"fold": fold, "low": low, "high": high, "test_groups": sorted(set(groups[test]))})
-    return {"model": model_name, "grouping": grouping, "features": names, "rows": labelled, "y": y, "prob_incorrect": prob,
-            "decision": decision, "thresholds": thresholds}
+        validation.append({"fold": fold, "prob": validation_prob, "y": y[thr_idx], "test": test})
+        thresholds.append({"fold": fold, "low": low, "high": high, "test_groups": sorted(set(groups[test])),
+                           "calibration_groups": sorted(set(groups[cal_idx])), "threshold_groups": sorted(set(groups[thr_idx]))})
+    return {"model": model_name, "grouping": grouping, "features": names, "rows": labelled, "y": y, "groups": groups, "prob_incorrect": prob,
+            "decision": decision, "thresholds": thresholds, "validation": validation}
 
 
 def _decision_metrics(y: np.ndarray, decision: np.ndarray) -> dict:

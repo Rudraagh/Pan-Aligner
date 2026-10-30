@@ -62,6 +62,7 @@ class MainForwardingTests(unittest.TestCase):
             "--ml-alignment-data": ("ml.build_alignment_dataset", ["--seeds", "1"], False),
             "--ml-alignment": ("ml.alignment_reliability", ["--folds", "3"], True),
             "--ml-variant": ("ml.variant_feasibility", ["--seeds", "0"], True),
+            "--ml-alignment-strict": ("ml.strict_targets", ["--resamples", "5"], True),
         }
         for mode, (module_name, rest, needs_sklearn) in cases.items():
             with self.subTest(mode=mode):
