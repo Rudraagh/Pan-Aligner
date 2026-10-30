@@ -31,5 +31,8 @@ outputs/**/*.pyc
 /outputs/truth_eval/reads/*/*/
 /outputs/truth_eval/results/*/*/
 
+# Model A simulated reads and GAFs (regenerable: scripts/ml/build_alignment_dataset.py).
+/outputs/ml_alignment/sim/
+
 Thumbs.db
 .DS_Store

@@ -1,0 +1,5 @@
+# ML layer (scripts/ml/): Model A alignment reliability and the Model B feasibility study.
+# scikit-learn >= 1.6 is needed for sklearn.frozen.FrozenEstimator (verified with 1.8.0).
+-r requirements.txt
+numpy
+scikit-learn>=1.6
