@@ -52,7 +52,7 @@ class PGScunkStep4Tests(unittest.TestCase):
         quality_threshold = kwargs.pop("quality_threshold", 0.99)
         base_parameters = kwargs.pop("base_parameters", self.parameters)
         with patch("proposed.quality_feedback.build_proposed_pangenome_graph", side_effect=graphs) as builder:
-            result = run_pg_scunk_feedback_loop(self.assemblies, base_parameters=base_parameters, backend="cpu", quality_threshold=quality_threshold, min_anchor_coverage=kwargs.pop("min_anchor_coverage", 0.3), max_rounds=kwargs.pop("max_rounds", 2), **kwargs)
+            result = run_pg_scunk_feedback_loop(self.assemblies, base_parameters=base_parameters, backend="cpu", quality_threshold=quality_threshold, max_rounds=kwargs.pop("max_rounds", 2), **kwargs)
         return result, builder
 
     def test_initial_threshold_is_immediate_success(self) -> None:
@@ -97,10 +97,41 @@ class PGScunkStep4Tests(unittest.TestCase):
         self.assertEqual(result["stagnation_reason"], "no_unseen_configurations")
 
     def test_diagnosis_actions_are_distinct_and_deterministic(self) -> None:
-        anchor = diagnose_quality({"anchor_coverage_ratio": 0.1, "mean_node_consistency": 0.9, "mean_node_support_ratio": 0.9, "mean_edge_consistency": 0.9, "mean_path_consistency": 0.9, "branching_node_ratio": 0.0})
         node = diagnose_quality({"anchor_coverage_ratio": 0.9, "mean_node_consistency": 0.1, "mean_node_support_ratio": 0.9, "mean_edge_consistency": 0.9, "mean_path_consistency": 0.9, "branching_node_ratio": 0.0})
-        self.assertEqual(anchor["action"], "retune_anchor_selection")
+        path = diagnose_quality({"anchor_coverage_ratio": 0.9, "mean_node_consistency": 0.9, "mean_node_support_ratio": 0.9, "mean_edge_consistency": 0.9, "mean_path_consistency": 0.1, "branching_node_ratio": 0.0})
         self.assertEqual(node["action"], "retune_minimizer_nodes")
+        self.assertEqual(path["action"], "retune_path_resolution")
+
+    def test_diagnosis_ignores_anchor_coverage(self) -> None:
+        # Anchors are not consumed by any aligner, so anchor coverage is reported but never diagnosed.
+        diagnosis = diagnose_quality({"anchor_coverage_ratio": 0.0, "mean_node_consistency": 0.9, "mean_node_support_ratio": 0.8, "mean_edge_consistency": 0.9, "mean_path_consistency": 0.9, "branching_node_ratio": 0.0})
+        self.assertNotIn("anchor_coverage", diagnosis["signals"])
+        self.assertEqual(diagnosis["weakest_component"], "node_support")
+
+    def test_search_varies_only_k_and_window_size(self) -> None:
+        # min_node_support only labels rescued nodes and anchors are not scored, so neither is searched.
+        searched = {"k", "window_size"}
+        for weakest in ("node_consistency", "node_support", "edge_structural_coherence", "path_structural_coherence", "branch_coherence"):
+            diagnosis = diagnose_quality({
+                "mean_node_consistency": 0.1 if weakest == "node_consistency" else 0.9,
+                "mean_node_support_ratio": 0.1 if weakest == "node_support" else 0.9,
+                "mean_edge_consistency": 0.1 if weakest == "edge_structural_coherence" else 0.9,
+                "mean_path_consistency": 0.1 if weakest == "path_structural_coherence" else 0.9,
+                "branching_node_ratio": 0.9 if weakest == "branch_coherence" else 0.0,
+            })
+            with self.subTest(weakest=weakest):
+                self.assertEqual(diagnosis["weakest_component"], weakest)
+                self.assertLessEqual(set(diagnosis["parameters"]), searched)
+                candidates = generate_feedback_candidates(self.parameters, diagnosis, set())
+                self.assertTrue(candidates)
+                for candidate in candidates:
+                    changed = {name for name, value in candidate["parameters"].items() if value != self.parameters[name]}
+                    self.assertTrue(changed)
+                    self.assertLessEqual(changed, searched)
+
+    def test_acceptance_ignores_anchor_coverage(self) -> None:
+        result, _ = self._run([0.95], quality_threshold=0.9, components={"anchor_coverage_ratio": 0.0})
+        self.assertTrue(result["threshold_reached"])
 
     def test_same_mocked_input_has_deterministic_trajectory(self) -> None:
         first, _ = self._run([0.30, 0.40, 0.35, 0.36])

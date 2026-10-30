@@ -63,5 +63,39 @@ class ProposedConsistencyDefinitionTests(unittest.TestCase):
         self.assertTrue(all(path.consistency_score >= 0.40 for path in self.graph.paths))
 
 
+class ProposedQualityScoreTests(unittest.TestCase):
+    """Overall quality uses graph structure only: no anchor term, no min_node_support effect."""
+
+    ASSEMBLIES = [
+        AssemblyInput("a", "G", "HEALTHY", "ACGTTGCATGACCTAGGATCCAGTTACG"),
+        AssemblyInput("b", "G", "HEALTHY", "ACGTTGCATGACGTAGGATCCAGTTACG"),
+        AssemblyInput("c", "G", "UNHEALTHY", "TTTTACGTTGCATGACCTAGGATCC"),
+    ]
+
+    def build(self, **overrides):
+        return build_proposed_pangenome_graph(self.ASSEMBLIES, **{"k": 4, "window_size": 3, "backend": "cpu", **overrides})
+
+    def test_overall_quality_formula_has_no_anchor_term(self) -> None:
+        q = self.build().quality
+        expected = (
+            0.25 * q["mean_node_consistency"] + 0.20 * q["mean_edge_consistency"] + 0.15 * q["mean_path_consistency"]
+            + 0.15 * q["mean_node_support_ratio"] + 0.10 * (1.0 - min(1.0, q["branching_node_ratio"]))
+        ) / 0.85
+        self.assertAlmostEqual(q["overall_quality_score"], expected, places=12)
+
+    def test_anchor_settings_change_reported_coverage_but_not_quality(self) -> None:
+        # Uniqueness-only weights with one anchor pick a private node, covering 1 of 3 haplotypes.
+        few = self.build(max_anchors=1, anchor_alpha=1.0, anchor_beta=0.0, anchor_gamma=0.0)
+        many = self.build(max_anchors=12, min_anchor_spacing=1.0)
+        self.assertAlmostEqual(few.quality["anchor_coverage_ratio"], 1 / 3)
+        self.assertEqual(many.quality["anchor_coverage_ratio"], 1.0)
+        self.assertEqual(few.quality["overall_quality_score"], many.quality["overall_quality_score"])
+
+    def test_min_node_support_changes_labels_but_not_quality(self) -> None:
+        low, high = self.build(min_node_support=1), self.build(min_node_support=3)
+        self.assertNotEqual(low.metadata["rescued_node_count"], high.metadata["rescued_node_count"])
+        self.assertEqual(low.quality, high.quality)
+
+
 if __name__ == "__main__":
     unittest.main()

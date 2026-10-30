@@ -130,7 +130,7 @@ def run_proposed_methodology(
                 key: feedback[key]
                 for key in (
                     "accepted", "threshold_reached", "initial_quality", "best_quality", "best_overall_quality", "final_quality",
-                    "quality_threshold", "min_anchor_coverage", "improvement_tolerance", "stagnation_patience",
+                    "quality_threshold", "improvement_tolerance", "stagnation_patience",
                     "stagnation_reason", "best_round", "total_rounds", "unique_configurations_evaluated",
                     "best_configuration", "final_configuration", "best_evaluation", "final_evaluation",
                     "evaluations", "final_parameters", "round_summaries",

@@ -244,14 +244,16 @@ def build_proposed_pangenome_graph(
             else 0.0
         ),
     }
+    # Structure-only score. Anchor coverage is reported but not scored: no aligner
+    # consumes the selected anchors, and coverage mostly tracked the max_anchors cap.
+    # The remaining original weights (sum 0.85) are rescaled to sum to 1.
     graph.quality["overall_quality_score"] = (
         0.25 * graph.quality["mean_node_consistency"]
         + 0.20 * graph.quality["mean_edge_consistency"]
         + 0.15 * graph.quality["mean_path_consistency"]
         + 0.15 * graph.quality["mean_node_support_ratio"]
-        + 0.15 * graph.quality["anchor_coverage_ratio"]
         + 0.10 * (1.0 - min(1.0, graph.quality["branching_node_ratio"]))
-    )
+    ) / 0.85
     errors = validate_proposed_graph(graph)
     if errors:
         raise ValueError("Invalid proposed graph: " + "; ".join(errors))

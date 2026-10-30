@@ -11,18 +11,19 @@ from .models import AssemblyInput, ProposedGraph
 CONFIGURATION_FIELDS = ("k", "window_size", "min_node_support", "max_anchors", "min_anchor_spacing", "anchor_alpha", "anchor_beta", "anchor_gamma")
 DEFAULT_IMPROVEMENT_TOLERANCE = 1e-4
 DEFAULT_STAGNATION_PATIENCE = 2
+# Only k and window_size are searched: min_node_support only labels rescued nodes
+# (no node is removed), and anchor coverage is reported but not part of quality.
 DIAGNOSIS_MAPPING = {
-    "anchor_coverage": {"action": "retune_anchor_selection", "parameters": ["min_anchor_spacing", "max_anchors", "anchor_alpha", "anchor_beta", "anchor_gamma"], "reason": "Selected-anchor coverage is low; vary spacing, anchor count, and ranking weights."},
-    "node_consistency": {"action": "retune_minimizer_nodes", "parameters": ["k", "window_size", "min_node_support"], "reason": "Node context coherence is low; vary k, window size, and minimum node support."},
-    "node_support": {"action": "retune_node_support", "parameters": ["k", "window_size", "min_node_support"], "reason": "Cross-path node support is low; vary k, window size, and minimum node support."},
-    "edge_structural_coherence": {"action": "retune_graph_transitions", "parameters": ["k", "window_size", "min_node_support"], "reason": "Observed-path edge support is weak; vary k, window size, and minimum node support."},
+    "node_consistency": {"action": "retune_minimizer_nodes", "parameters": ["k", "window_size"], "reason": "Node context coherence is low; vary k and window size."},
+    "node_support": {"action": "retune_node_support", "parameters": ["k", "window_size"], "reason": "Cross-path node support is low; vary k and window size."},
+    "edge_structural_coherence": {"action": "retune_graph_transitions", "parameters": ["k", "window_size"], "reason": "Observed-path edge support is weak; vary k and window size."},
     "path_structural_coherence": {"action": "retune_path_resolution", "parameters": ["k", "window_size"], "reason": "Observed-path structural coherence is weak; vary k and window size."},
-    "branch_coherence": {"action": "retune_graph_branching", "parameters": ["k", "window_size", "min_node_support"], "reason": "Branching is high; vary k, window size, and minimum node support."},
+    "branch_coherence": {"action": "retune_graph_branching", "parameters": ["k", "window_size"], "reason": "Branching is high; vary k and window size."},
 }
 
 
-def _quality_passes(quality: dict, threshold: float, min_anchor_coverage: float) -> bool:
-    return quality["overall_quality_score"] >= threshold and quality["anchor_coverage_ratio"] >= min_anchor_coverage and quality["mean_node_consistency"] >= 0.45 and quality["mean_path_consistency"] >= 0.45
+def _quality_passes(quality: dict, threshold: float) -> bool:
+    return quality["overall_quality_score"] >= threshold and quality["mean_node_consistency"] >= 0.45 and quality["mean_path_consistency"] >= 0.45
 
 
 def _adaptive_default_parameters(assemblies: list[AssemblyInput]) -> dict:
@@ -46,29 +47,22 @@ def diagnose_quality(quality: dict) -> dict:
     Edge/path scores are observed-path structural coherence, not independent
     biological correctness measures, because graph edges originate from paths.
     """
-    signals = {"anchor_coverage": quality.get("anchor_coverage_ratio", 0.0), "node_consistency": quality.get("mean_node_consistency", 0.0), "node_support": quality.get("mean_node_support_ratio", 0.0), "edge_structural_coherence": quality.get("mean_edge_consistency", 0.0), "path_structural_coherence": quality.get("mean_path_consistency", 0.0), "branch_coherence": 1.0 - min(1.0, quality.get("branching_node_ratio", 1.0))}
-    priority = ("anchor_coverage", "node_consistency", "node_support", "edge_structural_coherence", "path_structural_coherence", "branch_coherence")
+    signals = {"node_consistency": quality.get("mean_node_consistency", 0.0), "node_support": quality.get("mean_node_support_ratio", 0.0), "edge_structural_coherence": quality.get("mean_edge_consistency", 0.0), "path_structural_coherence": quality.get("mean_path_consistency", 0.0), "branch_coherence": 1.0 - min(1.0, quality.get("branching_node_ratio", 1.0))}
+    priority = ("node_consistency", "node_support", "edge_structural_coherence", "path_structural_coherence", "branch_coherence")
     weakest = min(priority, key=lambda name: (signals[name], priority.index(name)))
     mapping = DIAGNOSIS_MAPPING[weakest]
     return {"weakest_component": weakest, "signals": signals, "action": mapping["action"], "reason": mapping["reason"], "parameters": mapping["parameters"]}
 
 
-def _boost_alpha(parameters: dict) -> tuple[float, float, float]:
-    alpha, beta, gamma = parameters["anchor_alpha"] + 0.10, parameters["anchor_beta"], parameters["anchor_gamma"]
-    total = alpha + beta + gamma
-    return tuple(round(value / total, 12) for value in (alpha, beta, gamma))
-
-
 def generate_feedback_candidates(parameters: dict, diagnosis: dict, visited: set[tuple[tuple[str, int | float], ...]]) -> list[dict]:
-    """Generate a bounded, deterministic neighbourhood and remove seen configs."""
+    """Generate a bounded, deterministic k/window neighbourhood and remove seen configs.
+
+    Every diagnosis maps to the same neighbourhood; the action records which
+    weak signal triggered it.
+    """
     action = diagnosis["action"]
-    if action == "retune_anchor_selection":
-        alpha, beta, gamma = _boost_alpha(parameters)
-        raw = [{**parameters, "min_anchor_spacing": max(1.0, float(parameters["min_anchor_spacing"]) / 2.0)}, {**parameters, "max_anchors": int(parameters["max_anchors"]) + 2}, {**parameters, "anchor_alpha": alpha, "anchor_beta": beta, "anchor_gamma": gamma}]
-    elif action == "retune_path_resolution":
-        raw = [{**parameters, "k": max(3, int(parameters["k"]) - 2)}, {**parameters, "window_size": max(2, int(parameters["window_size"]) - 1)}, {**parameters, "k": max(3, int(parameters["k"]) - 2), "window_size": max(2, int(parameters["window_size"]) - 1)}]
-    else:
-        raw = [{**parameters, "k": max(3, int(parameters["k"]) - 2)}, {**parameters, "window_size": max(2, int(parameters["window_size"]) - 1)}, {**parameters, "min_node_support": max(1, int(parameters["min_node_support"]) - 1)}]
+    smaller_k, smaller_window = max(3, int(parameters["k"]) - 2), max(2, int(parameters["window_size"]) - 1)
+    raw = [{**parameters, "k": smaller_k}, {**parameters, "window_size": smaller_window}, {**parameters, "k": smaller_k, "window_size": smaller_window}]
     candidates, local_seen = [], set()
     for candidate in raw:
         key = canonical_configuration(candidate)
@@ -83,7 +77,7 @@ def _evaluation(round_index: int, candidate_id: str, candidate: dict, graph: Pro
     return {"round": round_index, "candidate_id": candidate_id, "configuration_key": configuration_key_text(candidate["configuration_key"]), "parameters": dict(candidate["parameters"]), "overall_quality": quality["overall_quality_score"], "mean_node_consistency": quality["mean_node_consistency"], "mean_edge_consistency": quality["mean_edge_consistency"], "mean_path_consistency": quality["mean_path_consistency"], "anchor_coverage": quality["anchor_coverage_ratio"], "node_count": quality["node_count"], "edge_count": quality["edge_count"], "path_count": len(graph.paths), "anchor_count": quality["anchor_count"], "accepted": False, "is_best_so_far": improved, "quality_delta": quality_delta, "weakest_component": diagnosis["weakest_component"], "action": candidate["action"], "reason": candidate["reason"]}
 
 
-def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_parameters: dict | None = None, backend: str = "auto", quality_threshold: float = 0.72, min_anchor_coverage: float = 0.70, max_rounds: int = 3, improvement_tolerance: float = DEFAULT_IMPROVEMENT_TOLERANCE, stagnation_patience: int = DEFAULT_STAGNATION_PATIENCE) -> dict:
+def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_parameters: dict | None = None, backend: str = "auto", quality_threshold: float = 0.72, max_rounds: int = 3, improvement_tolerance: float = DEFAULT_IMPROVEMENT_TOLERANCE, stagnation_patience: int = DEFAULT_STAGNATION_PATIENCE) -> dict:
     """Run deterministic feedback search; always return the protected best-so-far graph.
 
     Meaningful improvement is Q > best_Q + tolerance. Stops on threshold success,
@@ -112,7 +106,7 @@ def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_paramete
             delta = None if best_graph is None else graph.quality["overall_quality_score"] - best_quality
             improved = best_graph is None or graph.quality["overall_quality_score"] > best_quality + improvement_tolerance
             record = _evaluation(round_index, f"c{sequence:03d}", candidate, graph, delta, improved)
-            record["accepted"] = _quality_passes(graph.quality, quality_threshold, min_anchor_coverage)
+            record["accepted"] = _quality_passes(graph.quality, quality_threshold)
             evaluations.append(record); round_records.append(record); final_graph, final_evaluation = graph, record
             if improved:
                 best_graph, best_configuration, best_quality, best_evaluation, round_improved = graph, dict(candidate["parameters"]), graph.quality["overall_quality_score"], record, True
@@ -132,7 +126,7 @@ def run_pg_scunk_feedback_loop(assemblies: list[AssemblyInput], *, base_paramete
             reason = "no_unseen_configurations"; break
     if best_graph is None or best_evaluation is None or final_evaluation is None:
         raise RuntimeError("PG-SCUnK feedback loop could not build any proposed graph.")
-    return {"accepted": threshold_reached, "threshold_reached": threshold_reached, "initial_quality": evaluations[0]["overall_quality"], "best_quality": best_graph.quality, "best_overall_quality": best_quality, "final_quality": final_evaluation["overall_quality"], "quality_threshold": quality_threshold, "min_anchor_coverage": min_anchor_coverage, "improvement_tolerance": improvement_tolerance, "stagnation_patience": stagnation_patience, "stagnation_reason": reason, "best_round": best_evaluation["round"], "total_rounds": round_index, "unique_configurations_evaluated": len(visited), "best_configuration": best_configuration, "final_configuration": final_evaluation["parameters"], "final_evaluation": final_evaluation, "best_evaluation": best_evaluation, "evaluations": evaluations, "final_parameters": best_configuration, "round_summaries": [{"round_index": number, "evaluations": [item for item in evaluations if item["round"] == number]} for number in range(1, round_index + 1)], "graph": best_graph, "best_graph": best_graph, "final_graph": final_graph}
+    return {"accepted": threshold_reached, "threshold_reached": threshold_reached, "initial_quality": evaluations[0]["overall_quality"], "best_quality": best_graph.quality, "best_overall_quality": best_quality, "final_quality": final_evaluation["overall_quality"], "quality_threshold": quality_threshold, "improvement_tolerance": improvement_tolerance, "stagnation_patience": stagnation_patience, "stagnation_reason": reason, "best_round": best_evaluation["round"], "total_rounds": round_index, "unique_configurations_evaluated": len(visited), "best_configuration": best_configuration, "final_configuration": final_evaluation["parameters"], "final_evaluation": final_evaluation, "best_evaluation": best_evaluation, "evaluations": evaluations, "final_parameters": best_configuration, "round_summaries": [{"round_index": number, "evaluations": [item for item in evaluations if item["round"] == number]} for number in range(1, round_index + 1)], "graph": best_graph, "best_graph": best_graph, "final_graph": final_graph}
 
 
 def write_pg_scunk_reports(result: dict, output_dir: Path) -> dict:
