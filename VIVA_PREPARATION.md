@@ -29,15 +29,17 @@ AssemblyInput FASTA
   -> graph/report bundle + final validation
 ```
 
-Implemented: CPU minimizers, minimizer-node graph building, explicit paths, private-node rescue, graph-derived scores, deterministic anchor selection, a bounded local feedback heuristic, artifacts, unit tests, and a completed three-gene proposed evaluation.  Simplified/prototype: all of those algorithms are small project-local implementations, not a full biological graph assembler or a reproduction of PanAligner internals.  Proposed/future: genuine GPU kernels, richer orientation/base-level graph representation, and biological benchmark evidence.  Not implemented: GPU-accelerated minimizer computation in the current kernel, exact PanAligner algorithm reproduction, and proof of biological superiority.
+Implemented: CPU minimizers, minimizer-node graph building, explicit paths, private-node rescue, graph-derived scores, deterministic anchor selection, a bounded local feedback heuristic, artifacts, unit tests, and a completed three-gene proposed evaluation.  Simplified/prototype: all of those algorithms are small project-local implementations, not a full biological graph assembler or a reproduction of PanAligner internals.  GPU: minimizer extraction has a CUDA implementation with CPU/GPU parity and a minimizer-only speed-up measured on one laptop GPU (Section 2, Contribution A); graph construction and every later stage remain CPU-only.  Proposed/future: GPU validation on HPC hardware, faster host-side record handling, richer orientation/base-level graph representation, and biological benchmark evidence.  Not implemented: GPU graph construction, exact PanAligner algorithm reproduction, and proof of biological superiority.
 
 ## 2. Novelty analysis and safe claims
 
-### Contribution A — GPU-parallel minimizer concept
+### Contribution A — GPU minimizer extraction
 
-**Idea and difference.** A conventional CPU sketcher computes all windows serially; the architecture exposes a `backend` choice and detects CuPy.  **Code:** `scripts/proposed/minimizer_engine.py:compute_minimizers`.  **What is actually implemented:** `_compute_cpu_minimizers` always performs the work.  Even if CuPy imports, the code only reports `backend_used = "gpu"` and says it uses the shared deterministic minimizer logic; it does not transfer arrays or launch a GPU kernel.  The final evaluator explicitly calls `backend="cpu"`.
+**Idea and difference.** A conventional CPU sketcher computes all windows serially; the architecture exposes a `backend` choice and detects CuPy.  **Code:** `scripts/proposed/minimizer_engine.py:compute_minimizers`.  **What is actually implemented:** `_compute_gpu_minimizers` runs two CuPy `RawKernel`s (SHA-1 64-bit prefix per k-mer; sliding-window minimum, earliest position on ties), compacts consecutive duplicates on the device and copies only the selected minimizers back.  `backend="gpu"` raises if CUDA is unusable; `auto` falls back to CPU and records why.  Graph construction, consistency, anchors and feedback always run on the CPU, and the graph records the backend per stage.  The final proposed evaluation in Section 10 was run with `--backend cpu`.
 
-**Safe viva claim:** “GPU acceleration is a stated architecture/future contribution; the validated implementation is deterministic CPU minimizer extraction with GPU readiness/detection only.”  Do not claim speed-up, CUDA execution, GPU parity, or parallel kernels.  Examiner attack: *“Where is the GPU kernel?”* Strong answer: “There is none in the current implementation; CuPy detection is not computational acceleration.  A real version would batch encoded bases/k-mers in device arrays, compute hashes/window minima on device, compact duplicates, transfer records, and validate bit-for-bit or semantically against CPU.”
+**Measured evidence (one laptop GPU only):** NVIDIA GeForce RTX 3070 Ti Laptop GPU, CuPy 14.2.0, CUDA 13.2 runtime / 13.3 driver, commit `f2d3530`, results in `outputs/gpu_validation/laptop/`.  GPU output equals CPU output on 400 seeded random cases (IUPAC symbols, k up to the kernel limit 55) and all 12 benchmark cases; the CUDA-gated unit tests, including graph-level parity, pass.  Minimizer-only end-to-end speed-up is 2.8–12.4×, and 2.8× / 3.2× / 3.1× on the APP / PSEN1 / PSEN2 references at k=11, w=6.  For inputs of 100 kb or more, device time is only about 3–7% of the GPU path; the rest is Python record construction, which caps the speed-up.  The GPU memory pool held at most 27 MB.  Not measured: process RSS, HPC GPUs, whole-pipeline time.
+
+**Safe viva claim:** “Minimizer extraction has a CUDA implementation whose output matched the CPU reference exactly on a laptop RTX 3070 Ti, with a 3–12× minimizer-only speed-up; graph construction is still CPU-only and the GPU path has not been validated on HPC hardware.”  Do not claim pipeline or graph-construction speed-up, HPC GPU validation, or that the final proposed evaluation used the GPU.  Examiner attack: *“Why only ~3× on your genes if the kernels are so fast?”* Answer: “Device time is a few percent of the GPU path; building Python records dominates.  Reducing host-side object construction is the next step, and the phase breakdown in `results.json` shows it.”
 
 ### Contribution B — path-preserving, consistency-aware construction and anchoring
 
@@ -66,7 +68,7 @@ Examiner attack: *“Is keeping private nodes noise preservation?”* Answer: �
 |---|---|---|
 | `proposed_methodology.py` | CLI; `--final-proposed-evaluation`, `--pg-scunk-stress-demo`, normal workflow options. | `argparse`, `sys.path` setup, mutually ordered branches. |
 | `scripts/proposed/models.py` | Dataclasses: `AssemblyInput`, `MinimizerRecord`, `ProposedGraphNode`, `ProposedGraphEdge`, `HaplotypePath`, `AnchorCandidate`, `ProposedGraph`. | Typed in-memory contract between stages. |
-| `minimizer_engine.py` | SHA-1-prefix stable hashing and CPU minimizer extraction. | GPU caveat and duplicate suppression. |
+| `minimizer_engine.py` | SHA-1-prefix stable hashing; CPU reference and CUDA minimizer extraction. | CPU/GPU parity, `int32` kernel arguments, duplicate suppression. |
 | `workflow.py` | Reads manifests/FASTA; runs per-gene proposed workflow and writes a normal summary. | Input validation and lightweight default cap of 8 per bucket. |
 | `graph_constructor.py` | Builds nodes/paths/edges, rescue metadata, quality, JSON/GFA reports, integrity validation. | This is the core proposed graph constructor. |
 | `graph_consistency.py` | Mutates graph annotations with path-derived node/edge/path scores and emits CSV/JSON. | Circularity and score ranges. |
@@ -223,7 +225,7 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 
 | Test file | Coverage / important cases | It catches | It does not prove |
 |---|---|---|---|
-| `test_proposed_minimizer_engine.py` | deterministic records, parameter validation, short inputs, backend metadata. | unstable/minimum/empty-input regressions. | GPU acceleration or sequencing correctness. |
+| `test_proposed_minimizer_engine.py` | deterministic records, parameter validation, short inputs, backend metadata; CUDA-gated parity (incl. 120 seeded random cases), `int32` kernel arguments, phase timings. | unstable/minimum/empty-input regressions; CPU/GPU divergence on a CUDA machine. | speed-up, or parity on GPUs other than the one tested; sequencing correctness. |
 | `test_proposed_graph_constructor.py` | node/edge/path construction, ordered paths, private-node rescue, validation and reports. | missing path edges or accidental low-support deletion. | biological graph accuracy. |
 | `test_proposed_graph_consistency.py` | node/edge/path/graph formulas and reports. | formula/report regressions. | independence from construction circularity. |
 | `test_proposed_anchor_selection.py` | weight validation/formula, ranking effects, deterministic spacing, reports. | incorrect score/ranking/spacings. | biological anchor specificity. |
@@ -232,7 +234,7 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 | `test_proposed_pg_scunk_step4.py` | Step-4 loop/report semantics. | broken controller integration. | external PG-SCUnK equivalence. |
 | `test_proposed_pg_scunk_demo.py` | controlled stress demo/smoke evidence. | demo metadata/output regressions. | real-world benchmark performance. |
 
-Tests demonstrate deterministic software properties on selected synthetic/small cases.  They do not constitute a full published benchmark, biological validation, memory scalability study, or CPU/GPU parity study.
+Tests demonstrate deterministic software properties on selected synthetic/small cases.  They do not constitute a full published benchmark, biological validation or memory scalability study.  CPU/GPU parity has been checked on one laptop GPU only (CUDA tests plus `scripts/gpu_minimizer_bench.py`).
 
 ## 12. Baseline, PanAligner, minigraph, and legacy ML
 
@@ -244,7 +246,7 @@ The proposed constructor is not “just minigraph”; it is a separate Python mi
 
 | Limitation | Impact/current-review wording | Realistic future work |
 |---|---|---|
-| CPU routine only | No measured GPU speedup; final backend is CPU. | Device kernels, batched encoding/reductions, duplicate compaction and parity tests. |
+| GPU limited to minimizers, one device | Minimizer-only 2.8–12.4× on a laptop GPU; graph construction is CPU; final evaluation ran on CPU. | Faster host-side record handling, HPC GPU validation, GPU-backed graph stages if justified by profiling. |
 | Forward-only/minimizer graph | Does not model reverse orientation or base-level overlaps. | Canonical/strand-aware tokens, oriented edges, sequence segments and overlaps. |
 | `O(Lw)` window scan / materialization | Memory/time may not scale to chromosome-level assemblies. | Monotonic-deque minimizers, streaming/chunking, profiling. |
 | Rescue retains all low support | Preserves divergence and potential errors alike. | Read/assembly quality evidence and support calibration. |
@@ -258,7 +260,7 @@ For the current review, these limitations are not fatal if the project is defend
 
 ## 14. Future work
 
-Future work must be described as future work, not quietly folded into the implementation claim: (1) a genuine GPU minimizer kernel with CPU/GPU parity and timing; (2) canonical, orientation-aware paths and base/segment-level graph overlaps; (3) independent biological/path/variant validation; (4) adaptive anchor budgets and weights selected on held-out data; (5) stronger multi-objective parameter search; (6) external benchmark datasets and repeated runtime/memory experiments; and (7) a fair, versioned comparison against minigraph/PanAligner.  The expected payoff is stronger biological and systems evidence; the required discipline is to measure it rather than infer it from the current structural score.
+Future work must be described as future work, not quietly folded into the implementation claim: (1) validating the GPU minimizer path on HPC GPUs and reducing its Python record-construction overhead; (2) canonical, orientation-aware paths and base/segment-level graph overlaps; (3) independent biological/path/variant validation; (4) adaptive anchor budgets and weights selected on held-out data; (5) stronger multi-objective parameter search; (6) external benchmark datasets and repeated runtime/memory experiments; and (7) a fair, versioned comparison against minigraph/PanAligner.  The expected payoff is stronger biological and systems evidence; the required discipline is to measure it rather than infer it from the current structural score.
 
 ## 15. Code walkthroughs
 
@@ -282,7 +284,7 @@ Future work must be described as future work, not quietly folded into the implem
 | `min(window, key=lambda...)` | Selects deterministic minimizer with explicit tie-breaks. |
 | `last_signature` | Suppresses only consecutive duplicate selections across overlapping windows. |
 | `backend.lower()` | Normalizes user input before validation. |
-| `try: import cupy` | Capability detection, not a computation kernel. |
+| `_load_usable_cupy()` | Proves a CUDA device can allocate before the GPU path is used; the kernels themselves are in `_compute_gpu_minimizers`. |
 | `defaultdict(list)` | Creates grouping list on first key access. |
 | `seen_in_assembly` | Prevents repeated occurrences inflating node support within one assembly. |
 | `sorted(grouped_records.items())` | Stable node-ID assignment across runs. |
@@ -305,7 +307,7 @@ Future work must be described as future work, not quietly folded into the implem
 | `final_graph` vs `best_graph` | Audit’s last candidate may be worse; returned result protects best. |
 | `csv.DictWriter` | Enforces an explicit, reproducible report column order. |
 | `P\t...node+` | GFA path serialisation is forward orientation in this prototype. |
-| `backend="cpu"` final call | Final evidence explicitly avoids claiming GPU execution. |
+| `--backend cpu` final run | The Section 10 results were produced on the CPU; GPU evidence is separate, in `outputs/gpu_validation/laptop/`. |
 
 ## 17. Viva question bank
 
@@ -320,7 +322,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | E. Why not all k-mers? | All k-mers create more tokens/edges and memory pressure; minimizers are a sampling heuristic. | Follow-up information loss; safe: “we quantify structural, not exact base accuracy.” |
 | E. What does k do? | Larger k is more specific but can fragment/noise sensitivity; smaller k shares more and may be ambiguous. | adaptive `k` in `quality_feedback.py`. |
 | E. What does window do? | It controls minimizer sampling density; larger windows generally select fewer representatives. | current selection loop; follow-up why no deque. |
-| E. Is GPU implemented? | No; execution is CPU. CuPy is detected only and final evaluation explicitly requests CPU. | `minimizer_engine.py`, `final_evaluation.py`; safe exact wording. |
+| E. Is GPU implemented? | For minimizer extraction only: CUDA kernels with exact CPU parity on a laptop RTX 3070 Ti and a 2.8–12.4× minimizer-only speed-up. Graph construction is CPU, the final evaluation ran on CPU, and HPC GPUs are untested. | `minimizer_engine.py`, `outputs/gpu_validation/laptop/`; exact wording. |
 | F. How are nodes created? | One node per distinct minimizer string after per-assembly support grouping. | `grouped_records`, `node_lookup`; support counts assemblies. |
 | F. What if a minimizer repeats? | Records may repeat; support counts an assembly once, immediate path duplicates are compressed, later revisits remain. | graph path loop; follow-up cycles. |
 | F. What is an edge? | A directed adjacent transition observed in one or more input minimizer paths. | `edge_supports`; safe: “observed path-derived edge.” |
@@ -348,7 +350,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | Q. Why does the controller not retune on real data? | All three genes exceed the `.72` threshold on the initial configuration (Q ≈ .98), so it stops after one evaluation. | final summary; stress demo is the only retuning run. |
 | R. Why not simply PanAligner? | PanAligner is retained for alignment; this prototype explores an alignment-free, path/quality-control layer. | baseline scripts; no replacement claim. |
 | S. Is minigraph your algorithm? | No. It is an external baseline tool used in legacy orchestration. | `paper_evaluation.py`, `align.py`. |
-| T. How would GPU be done correctly? | Parallel device k-mer encoding/hashing/window minima and compaction, plus CPU/GPU parity, timing and memory experiments. | future work; safe no current claim. |
+| T. How was the GPU path checked? | Seeded random and benchmark parity against the CPU reference, CUDA-event phase timings, memory-pool bytes, and a run manifest with commit and environment. | `scripts/gpu_minimizer_bench.py`; one laptop GPU only. |
 | U. What exactly is novel? | The project’s proposed combination: explicit minimizer paths, rescue, graph-derived scoring, consistency-aware anchors and bounded retuning. | Safe: “proposed integration/prototype,” not invention of primitives. |
 | V. Biggest limitation? | Structural scores reuse observed construction paths and do not establish biological accuracy. | Section 6/13. |
 | W. Next experiment? | Truth-backed external benchmark with same inputs/baselines, orientation-aware graph and runtime/memory comparison. | future-work table. |
@@ -356,7 +358,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 
 ## 18. Quick revision sheet
 
-**30 seconds:** “I retained the PanAligner/minigraph baseline and added a separate CPU alignment-free prototype.  It turns assembly minimizers into explicit per-assembly graph paths, preserves low-support nodes as rescued, measures internal structural coherence, ranks anchors, and uses a bounded feedback controller to try alternative parameters.  The final 174-assembly run completed and validated, but its scores are not biological accuracy and GPU execution is future work.”
+**30 seconds:** “I retained the PanAligner/minigraph baseline and added a separate CPU alignment-free prototype.  It turns assembly minimizers into explicit per-assembly graph paths, preserves low-support nodes as rescued, measures internal structural coherence, ranks anchors, and uses a bounded feedback controller to try alternative parameters.  The final 174-assembly run completed and validated, but its scores are not biological accuracy.  Minimizer extraction also has a CUDA path that matched the CPU exactly on a laptop GPU with a 3–12× minimizer-only speed-up; the graph itself is built on the CPU.”
 
 **1 minute:** Add the three results: PSEN2 accepted with Q `.98851`/coverage `1.0`; APP Q `.88639` but coverage `.333`; PSEN1 Q `.84871`, coverage `.10484`, 7 configurations and no acceptance.  Explain acceptance requires Q plus coverage/node/path gates.
 
@@ -366,13 +368,13 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 
 **Must know parameters:** default final initial `k=11`, window `6`, support `2`, anchors `12`, spacing `4.0`, weights `.35/.35/.30`, threshold `.72` (no anchor-coverage gate since `22076bc`), searched parameters `k` and `window` only, tolerance `1e-4`, max rounds `3`.
 
-**20 must-know questions:** What is a minimizer? Why paths? What is rescued? Why not GPU claim? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required?
+**20 must-know questions:** What is a minimizer? Why paths? What is rescued? What exactly does the GPU do, and what not? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required?
 
 ## 19. CLAIMS I MUST NOT MAKE
 
 | Unsafe claim | Safe, accurate replacement |
 |---|---|
-| “Our GPU implementation accelerates minimizers.” | “GPU is an architectural/future goal; the validated minimizer computation runs on CPU.” |
+| “Our GPU implementation accelerates the pipeline.” | “On one laptop GPU, minimizer extraction is 2.8–12.4× faster with exact CPU parity; graph construction and later stages are CPU-only and HPC GPUs are untested.” |
 | “A .99 consistency score means 99% accuracy.” | “It is a bounded graph-derived structural coherence score, not an accuracy percentage.” |
 | “We reproduced PanAligner.” | “We retained PanAligner/minigraph baseline components and implemented a separate proposed alignment-free prototype.” |
 | “Our graph is biologically correct because paths validate.” | “Path validation checks internal graph/path integrity; biological correctness needs independent evidence.” |
