@@ -1,0 +1,633 @@
+sequence_id,original_label,vcv,scv,submitter,submission_date,classification,last_evaluated,review_status,conditions
+APP_H_1,HEALTHY,VCV000339620,SCV000435506,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+APP_H_2,HEALTHY,VCV000037145,SCV000053435,OMIM,2013-04-02,protective,2012-08-02,no assertion criteria provided,"ALZHEIMER DISEASE, PROTECTION AGAINST"
+APP_H_2,HEALTHY,VCV000037145,SCV007874227,Blueprint Genetics,2026-08-20,Likely benign,2024-05-27,"criteria provided, single submitter",Not specified
+APP_H_2,HEALTHY,VCV000037145,SCV000116694,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_H_2,HEALTHY,VCV000037145,SCV003256001,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2025-08-04,"criteria provided, single submitter",
+APP_H_3,HEALTHY,VCV002198130,SCV003517324,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2023-03-14,"criteria provided, single submitter",
+APP_H_4,HEALTHY,VCV000339631,SCV001475532,Athena Diagnostics,2025-12-24,benign,2025-09-22,"criteria provided, single submitter",not specified
+APP_H_4,HEALTHY,VCV000339631,SCV000435517,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+APP_H_4,HEALTHY,VCV000339631,SCV002813780,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Likely benign,2021-07-27,"criteria provided, single submitter",
+APP_H_4,HEALTHY,VCV000339631,SCV007315235,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2023-11-28,"criteria provided, single submitter",Not specified
+APP_H_4,HEALTHY,VCV000339631,SCV001016020,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-06,"criteria provided, single submitter",
+APP_H_5,HEALTHY,VCV000704136,SCV002337005,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-12,Benign,2025-03-02,"criteria provided, single submitter",
+APP_H_6,HEALTHY,VCV001591970,SCV006087494,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-06-16,Likely benign,2025-05-23,"criteria provided, single submitter",
+APP_H_6,HEALTHY,VCV001591970,SCV007297088,Athena Diagnostics,2025-12-24,benign,2025-09-18,"criteria provided, single submitter",not specified
+APP_H_6,HEALTHY,VCV001591970,SCV002394729,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-09,Likely benign,2025-10-13,"criteria provided, single submitter",
+APP_H_7,HEALTHY,VCV000585430,SCV000840831,Athena Diagnostics,2018-08-31,Benign,2017-11-28,"criteria provided, single submitter",not provided
+APP_H_7,HEALTHY,VCV000585430,SCV001250686,"Myllykangas group, University of Helsinki",2020-05-05,Uncertain significance,2020-04-01,no assertion criteria provided,
+APP_H_7,HEALTHY,VCV000585430,SCV001303817,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+APP_H_7,HEALTHY,VCV000585430,SCV004758841,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2021-12-31,no assertion criteria provided,APP-related condition
+APP_H_7,HEALTHY,VCV000585430,SCV001015881,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-12,"criteria provided, single submitter",
+APP_H_7,HEALTHY,VCV000585430,SCV002544657,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Likely benign,2025-09-01,"criteria provided, single submitter",
+APP_H_7,HEALTHY,VCV000585430,SCV005204341,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2024-09-11,Likely benign,2024-06-12,"criteria provided, single submitter",
+APP_H_8,HEALTHY,VCV002724746,SCV005380732,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2024-10-23,Likely benign,2024-08-09,"criteria provided, single submitter",
+APP_H_8,HEALTHY,VCV002724746,SCV004280021,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2024-10-17,"criteria provided, single submitter",
+APP_H_9,HEALTHY,VCV000339636,SCV000840830,Athena Diagnostics,2018-08-31,Benign,2017-08-31,"criteria provided, single submitter",not provided
+APP_H_9,HEALTHY,VCV000339636,SCV001841736,GeneDx,2021-09-08,Benign,2018-11-16,"criteria provided, single submitter",Not Provided
+APP_H_9,HEALTHY,VCV000339636,SCV004564672,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2024-01-24,Benign,2023-10-16,"criteria provided, single submitter",
+APP_H_9,HEALTHY,VCV000339636,SCV005307162,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+APP_H_9,HEALTHY,VCV000339636,SCV000435522,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+APP_H_9,HEALTHY,VCV000339636,SCV007315238,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2023-06-19,"criteria provided, single submitter",Not specified
+APP_H_9,HEALTHY,VCV000339636,SCV001015903,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-19,"criteria provided, single submitter",
+APP_H_10,HEALTHY,VCV001600556,SCV005307168,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+APP_H_10,HEALTHY,VCV001600556,SCV002405675,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-11,"criteria provided, single submitter",
+APP_H_11,HEALTHY,VCV001643179,SCV002799909,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Likely benign,2021-09-14,"criteria provided, single submitter",
+APP_H_11,HEALTHY,VCV001643179,SCV002451811,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-09,Benign,2025-04-17,"criteria provided, single submitter",
+APP_H_12,HEALTHY,VCV000339621,SCV000435507,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+APP_H_13,HEALTHY,VCV000446854,SCV001299068,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+APP_H_13,HEALTHY,VCV000446854,SCV000612387,Athena Diagnostics,2021-09-13,Benign,2021-04-13,"criteria provided, single submitter",not specified
+APP_H_13,HEALTHY,VCV000446854,SCV004720880,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2022-04-17,no assertion criteria provided,APP-related condition
+APP_H_13,HEALTHY,VCV000446854,SCV007315241,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Likely benign,2025-05-19,"criteria provided, single submitter",Not provided
+APP_H_13,HEALTHY,VCV000446854,SCV006327882,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Benign,2025-10-01,"criteria provided, single submitter",
+APP_H_13,HEALTHY,VCV000446854,SCV005206170,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+APP_H_13,HEALTHY,VCV000446854,SCV001019787,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2026-01-14,"criteria provided, single submitter",
+APP_H_14,HEALTHY,VCV000339639,SCV000840827,Athena Diagnostics,2018-08-31,Benign,2018-07-10,"criteria provided, single submitter",not provided
+APP_H_14,HEALTHY,VCV000339639,SCV005307169,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+APP_H_14,HEALTHY,VCV000339639,SCV004563824,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2026-01-09,Benign,2025-02-12,"criteria provided, single submitter",
+APP_H_14,HEALTHY,VCV000339639,SCV000435525,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+APP_H_14,HEALTHY,VCV000339639,SCV007315242,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2025-02-28,"criteria provided, single submitter",Not specified
+APP_H_14,HEALTHY,VCV000339639,SCV001015614,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-25,"criteria provided, single submitter",
+APP_H_15,HEALTHY,VCV001636756,SCV002455975,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2024-11-15,"criteria provided, single submitter",
+APP_H_16,HEALTHY,VCV001644632,SCV005307173,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+APP_H_16,HEALTHY,VCV001644632,SCV004562163,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2026-01-09,Benign,2025-02-12,"criteria provided, single submitter",
+APP_H_16,HEALTHY,VCV001644632,SCV002467128,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-25,"criteria provided, single submitter",
+APP_H_17,HEALTHY,VCV000339622,SCV005307151,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+APP_H_17,HEALTHY,VCV000339622,SCV000435508,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+APP_H_18,HEALTHY,VCV000894858,SCV001296478,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+APP_H_19,HEALTHY,VCV000704297,SCV001299672,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2017-04-27,"criteria provided, single submitter",
+APP_H_19,HEALTHY,VCV000704297,SCV001808832,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-08-24,Likely benign,,no assertion criteria provided,not provided
+APP_H_19,HEALTHY,VCV000704297,SCV001964862,"Clinical Genetics DNA and cytogenetics Diagnostics Lab, Erasmus MC, Erasmus Medical Center",2021-09-21,Likely benign,,no assertion criteria provided,not provided
+APP_H_19,HEALTHY,VCV000704297,SCV004742505,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2024-02-28,no assertion criteria provided,APP-related condition
+APP_H_19,HEALTHY,VCV000704297,SCV001016441,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2026-01-08,"criteria provided, single submitter",
+APP_H_19,HEALTHY,VCV000704297,SCV007123269,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-12-12,Likely benign,2025-11-04,"criteria provided, single submitter",
+APP_H_20,HEALTHY,VCV000339627,SCV000435513,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+APP_H_20,HEALTHY,VCV000339627,SCV007309791,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2023-11-01,"criteria provided, single submitter",Not specified
+APP_H_20,HEALTHY,VCV000339627,SCV000748689,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2025-12-03,"criteria provided, single submitter",
+APP_H_21,HEALTHY,VCV000585432,SCV000840834,Athena Diagnostics,2018-08-31,Benign,2017-10-30,"criteria provided, single submitter",not provided
+APP_H_21,HEALTHY,VCV000585432,SCV001015767,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-19,"criteria provided, single submitter",
+APP_H_21,HEALTHY,VCV000585432,SCV007309792,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2024-10-18,"criteria provided, single submitter",Not specified
+APP_H_22,HEALTHY,VCV000339628,SCV001143036,Athena Diagnostics,2019-09-25,Benign,2019-06-14,"criteria provided, single submitter",not provided
+APP_H_22,HEALTHY,VCV000339628,SCV001788406,GeneDx,2021-08-17,Likely benign,2020-09-16,"criteria provided, single submitter",Not Provided
+APP_H_22,HEALTHY,VCV000339628,SCV007331633,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2026-01-09,Benign,2025-07-07,"criteria provided, single submitter",
+APP_H_22,HEALTHY,VCV000339628,SCV000435514,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+APP_H_22,HEALTHY,VCV000339628,SCV005206165,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+APP_H_22,HEALTHY,VCV000339628,SCV001015950,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-19,"criteria provided, single submitter",
+APP_H_23,HEALTHY,VCV000339629,SCV000040017,OMIM,2013-04-02,Benign,1992-07-01,no assertion criteria provided,APP POLYMORPHISM
+APP_H_23,HEALTHY,VCV000339629,SCV000840833,Athena Diagnostics,2018-08-31,Benign,2017-09-20,"criteria provided, single submitter",not provided
+APP_H_23,HEALTHY,VCV000339629,SCV000435515,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+APP_H_23,HEALTHY,VCV000339629,SCV001809770,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-08-24,Benign,,no assertion criteria provided,not specified
+APP_H_23,HEALTHY,VCV000339629,SCV001968441,"Clinical Genetics DNA and cytogenetics Diagnostics Lab, Erasmus MC, Erasmus Medical Center",2021-09-21,Likely benign,,no assertion criteria provided,not provided
+APP_H_23,HEALTHY,VCV000339629,SCV002035979,"Laboratory of Diagnostic Genome Analysis, Leiden University Medical Center (LUMC)",2021-12-16,Likely benign,,no assertion criteria provided,not provided
+APP_H_23,HEALTHY,VCV000339629,SCV002798392,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Likely benign,2021-07-29,"criteria provided, single submitter",
+APP_H_23,HEALTHY,VCV000339629,SCV005206166,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+APP_H_23,HEALTHY,VCV000339629,SCV007309793,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2024-02-16,"criteria provided, single submitter",Not specified
+APP_H_23,HEALTHY,VCV000339629,SCV001015768,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Benign,2026-01-19,"criteria provided, single submitter",
+APP_H_23,HEALTHY,VCV000339629,SCV004151043,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Likely benign,2026-03-01,"criteria provided, single submitter",
+APP_H_23,HEALTHY,VCV000339629,SCV007874226,Blueprint Genetics,2026-08-20,Likely benign,2024-11-15,"criteria provided, single submitter",Not specified
+APP_U_1,UNHEALTHY,VCV001342870,SCV002102396,"Foundation for Research in Genetics and Endocrinology, FRIGE's Institute of Human Genetics",2022-03-03,Likely pathogenic,2021-10-27,"criteria provided, single submitter",
+APP_U_2,UNHEALTHY,VCV000018097,SCV000040022,OMIM,2018-05-17,Pathogenic,1999-09-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_2,UNHEALTHY,VCV000018097,SCV003925659,"Institute of Human Genetics, University of Leipzig Medical Center",2023-08-16,Pathogenic,2023-05-05,"criteria provided, single submitter",
+APP_U_2,UNHEALTHY,VCV000018097,SCV000116706,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_2,UNHEALTHY,VCV000018097,SCV000612389,Athena Diagnostics,2017-08-17,Likely pathogenic,2017-06-23,"criteria provided, single submitter",not provided
+APP_U_2,UNHEALTHY,VCV000018097,SCV003932785,"Suna and Inan Kirac Foundation Neurodegeneration Research Laboratory, Koc University",2023-06-20,Pathogenic,2023-03-21,"criteria provided, single submitter",
+APP_U_2,UNHEALTHY,VCV000018097,SCV004297369,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-08-02,"criteria provided, single submitter",
+APP_U_3,UNHEALTHY,VCV000018100,SCV000040026,OMIM,2018-05-17,Pathogenic,2005-01-25,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_3,UNHEALTHY,VCV000018100,SCV000116705,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_3,UNHEALTHY,VCV000018100,SCV005842143,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-04-25,"criteria provided, single submitter",
+APP_U_4,UNHEALTHY,VCV000018102,SCV000040028,OMIM,2017-12-04,Pathogenic,2002-05-28,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_4,UNHEALTHY,VCV000018102,SCV000116704,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_4,UNHEALTHY,VCV000018102,SCV002518490,Mendelics,2022-05-21,Pathogenic,2022-05-04,"criteria provided, single submitter",
+APP_U_4,UNHEALTHY,VCV000018102,SCV003443829,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2022-04-07,"criteria provided, single submitter",
+APP_U_5,UNHEALTHY,VCV003690355,SCV005797758,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely pathogenic,2024-02-06,"criteria provided, single submitter",
+APP_U_6,UNHEALTHY,VCV000018094,SCV000040019,OMIM,2017-12-04,Pathogenic,2004-09-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_6,UNHEALTHY,VCV000018094,SCV006322390,"Revvity Omics, Revvity",2025-08-19,Likely pathogenic,2024-10-24,"criteria provided, single submitter",not provided
+APP_U_6,UNHEALTHY,VCV000018094,SCV004241831,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2024-01-26,Likely pathogenic,2023-12-01,"criteria provided, single submitter",
+APP_U_6,UNHEALTHY,VCV000018094,SCV000622178,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-09,Likely pathogenic,2025-11-17,"criteria provided, single submitter",
+APP_U_6,UNHEALTHY,VCV000018094,SCV008018594,"PreventionGenetics, part of Exact Sciences",2026-09-29,Likely pathogenic,2026-09-25,"criteria provided, single submitter",APP-related condition
+APP_U_6,UNHEALTHY,VCV000018094,SCV000116702,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_6,UNHEALTHY,VCV000018094,SCV000967585,"Laboratory for Molecular Medicine, Mass General Brigham Personalized Medicine",2020-06-03,Likely pathogenic,2019-01-24,"criteria provided, single submitter",
+APP_U_6,UNHEALTHY,VCV000018094,SCV002557847,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2024-07-18,Likely pathogenic,2022-02-02,"criteria provided, single submitter",
+APP_U_6,UNHEALTHY,VCV000018094,SCV001143037,Athena Diagnostics,2024-12-31,likely pathogenic,2024-05-15,"criteria provided, single submitter",not provided
+APP_U_6,UNHEALTHY,VCV000018094,SCV007600626,"Variantyx, Inc.",2026-05-21,Likely Pathogenic,2025-12-11,"criteria provided, single submitter",
+APP_U_7,UNHEALTHY,VCV000018101,SCV000040027,OMIM,2019-12-11,Pathogenic,2003-03-25,no assertion criteria provided,"CEREBRAL AMYLOID ANGIOPATHY, APP-RELATED, IOWA VARIANT"
+APP_U_7,UNHEALTHY,VCV000018101,SCV006083514,"Institute of Human Genetics, University of Leipzig Medical Center",2025-11-14,pathogenic,2025-10-20,"criteria provided, single submitter",
+APP_U_7,UNHEALTHY,VCV000018101,SCV000814663,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Pathogenic,2024-07-30,"criteria provided, single submitter",
+APP_U_7,UNHEALTHY,VCV000018101,SCV008024165,"PreventionGenetics, part of Exact Sciences",2026-09-29,Pathogenic,2024-12-30,"criteria provided, single submitter",APP-related condition
+APP_U_7,UNHEALTHY,VCV000018101,SCV000116700,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_7,UNHEALTHY,VCV000018101,SCV001962410,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2021-09-01,"criteria provided, single submitter",
+APP_U_8,UNHEALTHY,VCV000018098,SCV000040682,GeneReviews,2013-03-26,not provided,,no classification provided,
+APP_U_8,UNHEALTHY,VCV000018098,SCV000040023,OMIM,2013-04-02,Pathogenic,2008-04-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_8,UNHEALTHY,VCV000018098,SCV000040024,OMIM,2013-04-02,Pathogenic,2008-04-01,no assertion criteria provided,"CEREBRAL AMYLOID ANGIOPATHY, APP-RELATED, ARCTIC VARIANT"
+APP_U_8,UNHEALTHY,VCV000018098,SCV000116699,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_9,UNHEALTHY,VCV000018099,SCV000040025,OMIM,2018-05-17,Pathogenic,2010-08-01,no assertion criteria provided,"CEREBRAL AMYLOID ANGIOPATHY, APP-RELATED, ITALIAN VARIANT"
+APP_U_9,UNHEALTHY,VCV000018099,SCV000116698,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_9,UNHEALTHY,VCV000018099,SCV007376019,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2025-08-20,"criteria provided, single submitter",
+APP_U_10,UNHEALTHY,VCV000018087,SCV000040011,OMIM,2013-04-02,Pathogenic,2000-09-01,no assertion criteria provided,"CEREBRAL AMYLOID ANGIOPATHY, APP-RELATED, DUTCH VARIANT"
+APP_U_10,UNHEALTHY,VCV000018087,SCV001587274,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2020-06-02,"criteria provided, single submitter",
+APP_U_10,UNHEALTHY,VCV000018087,SCV002557984,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2024-07-18,Pathogenic,2022-02-02,"criteria provided, single submitter",
+APP_U_11,UNHEALTHY,VCV000018091,SCV000040015,OMIM,2018-05-17,Pathogenic,2001-05-01,no assertion criteria provided,"CEREBRAL AMYLOID ANGIOPATHY, APP-RELATED, FLEMISH VARIANT"
+APP_U_11,UNHEALTHY,VCV000018091,SCV000040016,OMIM,2018-05-17,Pathogenic,2001-05-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_11,UNHEALTHY,VCV000018091,SCV000040681,GeneReviews,2013-03-26,not provided,,no classification provided,
+APP_U_11,UNHEALTHY,VCV000018091,SCV000116697,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_12,UNHEALTHY,VCV000018090,SCV000040014,OMIM,2013-04-02,Pathogenic,1991-10-31,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_12,UNHEALTHY,VCV000018090,SCV000116712,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_12,UNHEALTHY,VCV000018090,SCV002771850,Athena Diagnostics,2022-12-27,Pathogenic,2021-10-27,"criteria provided, single submitter",not provided
+APP_U_13,UNHEALTHY,VCV002628367,SCV004102647,"Center for Human Genetics and Genomic Medicine, Uniklinik Rwth Aachen",2023-11-15,Likely pathogenic,2023-11-14,"criteria provided, single submitter",
+APP_U_14,UNHEALTHY,VCV003382968,SCV005418731,"Juno Genomics, Hangzhou Juno Genomics, Inc",2025-09-28,Likely pathogenic,,"criteria provided, single submitter",
+APP_U_15,UNHEALTHY,VCV000018106,SCV000040032,OMIM,2018-05-18,Pathogenic,2009-03-13,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1, AUTOSOMAL RECESSIVE"
+APP_U_17,UNHEALTHY,VCV000018105,SCV000040031,OMIM,2013-04-02,Pathogenic,2006-02-28,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_17,UNHEALTHY,VCV000018105,SCV000612390,Athena Diagnostics,2020-12-30,Pathogenic,2020-07-27,"criteria provided, single submitter",not provided
+APP_U_17,UNHEALTHY,VCV000018105,SCV004041661,"Zotz-Klimas Genetics Lab, MVZ Zotz Klimas",2023-10-09,Pathogenic,2023-10-09,no assertion criteria provided,
+APP_U_18,UNHEALTHY,VCV000018089,SCV000040013,OMIM,2017-12-04,Pathogenic,1999-12-21,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_18,UNHEALTHY,VCV000018089,SCV000955932,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2025-03-31,"criteria provided, single submitter",
+APP_U_18,UNHEALTHY,VCV000018089,SCV004045802,"Institute of Human Genetics Munich, TUM University Hospital",2023-10-19,Pathogenic,2023-07-26,"criteria provided, single submitter",
+APP_U_18,UNHEALTHY,VCV000018089,SCV002496698,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2022-01-01,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV000040012,OMIM,2019-02-14,Pathogenic,1996-10-23,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_19,UNHEALTHY,VCV000018088,SCV000040683,GeneReviews,2013-03-26,not provided,,no classification provided,
+APP_U_19,UNHEALTHY,VCV000018088,SCV004813609,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-05-23,Pathogenic,2024-02-22,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV000935808,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2025-11-28,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV007874225,Blueprint Genetics,2026-08-20,Pathogenic,2024-08-21,"criteria provided, single submitter",APP-related disorders
+APP_U_19,UNHEALTHY,VCV000018088,SCV000116711,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_19,UNHEALTHY,VCV000018088,SCV002807780,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Pathogenic,2021-12-10,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV005199568,"Clinical Genetics Laboratory, Skane University Hospital Lund",2024-08-15,Pathogenic,2022-07-13,"criteria provided, single submitter",not provided
+APP_U_19,UNHEALTHY,VCV000018088,SCV002771849,Athena Diagnostics,2025-12-24,pathogenic,2025-09-24,"criteria provided, single submitter",not provided
+APP_U_19,UNHEALTHY,VCV000018088,SCV001250462,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2017-06-01,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV002557779,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2026-07-22,Pathogenic,2025-06-16,"criteria provided, single submitter",
+APP_U_19,UNHEALTHY,VCV000018088,SCV004048033,"Neuberg Centre For Genomic Medicine, NCGM",2023-10-19,Pathogenic,,"criteria provided, single submitter",
+APP_U_20,UNHEALTHY,VCV000098240,SCV000116710,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+APP_U_20,UNHEALTHY,VCV000098240,SCV004297368,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-11-27,"criteria provided, single submitter",
+APP_U_21,UNHEALTHY,VCV002498894,SCV005839847,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-05-16,"criteria provided, single submitter",
+APP_U_21,UNHEALTHY,VCV002498894,SCV003916326,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2023-02-01,"criteria provided, single submitter",
+APP_U_22,UNHEALTHY,VCV001457308,SCV002242807,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Pathogenic,2023-12-08,"criteria provided, single submitter",
+APP_U_22,UNHEALTHY,VCV001457308,SCV005893585,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2024-12-01,"criteria provided, single submitter",
+APP_U_23,UNHEALTHY,VCV000018096,SCV000040021,OMIM,2013-04-02,Pathogenic,1997-11-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 1"
+APP_U_23,UNHEALTHY,VCV000018096,SCV001334876,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2020-02-01,"criteria provided, single submitter",
+APP_U_23,UNHEALTHY,VCV000018096,SCV000116709,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_H_1,HEALTHY,VCV000369076,SCV005212483,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_1,HEALTHY,VCV000369076,SCV001719475,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-12,Benign,2026-01-12,"criteria provided, single submitter",
+PSEN1_H_2,HEALTHY,VCV001979276,SCV003028101,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-11-11,"criteria provided, single submitter",
+PSEN1_H_3,HEALTHY,VCV002924422,SCV004569378,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-01-01,"criteria provided, single submitter",
+PSEN1_H_4,HEALTHY,VCV001140026,SCV001681188,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-06,"criteria provided, single submitter",
+PSEN1_H_5,HEALTHY,VCV000586383,SCV000843413,Athena Diagnostics,2024-12-31,benign,2023-11-14,"criteria provided, single submitter",not specified
+PSEN1_H_5,HEALTHY,VCV000586383,SCV001098124,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2025-10-09,"criteria provided, single submitter",
+PSEN1_H_5,HEALTHY,VCV000586383,SCV007796575,Blueprint Genetics,2026-08-20,Likely benign,2024-09-19,"criteria provided, single submitter",Not specified
+PSEN1_H_6,HEALTHY,VCV000967025,SCV006402629,Ambry Genetics,2025-09-30,Likely benign,2025-08-02,"criteria provided, single submitter",
+PSEN1_H_6,HEALTHY,VCV000967025,SCV001414887,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-03-24,"criteria provided, single submitter",
+PSEN1_H_7,HEALTHY,VCV000703859,SCV001015671,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2026-01-21,"criteria provided, single submitter",
+PSEN1_H_7,HEALTHY,VCV000703859,SCV005203773,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2024-09-10,Likely benign,2024-07-03,"criteria provided, single submitter",
+PSEN1_H_7,HEALTHY,VCV000703859,SCV007796576,Blueprint Genetics,2026-08-20,Likely benign,2024-01-03,"criteria provided, single submitter",Not specified
+PSEN1_H_8,HEALTHY,VCV002068659,SCV003281488,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-13,"criteria provided, single submitter",
+PSEN1_H_9,HEALTHY,VCV001143252,SCV001685706,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-18,"criteria provided, single submitter",
+PSEN1_H_10,HEALTHY,VCV003760709,SCV005864942,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-02-06,"criteria provided, single submitter",
+PSEN1_H_11,HEALTHY,VCV001669762,SCV002485655,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-09-07,"criteria provided, single submitter",
+PSEN1_H_12,HEALTHY,VCV001153577,SCV001699949,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2020-12-27,"criteria provided, single submitter",
+PSEN1_H_12,HEALTHY,VCV001153577,SCV004136860,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Likely benign,2025-08-01,"criteria provided, single submitter",
+PSEN1_H_12,HEALTHY,VCV001153577,SCV007586787,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2026-04-30,Uncertain significance,2026-02-27,"criteria provided, single submitter",
+PSEN1_H_12,HEALTHY,VCV001153577,SCV008029851,"PreventionGenetics, part of Exact Sciences",2026-09-29,Uncertain significance,2026-06-19,"criteria provided, single submitter",PSEN1-related condition
+PSEN1_H_13,HEALTHY,VCV002934285,SCV004789480,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2019-03-06,no assertion criteria provided,PSEN1-related condition
+PSEN1_H_13,HEALTHY,VCV002934285,SCV004580638,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-11-05,"criteria provided, single submitter",
+PSEN1_H_14,HEALTHY,VCV001548466,SCV002347712,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-10-24,"criteria provided, single submitter",
+PSEN1_H_14,HEALTHY,VCV001548466,SCV007796580,Blueprint Genetics,2026-08-20,Likely benign,2024-09-06,"criteria provided, single submitter",Not specified
+PSEN1_H_15,HEALTHY,VCV002923997,SCV004568811,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-01-02,"criteria provided, single submitter",
+PSEN1_H_16,HEALTHY,VCV002196767,SCV003516704,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-13,"criteria provided, single submitter",
+PSEN1_H_16,HEALTHY,VCV002196767,SCV007796581,Blueprint Genetics,2026-08-20,Likely benign,2021-02-13,"criteria provided, single submitter",Not specified
+PSEN1_H_17,HEALTHY,VCV003761321,SCV005866646,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-11-17,"criteria provided, single submitter",
+PSEN1_H_18,HEALTHY,VCV001561292,SCV002351498,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-08-24,"criteria provided, single submitter",
+PSEN1_H_19,HEALTHY,VCV002192154,SCV006102544,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-07-01,Likely benign,2025-06-02,"criteria provided, single submitter",
+PSEN1_H_19,HEALTHY,VCV002192154,SCV003509964,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-01-06,"criteria provided, single submitter",
+PSEN1_H_20,HEALTHY,VCV002926872,SCV004572667,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-11-12,"criteria provided, single submitter",
+PSEN1_H_21,HEALTHY,VCV001607086,SCV002419632,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2021-08-11,"criteria provided, single submitter",
+PSEN1_H_22,HEALTHY,VCV001569167,SCV002362770,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2023-08-04,"criteria provided, single submitter",
+PSEN1_H_23,HEALTHY,VCV002019095,SCV003223588,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-23,"criteria provided, single submitter",
+PSEN1_H_24,HEALTHY,VCV000705597,SCV002478106,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-12,Likely benign,2025-12-28,"criteria provided, single submitter",
+PSEN1_H_25,HEALTHY,VCV003750467,SCV005853034,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-08-27,"criteria provided, single submitter",
+PSEN1_H_26,HEALTHY,VCV003763332,SCV005869203,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-01-02,"criteria provided, single submitter",
+PSEN1_H_26,HEALTHY,VCV003763332,SCV007640527,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Likely benign,2026-05-01,"criteria provided, single submitter",
+PSEN1_H_27,HEALTHY,VCV002193368,SCV003512250,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-09-01,"criteria provided, single submitter",
+PSEN1_H_27,HEALTHY,VCV002193368,SCV004759248,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2019-11-12,no assertion criteria provided,PSEN1-related condition
+PSEN1_H_28,HEALTHY,VCV001962493,SCV003002896,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-03-30,"criteria provided, single submitter",
+PSEN1_H_29,HEALTHY,VCV001122400,SCV004755354,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2019-06-21,no assertion criteria provided,PSEN1-related condition
+PSEN1_H_29,HEALTHY,VCV001122400,SCV001656747,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2019-05-09,"criteria provided, single submitter",
+PSEN1_H_30,HEALTHY,VCV001631818,SCV002450168,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-06,"criteria provided, single submitter",
+PSEN1_H_31,HEALTHY,VCV000754110,SCV001710359,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-12,Likely benign,2018-09-23,"criteria provided, single submitter",
+PSEN1_H_32,HEALTHY,VCV001164252,SCV001716817,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2023-05-14,"criteria provided, single submitter",
+PSEN1_H_32,HEALTHY,VCV001164252,SCV005157707,Ambry Genetics,2024-07-05,Likely benign,2024-04-18,"criteria provided, single submitter",
+PSEN1_H_33,HEALTHY,VCV002925995,SCV004571942,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-10-27,"criteria provided, single submitter",
+PSEN1_H_34,HEALTHY,VCV000762616,SCV001696077,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-12,Likely benign,2018-07-09,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV000301542,"PreventionGenetics, part of Exact Sciences",2016-04-28,Benign,,"criteria provided, single submitter",NOT SPECIFIED
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001903121,GeneDx,2021-09-20,Benign,2018-09-16,"criteria provided, single submitter",Not Provided
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001926056,"Clinical Genetics, Academic Medical Center",2021-09-23,Benign,,no assertion criteria provided,not specified
+PSEN1_H_35,HEALTHY,VCV000254714,SCV002031983,Genome-Nilou Lab,2021-12-08,Benign,2021-10-25,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV002031984,Genome-Nilou Lab,2021-12-08,Benign,2021-10-25,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV002031985,Genome-Nilou Lab,2021-12-08,Benign,2021-10-25,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV002031987,Genome-Nilou Lab,2021-12-08,Benign,2021-10-25,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV002031988,Genome-Nilou Lab,2021-12-08,Benign,2021-10-25,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001721639,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2026-02-04,"criteria provided, single submitter",
+PSEN1_H_35,HEALTHY,VCV000254714,SCV007796594,Blueprint Genetics,2026-08-20,Likely benign,2024-11-27,"criteria provided, single submitter",Not specified
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001807021,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-08-24,Benign,,no assertion criteria provided,not specified
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001744202,"Diagnostic Laboratory, Department of Genetics, University Medical Center Groningen",2021-09-02,Benign,,no assertion criteria provided,not specified
+PSEN1_H_35,HEALTHY,VCV000254714,SCV001964070,"Clinical Genetics DNA and cytogenetics Diagnostics Lab, Erasmus MC, Erasmus Medical Center",2021-09-21,Benign,,no assertion criteria provided,not specified
+PSEN1_H_35,HEALTHY,VCV000254714,SCV005291607,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN1_H_36,HEALTHY,VCV001964612,SCV003000423,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-05-28,"criteria provided, single submitter",
+PSEN1_H_37,HEALTHY,VCV001587846,SCV004781212,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2023-12-05,no assertion criteria provided,PSEN1-related condition
+PSEN1_H_37,HEALTHY,VCV001587846,SCV002384908,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-10-24,"criteria provided, single submitter",
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000116526,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000843423,Athena Diagnostics,2018-08-31,Benign,2017-09-22,"criteria provided, single submitter",not provided
+PSEN1_H_38,HEALTHY,VCV000098094,SCV001808320,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-08-24,Benign,,no assertion criteria provided,not specified
+PSEN1_H_38,HEALTHY,VCV000098094,SCV001895073,GeneDx,2021-09-18,Benign,2020-02-11,"criteria provided, single submitter",Not Provided
+PSEN1_H_38,HEALTHY,VCV000098094,SCV005212486,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000705960,Eurofins Ntd Llc (ga),2018-09-19,Benign,2017-02-07,"criteria provided, single submitter",not specified
+PSEN1_H_38,HEALTHY,VCV000098094,SCV007312463,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2023-02-03,"criteria provided, single submitter",Not specified
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000051594,"Biesecker Lab/Clinical Genomics Section, National Institutes of Health",2015-03-10,Benign,2013-06-24,"criteria provided, single submitter",Alzheimer disease
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000301543,"PreventionGenetics, part of Exact Sciences",2016-04-28,Benign,,"criteria provided, single submitter",NOT SPECIFIED
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000388103,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-03-06,"criteria provided, single submitter",
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000388102,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-03-06,"criteria provided, single submitter",
+PSEN1_H_38,HEALTHY,VCV000098094,SCV001968130,"Clinical Genetics DNA and cytogenetics Diagnostics Lab, Erasmus MC, Erasmus Medical Center",2021-09-21,Benign,,no assertion criteria provided,not specified
+PSEN1_H_38,HEALTHY,VCV000098094,SCV004563047,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2026-01-09,Benign,2025-03-17,"criteria provided, single submitter",
+PSEN1_H_38,HEALTHY,VCV000098094,SCV000639609,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2026-02-01,"criteria provided, single submitter",
+PSEN1_H_39,HEALTHY,VCV002953295,SCV004610357,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-08-05,"criteria provided, single submitter",
+PSEN1_H_40,HEALTHY,VCV002083843,SCV003298724,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-18,"criteria provided, single submitter",
+PSEN1_H_41,HEALTHY,VCV001589062,SCV002394210,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-11-13,"criteria provided, single submitter",
+PSEN1_H_42,HEALTHY,VCV002923020,SCV004603582,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-05-30,"criteria provided, single submitter",
+PSEN1_H_43,HEALTHY,VCV002923571,SCV004568306,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-12-07,"criteria provided, single submitter",
+PSEN1_H_44,HEALTHY,VCV002197336,SCV004722332,"PreventionGenetics, part of Exact Sciences",2024-10-02,Likely benign,2019-07-17,no assertion criteria provided,PSEN1-related condition
+PSEN1_H_44,HEALTHY,VCV002197336,SCV003517920,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-01-06,"criteria provided, single submitter",
+PSEN1_H_45,HEALTHY,VCV001256543,SCV001879977,Athena Diagnostics,2021-09-13,Benign,2021-02-11,"criteria provided, single submitter",not specified
+PSEN1_H_45,HEALTHY,VCV001256543,SCV005851195,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-07-27,"criteria provided, single submitter",
+PSEN1_H_45,HEALTHY,VCV001256543,SCV004136862,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Likely benign,2023-10-01,"criteria provided, single submitter",
+PSEN1_H_45,HEALTHY,VCV001256543,SCV007796569,Blueprint Genetics,2026-08-20,Likely benign,2023-03-29,"criteria provided, single submitter",Not specified
+PSEN1_H_45,HEALTHY,VCV001256543,SCV008009089,"PreventionGenetics, part of Exact Sciences",2026-09-29,Likely benign,2025-05-28,"criteria provided, single submitter",PSEN1-related condition
+PSEN1_H_46,HEALTHY,VCV002182147,SCV003499402,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-08-31,"criteria provided, single submitter",
+PSEN1_H_47,HEALTHY,VCV002159736,SCV003472136,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-05-31,"criteria provided, single submitter",
+PSEN1_H_48,HEALTHY,VCV003750146,SCV005852697,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-05-27,"criteria provided, single submitter",
+PSEN1_H_49,HEALTHY,VCV000313949,SCV000388108,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_49,HEALTHY,VCV000313949,SCV000388109,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_49,HEALTHY,VCV000313949,SCV001757511,GeneDx,2021-07-20,Benign,2019-11-25,"criteria provided, single submitter",Not Provided
+PSEN1_H_49,HEALTHY,VCV000313949,SCV002034888,"Diagnostic Laboratory, Department of Genetics, University Medical Center Groningen",2021-12-16,Likely benign,,no assertion criteria provided,not provided
+PSEN1_H_49,HEALTHY,VCV000313949,SCV002035195,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-12-16,Likely benign,,no assertion criteria provided,not provided
+PSEN1_H_49,HEALTHY,VCV000313949,SCV004564807,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2024-01-24,Benign,2023-05-15,"criteria provided, single submitter",
+PSEN1_H_49,HEALTHY,VCV000313949,SCV005212487,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_49,HEALTHY,VCV000313949,SCV007312464,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-23,Benign,2025-03-20,"criteria provided, single submitter",Not specified
+PSEN1_H_49,HEALTHY,VCV000313949,SCV001001700,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2026-01-15,"criteria provided, single submitter",
+PSEN1_H_50,HEALTHY,VCV000747483,SCV001069704,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-10-10,"criteria provided, single submitter",
+PSEN1_H_50,HEALTHY,VCV000747483,SCV007796609,Blueprint Genetics,2026-08-20,Likely benign,2022-12-16,"criteria provided, single submitter",Not specified
+PSEN1_H_51,HEALTHY,VCV001609857,SCV002417931,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2023-06-24,"criteria provided, single submitter",
+PSEN1_H_52,HEALTHY,VCV002105525,SCV003316508,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2022-03-26,"criteria provided, single submitter",
+PSEN1_H_53,HEALTHY,VCV000313954,SCV000388118,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_53,HEALTHY,VCV000313954,SCV000388119,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_53,HEALTHY,VCV000313954,SCV001916145,GeneDx,2021-09-22,Benign,2021-05-15,"criteria provided, single submitter",Not Provided
+PSEN1_H_53,HEALTHY,VCV000313954,SCV005212488,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_54,HEALTHY,VCV000313956,SCV000388122,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_54,HEALTHY,VCV000313956,SCV000388123,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_54,HEALTHY,VCV000313956,SCV001937222,GeneDx,2021-09-26,Benign,2021-05-21,"criteria provided, single submitter",Not Provided
+PSEN1_H_54,HEALTHY,VCV000313956,SCV005212489,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_55,HEALTHY,VCV000886433,SCV001276924,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2017-04-27,"criteria provided, single submitter",
+PSEN1_H_55,HEALTHY,VCV000886433,SCV001276925,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2017-04-27,"criteria provided, single submitter",
+PSEN1_H_56,HEALTHY,VCV001165965,SCV001721212,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Benign,2024-11-11,"criteria provided, single submitter",
+PSEN1_H_57,HEALTHY,VCV000313960,SCV000388130,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_57,HEALTHY,VCV000313960,SCV000388131,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_57,HEALTHY,VCV000313960,SCV005291610,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN1_H_58,HEALTHY,VCV000313962,SCV000388134,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_58,HEALTHY,VCV000313962,SCV000388135,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_58,HEALTHY,VCV000313962,SCV001873244,GeneDx,2021-09-15,Benign,2021-05-14,"criteria provided, single submitter",Not Provided
+PSEN1_H_58,HEALTHY,VCV000313962,SCV005291611,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN1_H_59,HEALTHY,VCV000313970,SCV000388150,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_59,HEALTHY,VCV000313970,SCV000388151,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_60,HEALTHY,VCV000313973,SCV000388156,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_60,HEALTHY,VCV000313973,SCV000388157,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_61,HEALTHY,VCV000313984,SCV000388178,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_61,HEALTHY,VCV000313984,SCV000388179,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_62,HEALTHY,VCV000313990,SCV000388190,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_62,HEALTHY,VCV000313990,SCV000388191,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_62,HEALTHY,VCV000313990,SCV005291612,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN1_H_63,HEALTHY,VCV000884730,SCV001273944,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_63,HEALTHY,VCV000884730,SCV001273945,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_63,HEALTHY,VCV000884730,SCV005212490,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_64,HEALTHY,VCV000313994,SCV000388198,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_64,HEALTHY,VCV000313994,SCV000388199,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_65,HEALTHY,VCV000313996,SCV000388202,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_65,HEALTHY,VCV000313996,SCV000388203,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_66,HEALTHY,VCV000885670,SCV001275567,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_66,HEALTHY,VCV000885670,SCV001275568,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_67,HEALTHY,VCV002183816,SCV003501414,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2022-07-19,"criteria provided, single submitter",
+PSEN1_H_67,HEALTHY,VCV002183816,SCV007298144,Athena Diagnostics,2025-12-24,likely benign,2025-09-19,"criteria provided, single submitter",not provided
+PSEN1_H_68,HEALTHY,VCV000886681,SCV001277324,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_68,HEALTHY,VCV000886681,SCV001277325,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_68,HEALTHY,VCV000886681,SCV005212491,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_69,HEALTHY,VCV000313998,SCV000388206,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_69,HEALTHY,VCV000313998,SCV000388207,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_69,HEALTHY,VCV000313998,SCV001884532,GeneDx,2021-09-16,Benign,2021-05-15,"criteria provided, single submitter",Not Provided
+PSEN1_H_69,HEALTHY,VCV000313998,SCV005212492,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_70,HEALTHY,VCV000313999,SCV000388208,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_70,HEALTHY,VCV000313999,SCV000388209,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_71,HEALTHY,VCV000314000,SCV000388210,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_71,HEALTHY,VCV000314000,SCV000388211,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_71,HEALTHY,VCV000314000,SCV001903882,GeneDx,2021-09-20,Benign,2021-05-15,"criteria provided, single submitter",Not Provided
+PSEN1_H_71,HEALTHY,VCV000314000,SCV005291613,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN1_H_72,HEALTHY,VCV000314001,SCV000388212,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_72,HEALTHY,VCV000314001,SCV000388213,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_73,HEALTHY,VCV000884793,SCV001274066,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_73,HEALTHY,VCV000884793,SCV001274067,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_74,HEALTHY,VCV000314003,SCV000388216,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_74,HEALTHY,VCV000314003,SCV000388217,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_74,HEALTHY,VCV000314003,SCV001842631,GeneDx,2021-09-08,Benign,2021-05-24,"criteria provided, single submitter",Not Provided
+PSEN1_H_75,HEALTHY,VCV000314005,SCV000388220,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_75,HEALTHY,VCV000314005,SCV000388221,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN1_H_75,HEALTHY,VCV000314005,SCV005212493,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Likely benign,,"criteria provided, single submitter",not provided
+PSEN1_H_76,HEALTHY,VCV000314008,SCV000388226,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_76,HEALTHY,VCV000314008,SCV000388227,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN1_H_77,HEALTHY,VCV001623415,SCV002431734,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2024-02-24,"criteria provided, single submitter",
+PSEN1_H_77,HEALTHY,VCV001623415,SCV006074066,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-06-24,Likely benign,2025-04-14,"criteria provided, single submitter",
+PSEN1_H_78,HEALTHY,VCV001538139,SCV002340331,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2021-12-02,"criteria provided, single submitter",
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV000040382,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV000843412,Athena Diagnostics,2024-01-03,Pathogenic,2023-06-07,"criteria provided, single submitter",not provided
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV000040085,OMIM,2017-05-12,Pathogenic,2007-05-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV000116417,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV005882840,"Clinical Genetics Laboratory, Skane University Hospital Lund",2025-03-13,Pathogenic,2024-08-05,"criteria provided, single submitter",
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV005885230,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-03-14,Pathogenic,2025-02-24,"criteria provided, single submitter",
+PSEN1_U_1,UNHEALTHY,VCV000018157,SCV000639604,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-04-17,"criteria provided, single submitter",
+PSEN1_U_2,UNHEALTHY,VCV000098016,SCV000116432,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_2,UNHEALTHY,VCV000098016,SCV003442898,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-09-19,"criteria provided, single submitter",
+PSEN1_U_3,UNHEALTHY,VCV000098017,SCV000116433,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_3,UNHEALTHY,VCV000098017,SCV003442315,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-10-28,"criteria provided, single submitter",
+PSEN1_U_4,UNHEALTHY,VCV000098018,SCV000116434,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_4,UNHEALTHY,VCV000098018,SCV002556764,"Genetics and Molecular Pathology, SA Pathology",2022-12-11,Likely pathogenic,2022-03-01,"criteria provided, single submitter",
+PSEN1_U_4,UNHEALTHY,VCV000098018,SCV005862918,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-05-15,"criteria provided, single submitter",
+PSEN1_U_5,UNHEALTHY,VCV000018135,SCV000040063,OMIM,2017-05-12,Pathogenic,1996-12-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_5,UNHEALTHY,VCV000018135,SCV000116436,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_6,UNHEALTHY,VCV000098022,SCV000116439,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_6,UNHEALTHY,VCV000098022,SCV000843417,Athena Diagnostics,2018-08-31,Likely pathogenic,2018-07-26,"criteria provided, single submitter",not provided
+PSEN1_U_6,UNHEALTHY,VCV000098022,SCV000965236,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-02-25,"criteria provided, single submitter",
+PSEN1_U_6,UNHEALTHY,VCV000098022,SCV004100126,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2023-10-27,Pathogenic,2023-09-26,"criteria provided, single submitter",
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV000040054,OMIM,2017-05-12,Pathogenic,2003-06-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV000843418,Athena Diagnostics,2018-08-31,Pathogenic,2015-12-24,"criteria provided, single submitter",not provided
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV000040385,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV001446922,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2020-10-23,Pathogenic,2020-10-23,"criteria provided, single submitter",not provided
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV004570949,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-12-04,"criteria provided, single submitter",
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV001248745,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2021-04-01,"criteria provided, single submitter",
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV000116440,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV002764843,"Institute of Human Genetics Munich, TUM University Hospital",2022-12-20,Pathogenic,2022-07-29,"criteria provided, single submitter",
+PSEN1_U_7,UNHEALTHY,VCV000018128,SCV006083528,"Human Genome Lab, NIMHANS, National Institute of Mental Health and Neuro Sciences",2025-06-07,Pathogenic,,"criteria provided, single submitter",
+PSEN1_U_8,UNHEALTHY,VCV003759252,SCV005862919,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-10-27,"criteria provided, single submitter",
+PSEN1_U_8,UNHEALTHY,VCV003759252,SCV005885562,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-03-14,Likely pathogenic,2025-02-11,"criteria provided, single submitter",
+PSEN1_U_9,UNHEALTHY,VCV000098023,SCV000116441,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_9,UNHEALTHY,VCV000098023,SCV001478336,"Laboratory for Molecular Genetic Diagnostic of Neurological Diseases, University of Belgrade, School of Medicine",2021-02-04,Pathogenic,2020-07-01,"criteria provided, single submitter",
+PSEN1_U_9,UNHEALTHY,VCV000098023,SCV007641924,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2026-04-01,"criteria provided, single submitter",
+PSEN1_U_10,UNHEALTHY,VCV000098026,SCV000614821,Athena Diagnostics,2017-08-17,Pathogenic,2016-02-01,"criteria provided, single submitter",not provided
+PSEN1_U_10,UNHEALTHY,VCV000098026,SCV000116444,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_10,UNHEALTHY,VCV000098026,SCV004812496,"Molecular Genetics, Royal Melbourne Hospital",2024-04-12,Pathogenic,2022-08-04,"criteria provided, single submitter",
+PSEN1_U_10,UNHEALTHY,VCV000098026,SCV001236811,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-09-13,"criteria provided, single submitter",
+PSEN1_U_10,UNHEALTHY,VCV000098026,SCV008071600,"OLLIN Analises Genomicas, OLLIN",2026-08-20,Pathogenic,2026-08-06,"criteria provided, single submitter",
+PSEN1_U_11,UNHEALTHY,VCV000018129,SCV006083525,"Human Genome Lab, NIMHANS, National Institute of Mental Health and Neuro Sciences",2025-06-07,Pathogenic,,"criteria provided, single submitter",
+PSEN1_U_11,UNHEALTHY,VCV000018129,SCV000040055,OMIM,2017-05-12,Pathogenic,1995-10-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_12,UNHEALTHY,VCV002925522,SCV004570860,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-12-19,"criteria provided, single submitter",
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV000040386,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV000040049,OMIM,2017-05-12,Pathogenic,2010-03-09,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV003826682,"Revvity Omics, Revvity",2025-08-19,Pathogenic,2022-02-17,"criteria provided, single submitter",not provided
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV003761806,GeneDx,2023-02-01,Pathogenic,2022-07-21,"criteria provided, single submitter",Not Provided
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV004101803,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2023-11-14,Pathogenic,2023-11-14,"criteria provided, single submitter",
+PSEN1_U_13,UNHEALTHY,VCV000018123,SCV001421848,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-06-01,"criteria provided, single submitter",
+PSEN1_U_14,UNHEALTHY,VCV000098029,SCV000116447,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_14,UNHEALTHY,VCV000098029,SCV000614822,Athena Diagnostics,2024-12-31,pathogenic,2024-01-02,"criteria provided, single submitter",not provided
+PSEN1_U_14,UNHEALTHY,VCV000098029,SCV002231314,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-01-24,"criteria provided, single submitter",
+PSEN1_U_15,UNHEALTHY,VCV000018137,SCV000040065,OMIM,2017-05-12,Pathogenic,1998-03-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_16,UNHEALTHY,VCV002137604,SCV003442899,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-04-09,"criteria provided, single submitter",
+PSEN1_U_17,UNHEALTHY,VCV000018130,SCV000040056,OMIM,2017-05-12,Pathogenic,1995-10-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_17,UNHEALTHY,VCV000018130,SCV000116453,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_17,UNHEALTHY,VCV000018130,SCV005620725,Athena Diagnostics,2024-12-31,pathogenic,2024-02-16,"criteria provided, single submitter",not provided
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV004229914,Athena Diagnostics,2024-01-03,Pathogenic,2022-11-15,"criteria provided, single submitter",not provided
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV000040050,OMIM,2017-05-12,Pathogenic,1995-06-29,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV004108245,"PreventionGenetics, part of Exact Sciences",2023-10-19,Pathogenic,2023-08-30,"criteria provided, single submitter",PSEN1-related condition
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV000116454,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV002802873,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Pathogenic,2021-11-12,"criteria provided, single submitter",
+PSEN1_U_18,UNHEALTHY,VCV000018124,SCV000639607,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-09-03,"criteria provided, single submitter",
+PSEN1_U_19,UNHEALTHY,VCV000018146,SCV000040074,OMIM,2017-05-12,Pathogenic,2002-06-11,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_19,UNHEALTHY,VCV000018146,SCV001139483,Mendelics,2019-10-22,Pathogenic,2019-05-28,"criteria provided, single submitter",
+PSEN1_U_20,UNHEALTHY,VCV000098041,SCV000116461,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_20,UNHEALTHY,VCV000098041,SCV003442900,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-05-27,"criteria provided, single submitter",
+PSEN1_U_20,UNHEALTHY,VCV000098041,SCV007120389,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-12-09,Likely pathogenic,2025-09-25,"criteria provided, single submitter",
+PSEN1_U_21,UNHEALTHY,VCV000018158,SCV000040086,OMIM,2017-05-12,Pathogenic,2007-05-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_21,UNHEALTHY,VCV000018158,SCV000116462,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_21,UNHEALTHY,VCV000018158,SCV000040387,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_22,UNHEALTHY,VCV000098042,SCV000116463,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_22,UNHEALTHY,VCV000098042,SCV003442350,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-08-25,"criteria provided, single submitter",
+PSEN1_U_23,UNHEALTHY,VCV000018153,SCV000040081,OMIM,2017-05-12,Pathogenic,2004-11-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3, WITH SPASTIC PARAPARESIS AND APRAXIA"
+PSEN1_U_23,UNHEALTHY,VCV000018153,SCV006075168,Kariminejad - Najmabadi Pathology & Genetics Center,2025-04-26,Pathogenic,2022-08-05,"criteria provided, single submitter",
+PSEN1_U_23,UNHEALTHY,VCV000018153,SCV000116420,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_23,UNHEALTHY,VCV000018153,SCV001446807,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2020-10-23,Likely pathogenic,2020-10-23,"criteria provided, single submitter",not provided
+PSEN1_U_24,UNHEALTHY,VCV000018147,SCV000040075,OMIM,2017-05-12,Pathogenic,2002-10-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_24,UNHEALTHY,VCV000018147,SCV000116465,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_25,UNHEALTHY,VCV000098047,SCV000116469,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_25,UNHEALTHY,VCV000098047,SCV003442901,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-10-05,"criteria provided, single submitter",
+PSEN1_U_25,UNHEALTHY,VCV000098047,SCV005438234,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2024-12-20,Pathogenic,2024-12-20,"criteria provided, single submitter",
+PSEN1_U_26,UNHEALTHY,VCV000018149,SCV000040077,OMIM,2018-02-14,Pathogenic,2018-02-14,no assertion criteria provided,PICK DISEASE OF BRAIN
+PSEN1_U_26,UNHEALTHY,VCV000018149,SCV000116471,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_26,UNHEALTHY,VCV000018149,SCV000040388,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_27,UNHEALTHY,VCV000098049,SCV000116472,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_27,UNHEALTHY,VCV000098049,SCV002235246,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-05-09,"criteria provided, single submitter",
+PSEN1_U_28,UNHEALTHY,VCV000807473,SCV001149894,"Institute of Human Genetics Munich, TUM University Hospital",2020-01-21,Pathogenic,2018-06-01,"criteria provided, single submitter",
+PSEN1_U_28,UNHEALTHY,VCV000807473,SCV002581264,MGZ Medical Genetics Center,2022-10-06,Pathogenic,2021-11-04,"criteria provided, single submitter",
+PSEN1_U_28,UNHEALTHY,VCV000807473,SCV004570861,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-07-03,"criteria provided, single submitter",
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV000040071,OMIM,2017-05-12,Pathogenic,2001-11-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV002019538,"Revvity Omics, Revvity",2025-08-19,Pathogenic,2019-04-24,"criteria provided, single submitter",not provided
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV002777693,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Pathogenic,2022-03-04,"criteria provided, single submitter",
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV004029436,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2023-08-25,Pathogenic,2023-07-26,"criteria provided, single submitter",
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV001792148,GeneDx,2023-09-27,Pathogenic,2022-08-31,"criteria provided, single submitter",Not Provided
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV005414245,"Mayo Clinic Laboratories, Mayo Clinic",2025-12-18,Pathogenic,2025-04-22,"criteria provided, single submitter",Not provided
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV000762203,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2026-01-26,"criteria provided, single submitter",
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV007796583,Blueprint Genetics,2026-08-20,Pathogenic,2022-08-02,"criteria provided, single submitter",PSEN1-related disorders
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV005358690,"PreventionGenetics, part of Exact Sciences",2026-09-29,Pathogenic,2026-06-24,"criteria provided, single submitter",PSEN1-related condition
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV002050081,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2024-01-24,Pathogenic,2023-03-06,"criteria provided, single submitter",
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV000614823,Athena Diagnostics,2025-12-24,pathogenic,2025-04-14,"criteria provided, single submitter",not provided
+PSEN1_U_29,UNHEALTHY,VCV000018143,SCV007592977,"Variantyx, Inc.",2026-05-01,Pathogenic,2025-12-25,"criteria provided, single submitter",Autosomal dominant PSEN1-related disorders
+PSEN1_U_30,UNHEALTHY,VCV000663536,SCV000962183,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-02-08,"criteria provided, single submitter",
+PSEN1_U_31,UNHEALTHY,VCV000098053,SCV000116476,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_31,UNHEALTHY,VCV000098053,SCV000762198,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2026-02-01,"criteria provided, single submitter",
+PSEN1_U_32,UNHEALTHY,VCV000586386,SCV000843420,Athena Diagnostics,2018-08-31,Likely pathogenic,2017-04-26,"criteria provided, single submitter",not provided
+PSEN1_U_32,UNHEALTHY,VCV000586386,SCV001219406,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-08-24,"criteria provided, single submitter",
+PSEN1_U_33,UNHEALTHY,VCV000098059,SCV000116482,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_33,UNHEALTHY,VCV000098059,SCV002557639,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2026-03-05,Pathogenic,2026-01-28,"criteria provided, single submitter",
+PSEN1_U_33,UNHEALTHY,VCV000098059,SCV007796586,Blueprint Genetics,2026-08-20,Likely pathogenic,2024-11-14,"criteria provided, single submitter",PSEN1-related disorders
+PSEN1_U_34,UNHEALTHY,VCV002028849,SCV003231486,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-09-03,"criteria provided, single submitter",
+PSEN1_U_34,UNHEALTHY,VCV002028849,SCV003917331,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2023-01-01,"criteria provided, single submitter",
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV000040389,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV000843421,Athena Diagnostics,2022-12-27,Pathogenic,2022-03-25,"criteria provided, single submitter",not provided
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV001428487,"Institute of Human Genetics, University of Leipzig Medical Center",2020-04-20,Likely pathogenic,2019-01-07,"criteria provided, single submitter",
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV005201534,GeneDx,2024-09-11,Pathogenic,2024-01-18,"criteria provided, single submitter",Not Provided
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV001430032,"Institute of Human Genetics Munich, TUM University Hospital",2020-08-10,Pathogenic,2020-06-08,"criteria provided, single submitter",
+PSEN1_U_35,UNHEALTHY,VCV000021028,SCV000959520,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-06-07,"criteria provided, single submitter",
+PSEN1_U_36,UNHEALTHY,VCV000098068,SCV000116491,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_36,UNHEALTHY,VCV000098068,SCV002058532,3billion,2022-01-11,Likely pathogenic,2022-01-03,"criteria provided, single submitter",
+PSEN1_U_36,UNHEALTHY,VCV000098068,SCV003932786,"Suna and Inan Kirac Foundation Neurodegeneration Research Laboratory, Koc University",2023-06-20,Pathogenic,2023-03-21,"criteria provided, single submitter",
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV002770445,Athena Diagnostics,2022-12-27,Pathogenic,2022-08-29,"criteria provided, single submitter",not provided
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV000040051,OMIM,2017-05-12,Pathogenic,1995-06-29,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV000116497,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV005091231,Solve-RD Consortium,2024-07-29,Likely pathogenic,2022-06-01,no assertion criteria provided,
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV005399926,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2024-11-19,Pathogenic,2024-10-09,"criteria provided, single submitter",
+PSEN1_U_37,UNHEALTHY,VCV000018125,SCV000639608,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-09-01,"criteria provided, single submitter",
+PSEN1_U_38,UNHEALTHY,VCV000995217,SCV001476790,Athena Diagnostics,2020-12-30,Likely pathogenic,2020-03-24,"criteria provided, single submitter",not provided
+PSEN1_U_38,UNHEALTHY,VCV000995217,SCV001575800,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-04-09,"criteria provided, single submitter",
+PSEN1_U_38,UNHEALTHY,VCV000995217,SCV006561843,GeneDx,2025-10-22,Likely pathogenic,2025-04-10,"criteria provided, single submitter",Not Provided
+PSEN1_U_38,UNHEALTHY,VCV000995217,SCV006102263,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-10-28,Likely pathogenic,2025-07-08,"criteria provided, single submitter",
+PSEN1_U_38,UNHEALTHY,VCV000995217,SCV004730201,"PreventionGenetics, part of Exact Sciences",2026-09-29,Likely pathogenic,2025-12-01,"criteria provided, single submitter",PSEN1-related condition
+PSEN1_U_39,UNHEALTHY,VCV000018138,SCV000040066,OMIM,2017-05-12,Pathogenic,1998-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_39,UNHEALTHY,VCV000018138,SCV000116499,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_40,UNHEALTHY,VCV001453682,SCV002237048,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-10-07,"criteria provided, single submitter",
+PSEN1_U_41,UNHEALTHY,VCV002419054,SCV003786999,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2021-12-09,"criteria provided, single submitter",
+PSEN1_U_42,UNHEALTHY,VCV000098075,SCV000116501,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_42,UNHEALTHY,VCV000098075,SCV004570863,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-01-01,"criteria provided, single submitter",
+PSEN1_U_43,UNHEALTHY,VCV000691947,SCV000995993,Codex Genetics Limited,2019-07-02,Likely pathogenic,2019-02-28,no assertion criteria provided,Early onset Alzheimer disease with behavioral disturbance
+PSEN1_U_43,UNHEALTHY,VCV000691947,SCV005863322,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-02-26,"criteria provided, single submitter",
+PSEN1_U_43,UNHEALTHY,VCV000691947,SCV007641923,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2026-05-01,"criteria provided, single submitter",
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV005863534,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-12-11,"criteria provided, single submitter",
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV000116503,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV001145227,Athena Diagnostics,2019-09-25,Likely pathogenic,2018-11-26,"criteria provided, single submitter",not provided
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV001808129,"Genome Diagnostics Laboratory, Amsterdam University Medical Center",2021-08-24,Pathogenic,,no assertion criteria provided,not provided
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV005395964,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2024-11-13,Pathogenic,2024-11-13,"criteria provided, single submitter",
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV007584057,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2026-04-30,Pathogenic,2026-03-18,"criteria provided, single submitter",
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV001964628,"Clinical Genetics DNA and cytogenetics Diagnostics Lab, Erasmus MC, Erasmus Medical Center",2021-09-21,Pathogenic,,no assertion criteria provided,not provided
+PSEN1_U_44,UNHEALTHY,VCV000098077,SCV007592978,"Variantyx, Inc.",2026-05-01,Likely Pathogenic,2025-08-05,"criteria provided, single submitter",Autosomal dominant PSEN1-related disorders
+PSEN1_U_45,UNHEALTHY,VCV000018142,SCV000040070,OMIM,2017-05-12,Pathogenic,2000-10-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_45,UNHEALTHY,VCV000018142,SCV000116422,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV000116506,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV000493061,"Centre for Mendelian Genomics, University Medical Centre Ljubljana",2016-11-12,Likely pathogenic,2015-02-06,"criteria provided, single submitter",
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV000843422,Athena Diagnostics,2018-08-31,Pathogenic,2018-06-05,"criteria provided, single submitter",not provided
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV005201535,GeneDx,2024-09-11,Pathogenic,2023-10-26,"criteria provided, single submitter",Not Provided
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV001447788,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2020-10-23,Pathogenic,2020-10-23,"criteria provided, single submitter",not provided
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV001588727,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-02-02,"criteria provided, single submitter",
+PSEN1_U_46,UNHEALTHY,VCV000098080,SCV004184412,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2024-08-01,"criteria provided, single submitter",
+PSEN1_U_47,UNHEALTHY,VCV000992565,SCV001450773,"Laboratory for Molecular Genetic Diagnostic of Neurological Diseases, University of Belgrade, School of Medicine",2021-01-06,Pathogenic,2020-07-01,"criteria provided, single submitter",
+PSEN1_U_47,UNHEALTHY,VCV000992565,SCV005863298,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely pathogenic,2024-12-12,"criteria provided, single submitter",
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV000054464,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV005879218,"ARUP Laboratories, Molecular Genetics and Genomics, ARUP Laboratories",2025-01-28,Pathogenic,2024-05-09,"criteria provided, single submitter",
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV000116510,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV002770536,Athena Diagnostics,2022-12-27,Pathogenic,2022-02-18,"criteria provided, single submitter",not provided
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV000817117,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2026-01-27,"criteria provided, single submitter",
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV001248748,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2021-01-01,"criteria provided, single submitter",
+PSEN1_U_48,UNHEALTHY,VCV000038297,SCV007796591,Blueprint Genetics,2026-08-20,Pathogenic,2023-07-31,"criteria provided, single submitter",PSEN1-related disorders
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV000040076,OMIM,2017-05-12,Pathogenic,2003-02-28,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3, WITH UNUSUAL PLAQUES"
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV001375365,"Labcorp Genetics (formerly Invitae), Labcorp",2020-02-06,Pathogenic,2019-07-03,"criteria provided, single submitter","Alzheimer disease, type 3; Pick disease; Acne inversa, familial, 3; Frontotemporal dementia"
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV000116511,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV007796592,Blueprint Genetics,2026-08-20,Pathogenic,2019-11-29,"criteria provided, single submitter",PSEN1-related disorders
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV002318537,3billion,2022-03-25,Pathogenic,2022-03-22,"criteria provided, single submitter",
+PSEN1_U_49,UNHEALTHY,VCV000018148,SCV000995997,Codex Genetics Limited,2019-07-02,Pathogenic,2019-02-28,no assertion criteria provided,"Alzheimer disease, type 3; Spastic paraparesis"
+PSEN1_U_50,UNHEALTHY,VCV000018152,SCV000040080,OMIM,2017-05-12,Pathogenic,2004-11-09,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_50,UNHEALTHY,VCV000018152,SCV003442902,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-06-25,"criteria provided, single submitter",
+PSEN1_U_50,UNHEALTHY,VCV000018152,SCV000116515,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_51,UNHEALTHY,VCV000018139,SCV000040067,OMIM,2013-03-26,Pathogenic,1997-04-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, WITH SPASTIC PARAPARESIS AND UNUSUAL PLAQUES"
+PSEN1_U_51,UNHEALTHY,VCV000018139,SCV001755633,Kariminejad - Najmabadi Pathology & Genetics Center,2021-09-09,Pathogenic,2021-07-10,"criteria provided, single submitter",
+PSEN1_U_52,UNHEALTHY,VCV001458372,SCV002238301,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2021-07-21,"criteria provided, single submitter",
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV000040058,OMIM,2017-05-12,Pathogenic,2003-10-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV000040059,OMIM,2017-05-12,Pathogenic,2003-10-14,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, WITH SPASTIC PARAPARESIS AND UNUSUAL PLAQUES"
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV003442732,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-08-19,"criteria provided, single submitter",
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV001501514,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2024-11-01,"criteria provided, single submitter",
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV000116517,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_53,UNHEALTHY,VCV000018132,SCV002600865,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2022-11-10,Pathogenic,2022-10-04,"criteria provided, single submitter",
+PSEN1_U_54,UNHEALTHY,VCV000018131,SCV000040391,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_54,UNHEALTHY,VCV000018131,SCV000040057,OMIM,2019-11-22,Pathogenic,2015-01-13,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_54,UNHEALTHY,VCV000018131,SCV000830715,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2025-09-16,"criteria provided, single submitter",
+PSEN1_U_55,UNHEALTHY,VCV001917985,SCV002949913,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2023-08-20,"criteria provided, single submitter",
+PSEN1_U_55,UNHEALTHY,VCV001917985,SCV007297145,Athena Diagnostics,2025-12-24,likely pathogenic,2025-07-09,"criteria provided, single submitter",not provided
+PSEN1_U_56,UNHEALTHY,VCV001027511,SCV001519190,"Molecular Medicine for Neurodegenerative and Neuromuscular Diseases Unit, IRCCS Fondazione Stella Maris",2021-03-14,Pathogenic,2021-01-04,"criteria provided, single submitter",
+PSEN1_U_57,UNHEALTHY,VCV000098091,SCV000116522,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_57,UNHEALTHY,VCV000098091,SCV002056151,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2022-01-12,Pathogenic,2022-01-12,"criteria provided, single submitter",
+PSEN1_U_57,UNHEALTHY,VCV000098091,SCV005863323,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-04-24,"criteria provided, single submitter",
+PSEN1_U_58,UNHEALTHY,VCV000018126,SCV000040052,OMIM,2017-05-12,Pathogenic,1995-06-29,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_58,UNHEALTHY,VCV000018126,SCV000614830,Athena Diagnostics,2017-08-17,Pathogenic,2017-07-21,"criteria provided, single submitter",not provided
+PSEN1_U_58,UNHEALTHY,VCV000018126,SCV001248749,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2021-06-01,"criteria provided, single submitter",
+PSEN1_U_58,UNHEALTHY,VCV000018126,SCV000116523,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_58,UNHEALTHY,VCV000018126,SCV006553513,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2025-10-08,Pathogenic,2025-10-08,"criteria provided, single submitter",
+PSEN1_U_59,UNHEALTHY,VCV000038296,SCV000054461,GeneReviews,2013-03-26,Pathogenic,2010-12-23,no assertion criteria provided,Early-Onset Familial Alzheimer Disease
+PSEN1_U_60,UNHEALTHY,VCV002925523,SCV004570891,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-12-21,"criteria provided, single submitter",
+PSEN1_U_61,UNHEALTHY,VCV000579680,SCV000831906,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2018-03-20,"criteria provided, single submitter",
+PSEN1_U_62,UNHEALTHY,VCV000599622,SCV000864558,"Human Genetics Group at Institute of Prion Diseases London, University College London",2018-09-12,Likely pathogenic,2017-02-01,"criteria provided, single submitter",
+PSEN1_U_62,UNHEALTHY,VCV000599622,SCV002767443,"Victorian Clinical Genetics Services, Murdoch Childrens Research Institute",2022-12-21,Pathogenic,2022-02-02,"criteria provided, single submitter",
+PSEN1_U_62,UNHEALTHY,VCV000599622,SCV003932784,"Suna and Inan Kirac Foundation Neurodegeneration Research Laboratory, Koc University",2023-06-20,Pathogenic,2023-03-21,"criteria provided, single submitter",
+PSEN1_U_62,UNHEALTHY,VCV000599622,SCV003442341,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-08-10,"criteria provided, single submitter",
+PSEN1_U_63,UNHEALTHY,VCV000098092,SCV000116524,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_63,UNHEALTHY,VCV000098092,SCV000040061,OMIM,2022-06-28,Pathogenic,2001-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_63,UNHEALTHY,VCV000098092,SCV000040062,OMIM,2022-06-28,Pathogenic,2001-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, WITH SPASTIC PARAPARESIS AND UNUSUAL PLAQUES"
+PSEN1_U_64,UNHEALTHY,VCV001450587,SCV002227590,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-03-16,"criteria provided, single submitter",
+PSEN1_U_65,UNHEALTHY,VCV000098101,SCV000116533,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_65,UNHEALTHY,VCV000098101,SCV000255443,"UCLA Clinical Genomics Center, UCLA",2015-05-14,Pathogenic,2013-11-19,"criteria provided, single submitter","Alzheimer disease, type 3"
+PSEN1_U_66,UNHEALTHY,VCV000021026,SCV000040380,GeneReviews,2013-01-08,not provided,,no classification provided,
+PSEN1_U_66,UNHEALTHY,VCV000021026,SCV003442734,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-04-12,"criteria provided, single submitter",
+PSEN1_U_66,UNHEALTHY,VCV000021026,SCV000116539,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_67,UNHEALTHY,VCV000098013,SCV000116429,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_67,UNHEALTHY,VCV000098013,SCV000040068,OMIM,2017-05-12,Pathogenic,1999-08-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_67,UNHEALTHY,VCV000098013,SCV002770639,Athena Diagnostics,2022-12-27,Pathogenic,2021-08-11,"criteria provided, single submitter",not provided
+PSEN1_U_68,UNHEALTHY,VCV000098107,SCV000116540,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_68,UNHEALTHY,VCV000098107,SCV003442903,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2021-12-24,"criteria provided, single submitter",
+PSEN1_U_69,UNHEALTHY,VCV000018127,SCV000040053,OMIM,2018-01-29,Pathogenic,1995-06-29,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_69,UNHEALTHY,VCV000018127,SCV000116543,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_69,UNHEALTHY,VCV000018127,SCV000762199,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2017-10-22,"criteria provided, single submitter",
+PSEN1_U_70,UNHEALTHY,VCV001178342,SCV001751540,"Kosik Lab, Neuroscience Research Institute, University of California Santa Barbara",2021-07-12,Pathogenic,2021-06-01,"criteria provided, single submitter",
+PSEN1_U_70,UNHEALTHY,VCV001178342,SCV005867260,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-06-25,"criteria provided, single submitter",
+PSEN1_U_71,UNHEALTHY,VCV000845851,SCV001213037,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2019-11-25,"criteria provided, single submitter",
+PSEN1_U_71,UNHEALTHY,VCV000845851,SCV002572030,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2022-09-14,Likely pathogenic,2022-08-15,"criteria provided, single submitter",
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV000894035,"Fulgent Genetics, Fulgent Genetics",2022-12-13,Likely pathogenic,2021-12-16,"criteria provided, single submitter",
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV000040064,OMIM,2017-05-12,Pathogenic,1998-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV005863121,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-11-12,"criteria provided, single submitter",
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV000116547,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV000614818,Athena Diagnostics,2024-12-31,likely pathogenic,2024-08-23,"criteria provided, single submitter",not provided
+PSEN1_U_72,UNHEALTHY,VCV000018136,SCV003919619,GeneDx,2026-09-02,Likely pathogenic,2023-12-27,"criteria provided, single submitter",Not Provided
+PSEN1_U_73,UNHEALTHY,VCV000018150,SCV000040078,OMIM,2017-05-12,Pathogenic,2004-06-15,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_73,UNHEALTHY,VCV000018150,SCV000116716,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_75,UNHEALTHY,VCV000018141,SCV000116724,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_75,UNHEALTHY,VCV000018141,SCV000040069,OMIM,2017-05-12,Pathogenic,2000-10-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3"
+PSEN1_U_75,UNHEALTHY,VCV000018141,SCV001145223,Athena Diagnostics,2019-09-25,Pathogenic,2019-03-27,"criteria provided, single submitter",not provided
+PSEN1_U_76,UNHEALTHY,VCV000098117,SCV000040082,OMIM,2017-05-12,Pathogenic,2005-03-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 3, WITH SPASTIC PARAPARESIS AND UNUSUAL PLAQUES"
+PSEN1_U_76,UNHEALTHY,VCV000098117,SCV000116552,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV000116431,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV000843414,Athena Diagnostics,2018-08-31,Pathogenic,2015-11-13,"criteria provided, single submitter",not provided
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV001370703,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2020-07-01,Likely pathogenic,2020-05-05,"criteria provided, single submitter","Alzheimer disease, type 3"
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV001425405,"Johns Hopkins Genomics, Johns Hopkins University",2020-05-28,Likely pathogenic,2020-05-21,"criteria provided, single submitter",
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV000762204,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2020-09-11,"criteria provided, single submitter",
+PSEN1_U_77,UNHEALTHY,VCV000098015,SCV005900336,"Molecular Genetics, Royal Melbourne Hospital",2025-03-25,Pathogenic,2024-12-06,"criteria provided, single submitter",
+PSEN1_U_78,UNHEALTHY,VCV000659639,SCV000957187,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2022-01-26,"criteria provided, single submitter",
+PSEN1_U_78,UNHEALTHY,VCV000659639,SCV007118777,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2025-10-01,"criteria provided, single submitter",
+PSEN2_H_2,HEALTHY,VCV000295980,SCV000355146,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_2,HEALTHY,VCV000295980,SCV000355145,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_2,HEALTHY,VCV000295980,SCV005281331,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN2_H_3,HEALTHY,VCV000295981,SCV000355147,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2017-04-28,"criteria provided, single submitter",
+PSEN2_H_3,HEALTHY,VCV000295981,SCV000355148,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2017-04-28,"criteria provided, single submitter",
+PSEN2_H_4,HEALTHY,VCV000295983,SCV000355151,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_4,HEALTHY,VCV000295983,SCV000355152,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_4,HEALTHY,VCV000295983,SCV005281332,"Breakthrough Genomics, Breakthrough Genomics",2024-09-16,Benign,,"criteria provided, single submitter",not provided
+PSEN2_H_5,HEALTHY,VCV000295986,SCV000355158,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN2_H_5,HEALTHY,VCV000295986,SCV000355157,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-13,"criteria provided, single submitter",
+PSEN2_H_6,HEALTHY,VCV002052418,SCV003260424,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Likely benign,2022-03-23,"criteria provided, single submitter",
+PSEN2_H_7,HEALTHY,VCV000533780,SCV001253642,"Illumina Laboratory Services, Illumina",2020-02-20,Benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_7,HEALTHY,VCV000533780,SCV001253643,"Illumina Laboratory Services, Illumina",2020-02-20,Likely benign,2018-01-12,"criteria provided, single submitter",
+PSEN2_H_7,HEALTHY,VCV000533780,SCV000762648,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Benign,2025-10-01,"criteria provided, single submitter",
+PSEN2_H_7,HEALTHY,VCV000533780,SCV007861425,Blueprint Genetics,2026-08-20,Likely benign,2024-11-20,"criteria provided, single submitter",Not specified
+PSEN2_H_8,HEALTHY,VCV001595235,SCV002398867,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-05,Likely benign,2024-07-14,"criteria provided, single submitter",
+PSEN2_H_8,HEALTHY,VCV001595235,SCV007340375,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2026-02-03,Likely benign,2025-12-02,"criteria provided, single submitter",
+PSEN2_H_9,HEALTHY,VCV003706299,SCV005815624,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Likely benign,2025-08-11,"criteria provided, single submitter",
+PSEN2_U_2,UNHEALTHY,VCV000008853,SCV000029620,OMIM,2015-02-26,Pathogenic,2008-04-22,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_2,UNHEALTHY,VCV000008853,SCV000116395,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_3,UNHEALTHY,VCV003720283,SCV005833954,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-07-27,"criteria provided, single submitter",
+PSEN2_U_4,UNHEALTHY,VCV000008849,SCV000029615,OMIM,2015-02-26,Pathogenic,2000-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_4,UNHEALTHY,VCV000008849,SCV000116396,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_4,UNHEALTHY,VCV000008849,SCV000614833,Athena Diagnostics,2017-08-17,Likely pathogenic,2017-05-03,"criteria provided, single submitter",not provided
+PSEN2_U_4,UNHEALTHY,VCV000008849,SCV001250072,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2023-03-01,"criteria provided, single submitter",
+PSEN2_U_5,UNHEALTHY,VCV000008851,SCV000029617,OMIM,2016-09-13,Pathogenic,2003-12-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_5,UNHEALTHY,VCV000008851,SCV000116715,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV000029611,OMIM,2017-02-01,Pathogenic,2011-09-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV000116398,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV002559862,"Institute of Medical Genetics and Applied Genomics, University Hospital Tübingen",2022-08-12,Pathogenic,2022-08-12,"criteria provided, single submitter",
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV000040676,GeneReviews,2013-03-26,not provided,,no classification provided,
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV002513134,GeneDx,2022-05-16,Pathogenic,2022-03-31,"criteria provided, single submitter",Not Provided
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV001145229,Athena Diagnostics,2024-12-31,pathogenic,2023-11-21,"criteria provided, single submitter",not provided
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV004813595,"Women's Health and Genetics/Laboratory Corporation of America, LabCorp",2025-05-23,Pathogenic,2024-02-29,"criteria provided, single submitter",
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV006554383,"Institute of Human Genetics, University of Leipzig Medical Center",2025-09-16,pathogenic,2025-08-19,"criteria provided, single submitter",
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV000762646,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Pathogenic,2025-12-06,"criteria provided, single submitter",
+PSEN2_U_6,UNHEALTHY,VCV000008845,SCV001250073,CeGaT Center for Human Genetics Tuebingen,2026-07-04,Pathogenic,2026-01-01,"criteria provided, single submitter",
+PSEN2_U_7,UNHEALTHY,VCV000008846,SCV000029612,OMIM,2015-02-26,Pathogenic,1995-08-31,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_7,UNHEALTHY,VCV000008846,SCV005834291,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-10,Pathogenic,2024-10-23,"criteria provided, single submitter",
+PSEN2_U_7,UNHEALTHY,VCV000008846,SCV000116401,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_8,UNHEALTHY,VCV000008850,SCV000029616,OMIM,2016-09-13,Pathogenic,2000-01-01,no assertion criteria provided,"ALZHEIMER DISEASE, FAMILIAL, 4"
+PSEN2_U_8,UNHEALTHY,VCV000008850,SCV000116402,"VIB  Department of Molecular Genetics, University of Antwerp",2013-02-13,not provided,,no classification provided,not provided
+PSEN2_U_8,UNHEALTHY,VCV000008850,SCV000040677,GeneReviews,2013-03-26,not provided,,no classification provided,
+PSEN2_U_9,UNHEALTHY,VCV000465218,SCV000640140,"Labcorp Genetics (formerly Invitae), Labcorp",2026-02-06,Likely pathogenic,2017-09-01,"criteria provided, single submitter",
