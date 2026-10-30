@@ -1,0 +1,10 @@
+gene,graph,inputs,nodes,edges,stored_bases,stores_full_sequence,build_seconds,backend_used,source
+APP,proposed,37,72646,79053,799106,False,75.895,cpu,built here
+APP,minigraph,37,96,131,290615,True,,cpu,graphs/train/app.combined.gfa
+APP,linear,1,1,0,290579,True,,,reference FASTA
+PSEN1,proposed,125,21397,23118,235367,False,66.517,cpu,built here
+PSEN1,minigraph,125,323,458,87388,True,,cpu,graphs/train/psen1.combined.gfa
+PSEN1,linear,1,1,0,87275,True,,,reference FASTA
+PSEN2,proposed,15,15635,16089,171985,False,5.065,cpu,built here
+PSEN2,minigraph,15,34,48,57551,True,,cpu,graphs/train/psen2.combined.gfa
+PSEN2,linear,1,1,0,57543,True,,,reference FASTA

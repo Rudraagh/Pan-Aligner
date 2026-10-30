@@ -1,0 +1,28 @@
+{
+  "command": "python scripts/shared_query_eval.py --query-set heldout",
+  "parameters": {
+    "k": 11,
+    "window_size": 6,
+    "min_node_support": 2,
+    "backend": "cpu"
+  },
+  "graph_inputs": "reference + train haplotypes (train_manifest), matching graphs/train/<gene>.combined.gfa",
+  "queries": "held-out haplotypes (test_manifest)",
+  "input_sha256": {
+    "data/metadata/train_manifest.json": "61982d50657a0bb6c75795efba708187ac81592f3a79b75084bfe8eb83b69f39",
+    "data/metadata/test_manifest.json": "819cf7b69005a43f69852623065551f8a63b076b74b51a9c87a8f08b83acc422",
+    "graphs/train/app.combined.gfa": "9290c8074d73c07ef004121a44171c1fbe035c9ca6e10b3be19ba59996fc581e",
+    "graphs/train/psen1.combined.gfa": "e4ef68aae74c737522b2106e15760bb18680128c13488958470c8a70111b8ed7",
+    "graphs/train/psen2.combined.gfa": "a38153e23ba51f1b509236a723b7733160bece14a0533c089fd327782b144684"
+  },
+  "host": "Windows-11-10.0.26300-SP0",
+  "python": "3.13.7",
+  "runtime_seconds": 205.172,
+  "comparison_type": "graph representation of unseen haplotypes (alignment-free); not alignment accuracy",
+  "notes": [
+    "Proposed transition recall checks only that an edge exists; minigraph/linear transition recall checks the exact bases.",
+    "Node recall: the proposed graph stores only k-mers selected as minimizers in its inputs (low-support ones are kept as rescued nodes), while minigraph/linear are checked for the k-mer anywhere in their sequence.",
+    "Forward strand only: the proposed minimizers are not canonical.",
+    "minigraph build time is not measured here; graphs/train/<gene>.combined.gfa is prebuilt by scripts/build_graph.py."
+  ]
+}
