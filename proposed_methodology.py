@@ -33,7 +33,12 @@ def main() -> None:
     parser.add_argument("--pg-scunk-stress-demo", action="store_true", help="Run the controlled synthetic PG-SCUnK stress demonstration, not a biological benchmark.")
     parser.add_argument("--final-proposed-evaluation", action="store_true", help="Run the complete proposed-only APP/PSEN1/PSEN2 evaluation bundle.")
     parser.add_argument("--demo-quality-threshold", type=float, default=0.99, help="Target quality used only by the controlled PG-SCUnK stress demonstration.")
-    parser.add_argument("--backend", type=str, default="auto", help="Minimizer backend: auto, cpu, or gpu.")
+    parser.add_argument(
+        "--backend",
+        choices=("cpu", "gpu", "auto"),
+        default="cpu",
+        help="Minimizer-extraction backend (graph construction is always CPU). gpu fails if CUDA/CuPy is unusable; auto falls back to CPU and records why.",
+    )
     parser.add_argument(
         "--max-assemblies-per-bucket",
         type=int,
@@ -69,7 +74,7 @@ def main() -> None:
         print(json.dumps({key: value for key, value in result.items() if key != "feedback"}, indent=2))
         return
     if args.final_proposed_evaluation:
-        result = run_final_proposed_evaluation(output_dir=args.output_dir.resolve() if args.output_dir else None)
+        result = run_final_proposed_evaluation(output_dir=args.output_dir.resolve() if args.output_dir else None, backend=args.backend)
         print(json.dumps({key: value for key, value in result.items() if key != "details"}, indent=2))
         return
 

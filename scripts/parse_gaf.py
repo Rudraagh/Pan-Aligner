@@ -25,7 +25,12 @@ class AlignmentResult:
 
     @property
     def coverage(self) -> float:
-        return self.alignment_block_length / self.query_length if self.query_length else 0.0
+        """Fraction of the query inside the alignment, in [0, 1].
+
+        Uses the query interval, not the GAF block length (column 11): the block
+        includes deletions, so block/query_length could exceed 1.
+        """
+        return max(0, self.query_end - self.query_start) / self.query_length if self.query_length else 0.0
 
     @property
     def identity(self) -> float:

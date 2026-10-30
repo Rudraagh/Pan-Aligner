@@ -84,11 +84,15 @@ def build_proposed_pangenome_graph(
     validate_anchor_weights(anchor_alpha, anchor_beta, anchor_gamma)
 
     minimizers_by_assembly: dict[str, list[MinimizerRecord]] = {}
-    backend_used = "cpu"
+    backends_seen: set[str] = set()
+    backend_notes: set[str] = set()
     for assembly in assemblies:
         payload = compute_minimizers(assembly.sequence, k, window_size, assembly.assembly_id, backend=backend)
-        backend_used = payload["backend_used"]
+        backends_seen.add(payload["backend_used"])
+        backend_notes.add(payload["backend_note"])
         minimizers_by_assembly[assembly.assembly_id] = _records_from_payload(payload)
+    # "mixed" means auto mode fell back to CPU for some assemblies only.
+    backend_used = next(iter(backends_seen)) if len(backends_seen) == 1 else "mixed"
 
     grouped_records: dict[str, list[MinimizerRecord]] = defaultdict(list)
     for records in minimizers_by_assembly.values():
@@ -173,6 +177,14 @@ def build_proposed_pangenome_graph(
             "minimizer_records": 0,
             "nodes": 0,
             "reason": "Observed minimizers are retained to preserve haplotype paths.",
+        },
+        "backend": {
+            "requested": backend.lower(),
+            "minimizer_extraction": backend_used,
+            "graph_construction": "cpu",
+            "consistency_anchors_feedback": "cpu",
+            "notes": sorted(backend_notes),
+            "scope": "Only minimizer extraction can run on the GPU; every later stage runs on the CPU.",
         },
     }
 

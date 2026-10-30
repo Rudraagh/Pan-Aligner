@@ -78,7 +78,17 @@ def _row(gene: str, graph, feedback: dict, validation: dict) -> dict:
     }
 
 
-def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, baseline_exists: bool) -> None:
+def _backend_statement(backend_requested: str, rows: list[dict]) -> str:
+    used = sorted({row["backend_used"] for row in rows})
+    if used == ["cpu"]:
+        return f"Minimizer backend requested: `{backend_requested}`; every gene used the CPU, so this evaluation has no GPU acceleration."
+    return (
+        f"Minimizer backend requested: `{backend_requested}`; minimizer extraction used {', '.join(f'`{item}`' for item in used)}. "
+        "Only minimizer extraction can run on the GPU; graph construction, consistency scoring, anchor selection and PG-SCUnK always run on the CPU."
+    )
+
+
+def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, baseline_exists: bool, backend_requested: str = "cpu") -> None:
     table = "\n".join(
         f"| {row['gene']} | {row['input_assembly_count']} | {row['node_count']} | {row['edge_count']} | {row['overall_quality']:.6f} | {row['backend_used']} |"
         for row in rows
@@ -93,15 +103,22 @@ def _write_readme(destination: Path, rows: list[dict], runtime_seconds: float, b
         "## Datasets and results\n\n| Gene | Assemblies / paths | Nodes | Edges | Overall structural quality | Backend |\n|---|---:|---:|---:|---:|---|\n"
         f"{table}\n\n"
         "All assemblies currently listed in `data/metadata/train_manifest.json` were used, without the older eight-per-bucket cap.\n\n"
-        "## Pipeline\n\nFASTA inputs → deterministic CPU minimizers → path-preserving proposed graph → Step 2 structural/path coherence → Step 3 anchors → Step 4 PG-SCUnK controller.\n\n"
-        "## Interpretation and limitations\n\nGraph/path consistency is structural coherence derived from observed minimizer paths, not independent biological correctness. The proposed method has no GPU acceleration in this evaluation; the recorded backend is CPU. Baseline alignment metrics and proposed structural metrics are not directly interchangeable.\n\n"
+        "## Pipeline\n\nFASTA inputs → deterministic minimizers → path-preserving proposed graph → Step 2 structural/path coherence → Step 3 anchors → Step 4 PG-SCUnK controller.\n\n"
+        "## Interpretation and limitations\n\nGraph/path consistency is structural coherence derived from observed minimizer paths, not independent biological correctness. "
+        f"{_backend_statement(backend_requested, rows)} Baseline alignment metrics and proposed structural metrics are not directly interchangeable.\n\n"
         f"Runtime: {runtime_seconds:.2f} seconds. {baseline_note}\n",
         encoding="utf-8",
     )
 
 
-def run_final_proposed_evaluation(*, output_dir: Path | None = None) -> dict:
-    """Run all available APP/PSEN1/PSEN2 inputs with the unchanged proposed stack."""
+def run_final_proposed_evaluation(*, output_dir: Path | None = None, backend: str = "cpu", genes: tuple[str, ...] = ("APP", "PSEN1", "PSEN2")) -> dict:
+    """Run all available APP/PSEN1/PSEN2 inputs with the unchanged proposed stack.
+
+    `backend` selects minimizer extraction only (cpu default; gpu raises if CUDA is
+    unusable; auto falls back to CPU and records why in graph.metadata["backend"]).
+    """
+    if backend.lower() not in {"auto", "cpu", "gpu"}:
+        raise ValueError("backend must be one of: auto, cpu, gpu.")
     root = Path(__file__).resolve().parents[2]
     manifest = root / "data" / "metadata" / "train_manifest.json"
     destination = ensure_dir(output_dir or (OUTPUTS_DIR / "proposed_final_evaluation"))
@@ -111,10 +128,12 @@ def run_final_proposed_evaluation(*, output_dir: Path | None = None) -> dict:
     for assembly in assemblies:
         grouped.setdefault(assembly.gene, []).append(assembly)
     rows, details = [], {}
-    for gene in ("APP", "PSEN1", "PSEN2"):
+    for gene in genes:
+        if gene not in grouped:
+            raise ValueError(f"No assemblies for {gene} in {manifest}.")
         gene_assemblies = grouped[gene]
         gene_dir = ensure_dir(destination / gene)
-        feedback = run_pg_scunk_feedback_loop(gene_assemblies, backend="cpu")
+        feedback = run_pg_scunk_feedback_loop(gene_assemblies, backend=backend)
         graph = feedback["best_graph"]
         bundle = write_proposed_graph_bundle(graph, gene_dir)
         visualization = visualize_graph(Path(bundle["graph_gfa"]), gene_dir / f"{gene.lower()}.proposed_graph")
@@ -123,12 +142,12 @@ def run_final_proposed_evaluation(*, output_dir: Path | None = None) -> dict:
         write_json(gene_dir / "validation.json", validation)
         row = _row(gene, graph, feedback, validation)
         rows.append(row)
-        details[gene] = {"summary": row, "validation": validation, "artifacts": {**bundle, **visualization, **reports}}
+        details[gene] = {"summary": row, "validation": validation, "backend": graph.metadata["backend"], "artifacts": {**bundle, **visualization, **reports}}
     runtime = time.perf_counter() - started
     summary_csv = destination / "proposed_final_summary.csv"
     with summary_csv.open("w", newline="", encoding="utf-8") as handle:
         writer = csv.DictWriter(handle, fieldnames=SUMMARY_FIELDS); writer.writeheader(); writer.writerows(rows)
-    summary = {"evaluation_type": "proposed_only_structural_evaluation", "dataset_manifest": str(manifest.resolve()), "complete_inputs_used": True, "runtime_seconds": runtime, "rows": rows, "genes": details}
+    summary = {"evaluation_type": "proposed_only_structural_evaluation", "dataset_manifest": str(manifest.resolve()), "complete_inputs_used": True, "backend_requested": backend.lower(), "runtime_seconds": runtime, "rows": rows, "genes": details}
     summary_json = destination / "proposed_final_summary.json"
     write_json(summary_json, summary)
     baseline_metrics = root / "outputs" / "evaluation" / "alignment_metrics.json"
@@ -143,5 +162,5 @@ def run_final_proposed_evaluation(*, output_dir: Path | None = None) -> dict:
         + baseline_text + "\n",
         encoding="utf-8",
     )
-    _write_readme(destination, rows, runtime, baseline_metrics.exists())
+    _write_readme(destination, rows, runtime, baseline_metrics.exists(), backend.lower())
     return {"output_dir": str(destination.resolve()), "summary_csv": str(summary_csv.resolve()), "summary_json": str(summary_json.resolve()), "runtime_seconds": runtime, "rows": rows, "details": details}
