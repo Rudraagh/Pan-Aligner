@@ -370,7 +370,7 @@
     "alignment_score": 87231.0,
     "normalized_score": 0.9995645647366189,
     "identity": 0.9993813369994844,
-    "coverage": 1.0001833411635288,
+    "coverage": 0.9998395764819122,
     "mapping_quality": 60,
     "path_span": 87261,
     "matched_nodes": 3,
