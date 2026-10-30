@@ -78,5 +78,6 @@ Accept when MAPQ >= Q. `gradient_boosting at same coverage` is that model's erro
 
 ## Limits
 
-- The incorrect class is dominated by off-target reads on single-locus graphs, so the models mainly learn that low identity and coverage mean wrong. This is evidence about detecting off-target or contaminating reads, not about whole-genome alignment.
+- 66% of incorrect alignments are off-target reads on single-locus graphs, where the true locus was not available to the aligner. This says nothing direct about whole-genome alignment.
+- Of 536 within-locus errors, 96% from minigraph, so those results mostly describe that aligner. Errors from the same regions repeat, so the effective sample is smaller than the count.
 - Simulated reads (PBSIM2, locus scale); real sequencing data and whole-genome graphs are not covered.

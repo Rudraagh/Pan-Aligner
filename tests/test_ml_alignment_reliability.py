@@ -166,6 +166,24 @@ class MapqThresholdTests(unittest.TestCase):
 
 
 @unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
+class ReportLimitsTests(unittest.TestCase):
+    def _limits(self, decoys: int, within: int, within_aligner: str = "minigraph") -> str:
+        base = {"group": "g", "setting": "s", "own_gene": "APP", "graph_gene": "APP", "read": "r!x!1!2!+"}
+        rows = [{**base, "label": "incorrect", "decoy": 1, "aligner": "minigraph"}] * decoys
+        rows += [{**base, "label": "incorrect", "decoy": 0, "aligner": within_aligner}] * within
+        return ar.report_limits(rows)
+
+    def test_dominated_wording_only_when_off_target_really_dominates(self) -> None:
+        self.assertIn("dominated by off-target", self._limits(99, 1)[0])
+        text = self._limits(66, 34)[0]
+        self.assertNotIn("dominated", text)
+        self.assertIn("66%", text)
+
+    def test_names_the_aligner_share_of_within_locus_errors(self) -> None:
+        self.assertIn("100% from minigraph", " ".join(self._limits(66, 34)))
+
+
+@unittest.skipIf(ar is None, "scikit-learn/numpy not installed in this environment")
 class ReportTests(unittest.TestCase):
     def test_report_states_numbers_and_caveats_from_the_results(self) -> None:
         import tempfile

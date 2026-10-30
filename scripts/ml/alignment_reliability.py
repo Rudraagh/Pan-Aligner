@@ -343,11 +343,30 @@ def write_report(path: Path, rows: list[dict], summaries: list[dict], targets: d
         *_mapq_section(mapq, number),
         "## Notes", "", *(notes or ["- none"]), "",
         "## Limits", "",
-        "- The incorrect class is dominated by off-target reads on single-locus graphs, so the models mainly learn that low identity "
-        "and coverage mean wrong. This is evidence about detecting off-target or contaminating reads, not about whole-genome alignment.",
+        *[f"- {limit}" for limit in report_limits(rows)],
         "- Simulated reads (PBSIM2, locus scale); real sequencing data and whole-genome graphs are not covered.",
     ]
     path.write_text("\n".join(lines) + "\n", encoding="utf-8")
+
+
+def report_limits(rows: list[dict]) -> list[str]:
+    """Limits that depend on what the incorrect class actually contains."""
+    incorrect = [row for row in rows if row["label"] == "incorrect"]
+    if not incorrect:
+        return []
+    off_target = sum(int(row["decoy"]) == 1 for row in incorrect) / len(incorrect)
+    if off_target >= 0.9:
+        limits = ["The incorrect class is dominated by off-target reads on single-locus graphs, so the models mainly learn that low identity "
+                  "and coverage mean wrong. This is evidence about detecting off-target or contaminating reads, not about whole-genome alignment."]
+    else:
+        limits = [f"{off_target:.0%} of incorrect alignments are off-target reads on single-locus graphs, where the true locus was not available "
+                  "to the aligner. This says nothing direct about whole-genome alignment."]
+    within = [row for row in incorrect if int(row["decoy"]) == 0]
+    if within:
+        aligner, count = Counter(row["aligner"] for row in within).most_common(1)[0]
+        limits.append(f"Of {len(within)} within-locus errors, {count / len(within):.0%} from {aligner}, so those results mostly describe that aligner. "
+                      "Errors from the same regions repeat, so the effective sample is smaller than the count.")
+    return limits
 
 
 def _mapq_section(mapq: dict | None, number) -> list[str]:
