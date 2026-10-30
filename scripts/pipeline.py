@@ -1,10 +1,15 @@
+"""LEGACY: end-to-end healthy/unhealthy ML pipeline (features, training, prediction).
+
+Not a valid classifier evaluation; see common.LEGACY_ML_NOTICE and docs/13.
+"""
+
 from __future__ import annotations
 
 import argparse
 from pathlib import Path
 
 from build_graph import build_graphs
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, resolve_binary, resolve_project_path
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, resolve_binary, resolve_project_path, warn_legacy_ml
 from evaluate import evaluate_test_set
 from extract_features import generate_feature_dataset
 from predict_ml import predict_with_ml
@@ -132,6 +137,7 @@ def main() -> None:
     parser.add_argument("--ml-model-path", type=Path, default=ROOT / "models" / "random_forest.pkl", help="Serialized ML model used when --predict-ml is set.")
     parser.add_argument("--minigraph-bin", type=str, default=None, help="Path to minigraph. Defaults to ./minigraph/minigraph.")
     parser.add_argument("--panaligner-bin", type=str, default=None, help="Path to PanAligner. Defaults to ./PanAligner/PanAligner.")
+    warn_legacy_ml("pipeline")
     args = parser.parse_args()
 
     minigraph_bin = resolve_binary(args.minigraph_bin, [Path("minigraph/minigraph")])

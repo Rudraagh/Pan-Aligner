@@ -376,6 +376,17 @@ Status in the current version:
 - still part of the repository history
 - not the main workflow described by the current README and `main.py`
 - best treated as legacy or archival functionality unless the project scope is intentionally expanded back toward ML
+- each module's entry point now prints `common.LEGACY_ML_NOTICE` before running
+
+Why its results are not a valid classifier evaluation (checked against the current data):
+
+- **Label leakage in the features.** `extract_features.py` aligns every training sequence against the healthy and unhealthy class graphs, which were built from those same training sequences, so `healthy_overlap_score` / `unhealthy_overlap_score` reveal the label. Test sequences carry a variant that is in neither graph, so their features come from a different distribution.
+- **What the data is.** Each of the 220 labelled sequences is the GRCh38 reference for its locus with a single inserted variant (mostly one SNV; a few two-SNV and indel cases). They are not real haplotypes, and the source and criteria of the healthy/unhealthy labels are not recorded in the repository.
+- **Position confound.** Labels correlate with genomic position: APP "unhealthy" variants all lie at positions 11,228–17,076 while "healthy" ones span 153–101,774, and PSEN2 is almost separated by position. A nearest-training-variant rule already labels 33 of the 46 test sequences correctly.
+- **Leaky split.** The seed-42 split is random per sequence, so neighbouring variants (median distance 4–6 bp for APP and PSEN1) fall on both sides.
+- `evaluate.py` scores the hand-weighted predictor on that same split, so its accuracy and F1 inherit the split problem.
+
+Any new healthy/unhealthy model needs a documented label source, group-disjoint (genomic-window) splits, position-only and nearest-neighbour baselines, and calibrated abstention.
 
 ## What is only partially reproduced
 

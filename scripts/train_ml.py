@@ -1,3 +1,8 @@
+"""LEGACY: RF/SVM/logistic-regression training for the healthy/unhealthy ML path.
+
+Not a valid classifier evaluation; see common.LEGACY_ML_NOTICE and docs/13.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -24,7 +29,7 @@ from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.svm import SVC
 
-from common import OUTPUTS_DIR, ROOT, ensure_dir, read_json, write_json
+from common import OUTPUTS_DIR, ROOT, ensure_dir, read_json, write_json, warn_legacy_ml
 
 
 MODEL_INPUT_COLUMNS = [
@@ -410,6 +415,7 @@ def main() -> None:
     parser.add_argument("--models-dir", type=Path, default=ROOT / "models", help="Directory where trained models will be serialized.")
     parser.add_argument("--baseline-metrics", type=Path, default=OUTPUTS_DIR / "evaluation" / "metrics.json", help="Optional rule-based baseline metrics JSON.")
     parser.add_argument("--baseline-records", type=Path, default=OUTPUTS_DIR / "evaluation" / "records.json", help="Optional rule-based baseline records JSON.")
+    warn_legacy_ml("train_ml")
     args = parser.parse_args()
 
     metrics = train_and_evaluate_models(

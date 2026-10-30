@@ -1,3 +1,8 @@
+"""LEGACY: alignment-derived features for the healthy/unhealthy ML path.
+
+Not a valid classifier evaluation; see common.LEGACY_ML_NOTICE and docs/13.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -5,7 +10,7 @@ import csv
 from pathlib import Path
 
 from align import run_panaligner
-from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json, warn_legacy_ml
 from parse_gaf import AlignmentResult, best_alignment
 from visualize import parse_gfa
 
@@ -229,6 +234,7 @@ def main() -> None:
         default=OUTPUTS_DIR / "ml",
         help="Directory where extracted features and alignment artifacts will be written.",
     )
+    warn_legacy_ml("extract_features")
     args = parser.parse_args()
 
     panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])

@@ -1,3 +1,8 @@
+"""LEGACY: query prediction with models from train_ml.py.
+
+Not a valid classifier evaluation; see common.LEGACY_ML_NOTICE and docs/13.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -5,7 +10,7 @@ from pathlib import Path
 
 import joblib
 
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, write_json, warn_legacy_ml
 from extract_features import extract_sequence_features
 from predictor import infer_gene
 from train_ml import prepare_model_input
@@ -81,6 +86,7 @@ def main() -> None:
     parser.add_argument("--train-graph-manifest", type=Path, default=METADATA_DIR / "train_graph_manifest.json", help="Train graph manifest JSON.")
     parser.add_argument("--panaligner-bin", type=str, default=None, help="Path to PanAligner binary.")
     parser.add_argument("--output-dir", type=Path, default=OUTPUTS_DIR / "ml" / "predict", help="Directory where query alignment artifacts will be written.")
+    warn_legacy_ml("predict_ml")
     args = parser.parse_args()
 
     panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])

@@ -1,3 +1,8 @@
+"""LEGACY: accuracy/F1 of the hand-weighted healthy/unhealthy score on the random test split.
+
+Not a valid classifier evaluation; see common.LEGACY_ML_NOTICE and docs/13.
+"""
+
 from __future__ import annotations
 
 import argparse
@@ -10,7 +15,7 @@ from pathlib import Path
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_auc_score
 
-from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json
+from common import METADATA_DIR, OUTPUTS_DIR, ROOT, ensure_dir, read_json, resolve_binary, resolve_project_path, write_json, warn_legacy_ml
 from predictor import predict_health_state
 
 
@@ -319,6 +324,7 @@ def main() -> None:
         default=OUTPUTS_DIR / "evaluation",
         help="Directory where evaluation metrics and reports will be written.",
     )
+    warn_legacy_ml("evaluate")
     args = parser.parse_args()
 
     panaligner_bin = resolve_binary(args.panaligner_bin, [Path("PanAligner/PanAligner")])

@@ -171,3 +171,17 @@ def resolve_binary(explicit: str | None, candidates: Sequence[Path]) -> Path:
     raise FileNotFoundError(
         f"Unable to locate required binary. Checked: {candidate_text}. Pass the path explicitly with the script argument."
     )
+
+
+LEGACY_ML_NOTICE = (
+    "LEGACY healthy/unhealthy ML path, kept for history only: it is not a valid classifier evaluation, "
+    "so do not report its metrics. Training rows are aligned against class graphs built from those same "
+    "sequences, so the healthy/unhealthy overlap features leak the label, while test rows (whose variant "
+    "is in neither graph) have a different feature distribution. Each labelled sequence is the reference "
+    "plus one variant, the labels correlate with genomic position, and the random per-sequence split puts "
+    "neighbouring variants on both sides. See docs/13_current_version_implementation_status.md."
+)
+
+
+def warn_legacy_ml(module_name: str) -> None:
+    print(f"[{module_name}] {LEGACY_ML_NOTICE}", file=sys.stderr)
