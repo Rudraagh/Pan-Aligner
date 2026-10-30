@@ -15,7 +15,7 @@
     "anchor_gamma": 0.3
   },
   "target_quality_threshold": 0.99,
-  "initial_quality": 0.6779687499999999,
+  "initial_quality": 0.709375,
   "initial_below_target": true,
   "all_candidates_rebuilt_with_real_graph_constructor": true,
   "quality_scores_recomputed_from_graph": true,
@@ -30,8 +30,8 @@
     "anchor_beta": 0.35,
     "anchor_gamma": 0.3
   },
-  "best_quality": 0.8034114583333333,
-  "final_quality": 0.7695924479166667,
+  "best_quality": 0.768719362745098,
+  "final_quality": 0.6680555555555555,
   "unique_configurations_evaluated": 7,
-  "stopping_reason": "max_rounds_reached"
+  "stopping_reason": "no_unseen_configurations"
 }
