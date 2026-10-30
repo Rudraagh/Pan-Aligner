@@ -33,6 +33,7 @@ outputs/**/*.pyc
 
 # Model A simulated reads and GAFs (regenerable: scripts/ml/build_alignment_dataset.py).
 /outputs/ml_alignment/sim/
+/outputs/ml_alignment_v2/sim/
 
 Thumbs.db
 .DS_Store
