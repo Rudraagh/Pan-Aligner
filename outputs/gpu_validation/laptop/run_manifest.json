@@ -1,0 +1,77 @@
+{
+  "command": "python scripts/gpu_minimizer_bench.py --output-dir ../outputs/gpu_validation/laptop",
+  "git_commit": "f2d353057c555555526629b21e0ae85975fd3a3e",
+  "git_uncommitted_code": [],
+  "seed": 20261029,
+  "parameters": {
+    "parity_cases": 400,
+    "repetitions": 5,
+    "random_lengths": [
+      10000,
+      100000,
+      1000000
+    ],
+    "random_parameters": [
+      [
+        15,
+        10
+      ],
+      [
+        31,
+        20
+      ],
+      [
+        55,
+        10
+      ]
+    ],
+    "gene_parameters": [
+      11,
+      6
+    ]
+  },
+  "reference_input_sha256": {
+    "data/raw/app_reference.fa": "8af944d3663bcb47d1e5399ea30260efddd147eacc77681b3e583424987cd2cb",
+    "data/raw/psen1_reference.fa": "cb91993f71437c5e35fe0b45931b3bc774b111fa2cf7a7577d4e825cccf12d99",
+    "data/raw/psen2_reference.fa": "517347854c7a0f8d948a168f6726b10ae40059ce4acb05651e739e22c13ccf70"
+  },
+  "device": {
+    "name": "NVIDIA GeForce RTX 3070 Ti Laptop GPU",
+    "compute_capability": "8.6",
+    "total_memory_bytes": 8589410304,
+    "cuda_runtime": 13020,
+    "cuda_driver": 13030
+  },
+  "cupy": "14.2.0",
+  "python": "3.13.7",
+  "host": "Windows-11-10.0.26300-SP0",
+  "processor": "AMD64 Family 25 Model 68 Stepping 1, AuthenticAMD",
+  "pip_freeze": [
+    "biopython==1.88",
+    "contourpy==1.4.0",
+    "cuda-pathfinder==1.8.4",
+    "cuda-toolkit==13.3.1",
+    "cupy-cuda13x==14.2.0",
+    "cycler==0.12.1",
+    "fonttools==4.68.0",
+    "kiwisolver==1.5.1",
+    "matplotlib==3.11.2",
+    "networkx==3.7",
+    "numpy==2.5.4",
+    "nvidia-cuda-nvrtc==13.3.33",
+    "nvidia-cuda-runtime==13.3.29",
+    "packaging==26.3",
+    "pillow==13.0.0",
+    "pyparsing==3.3.3",
+    "python-dateutil==3.0.0",
+    "six==1.17.0",
+    "tzdata==2026.6"
+  ],
+  "runtime_seconds": 161.832,
+  "scope": [
+    "Minimizer extraction only; graph construction and every later stage run on the CPU and are not measured.",
+    "End-to-end times include Python record construction and host-device transfer.",
+    "gpu_phases_ms are CUDA-event times on the default stream; python_heap_peak_bytes is tracemalloc, not RSS.",
+    "Single local device; not HPC GPU validation and not a whole-pipeline speed-up."
+  ]
+}
