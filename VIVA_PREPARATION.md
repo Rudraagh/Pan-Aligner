@@ -233,12 +233,51 @@ The run covered 174 assemblies.  It validates serialisation and structural prope
 - **Abstention (v2, strict evaluation):** coverage targets open the band in every fold and abstained alignments are enriched for errors (7–76% vs 0.83%), but error targets of 0.2% or lower are not reached on held-out data and over half of rows get p(incorrect) = 0 while about 0.25% of them are wrong, so the three-way output is not dependable.
 - **Abstention (first dataset):** with the 1% / 90% targets the "insufficient evidence" band never opened. With 0.1% / 99% it covers about 2% of alignments, and held-out error among accepted is 0.12–0.17%, above the 0.1% target; that run used only the weak haplotype split.
 
-**Model B, healthy/disease-associated classification.** A feasibility study only.
-- **Data:** each of the 220 labelled sequences is the reference plus one variant.
-- **Labels:** their source is undocumented; they agree with current ClinVar classes but cluster by position and consequence.
-- **Results under 1 kb window-grouped CV:** context-only balanced accuracy 0.550; the nearest training variant 0.628 and a 5-nearest position vote 0.646; almost every prediction "uncertain". At 20 kb windows these fall to 0.453, 0.450 and 0.591.
+**Model B, variant classification experiment: a negative result.** Full account: `docs/17_ml_layer.md`. Evidence: `outputs/model_b_training/20261030_training_01/`.
 
-**Safe claim:** "Model A detects off-target alignments on simulated, locus-scale reads far better than MAPQ alone. Model B shows the healthy/unhealthy labels cannot be recovered from sequence context without leakage; it is research label recovery, not diagnosis."
+- **What it investigated:** whether simple sequence-derived features recover ClinVar classification direction (P/LP against B/LB) in APP, PSEN1 and PSEN2 better than simple baselines.
+- **Dataset:** 693 variants from ClinVar at 1 star or more: 162 P/LP, 531 B/LB, 186 missense (153 P / 33 B). `VCV001231596` is excluded because its REF equals its ALT. The freeze still has 694 rows; the final data is `20261030_validation_02`, and `20261030_validation_01` is superseded.
+- **Effective sample:** 13 clusters hold pathogenic variants, and only 12 among missense.
+- **Why it is not an Alzheimer's classifier:** labels classify variants in three genes, not people. There are no patients, phenotypes or outcomes, and the disease assertions are not Alzheimer-specific. Benign does not mean protective.
+- **Features:** variant type, length change, transition flag, strand-neutral substitution, trinucleotide context, CpG context, GC content and homopolymer run. For missense: amino-acid change, BLOSUM62, change in hydropathy, volume and charge, and proline, glycine and cysteine flags. Gene, position and consequence are baselines only.
+- **Evaluation:** clusters (1 kb chains plus same residue) never cross roles; 5 folds, 5 seeds; settings and thresholds chosen on validation; 95% intervals from resampling clusters.
+
+| Experiment | Balanced accuracy |
+|---|---:|
+| Missense model | 0.734 |
+| Best baseline, chosen on validation | 0.848 |
+| Missense model without GC | 0.622 |
+| Amino-acid features alone | 0.582 |
+| All-variant model | 0.702 |
+| All-variant model without GC | 0.578 |
+| Consequence-only baseline | 0.969 |
+
+Primary difference −0.114. Headline seed 0: −0.177 (95% interval −0.311 to −0.021). Seeds 1–4 run from −0.139 to −0.078, with intervals including zero. So: no demonstrated gain.
+
+**Why the baselines won.** They exploit how the dataset is composed. PSEN1 missense is 125 P to 4 B, so gene alone scores 0.848. Benign records are mostly synonymous, intronic or UTR, so consequence scores 0.969. The sequence model was not given either. Neither baseline is a biological predictor of an individual variant, and gene may reflect curation and reporting differences.
+
+**What GC analysis revealed.** Removing GC lowers the mean from 0.734 to 0.622. `gc_200` has the largest coefficient (−0.72, negative in all 25 folds), 88% of its variance lies between clusters, and its direction reverses by gene (AUC 0.05, 0.63, 0.78). It appears to carry regional or gene-associated signal, mostly through APP. On seed 0 the paired difference is only 0.023 (−0.108 to 0.176). This does not prove sequence holds no biological information.
+
+**Why it is still useful.** It stops an inflated claim. The protocol could have shown a gain, and it did not. It shows that leakage-aware design matters, that strong-looking features can be proxies for region, and that any future model must beat gene and consequence. It also shows how little independent data these three genes offer.
+
+**Possible improvements, each a new declared analysis:** a later frozen ClinVar release with at least 20 P/LP and 20 B/LB in new clusters; more genes; protein-domain or conservation features, watching for circularity; REVEL, CADD or AlphaMissense as comparisons only; control for PSEN1/PSEN2 paralogy.
+
+**Likely viva questions:**
+
+- *"Did Model B fail?"* "The experiment worked and its answer was negative: these features didn't beat simple baselines under a fixed protocol. That's a finding about this representation and dataset."
+- *"Can it predict Alzheimer's or someone's risk?"* "No. It only tries to recover a database annotation of variants in three genes."
+- *"Why not just report the gene baseline's 0.848 as your model?"* "It reflects PSEN1 having 125 pathogenic and 4 benign missense variants. It says nothing about a given variant's biology, and may reflect how genes were studied and reported."
+- *"Why use balanced accuracy?"* "Classes are imbalanced, 162 to 531 overall and 153 to 33 in missense, so plain accuracy would reward predicting the majority."
+- *"Why group by cluster?"* "Nearby variants and those on one residue are not independent. Random splits let a model recognise a region. That's why 12 pathogenic missense clusters, not 153 variants, sets the real sample size."
+- *"Does losing accuracy without GC prove GC matters biologically?"* "No. It points the other way: GC mostly marks region and gene. It's an inference from the pattern, not a proof, and the seed 0 paired interval includes zero."
+- *"So sequence has no information about pathogenicity?"* "We can't say that. These features are simple and the data are few."
+- *"Could you improve it by tuning now?"* "Not as confirmation. We've read the test folds, so any further run on them is exploratory. Independent evaluation needs new variants or a later frozen release."
+- *"Holding out APP gave 0.660 against 0.500. Doesn't that show generalisation?"* "No. The baseline can't exceed 0.5 there by construction, the model includes GC, and three genes can't show generalisation. Other held-out genes gave about 0.47–0.52."
+- *"PSEN2 amino-acid features reached 0.736. Isn't that a finding?"* "No. It's an after-the-fact observation on 14 variants."
+- *"Is 693 your sample size?"* "Only as a row count. Thirteen clusters hold pathogenic variants, and 64% of records rest on one submitter."
+- *"What happened to the original 220-sequence dataset?"* "Its label source is undocumented, though an audit found 216 of 220 match ClinVar records. We replaced it with documented data and kept the old study as history."
+
+**Safe claim:** "Model A detects off-target alignments on simulated, locus-scale reads far better than MAPQ alone. Under cluster-separated evaluation, Model B's sequence-derived features did not recover ClinVar classification direction better than gene or consequence alone, in APP, PSEN1 and PSEN2. It carries no claim about diagnosis, individual risk or Alzheimer's disease."
 
 Examiner attack: *"Your PR-AUC of about 0.98 looks too good."* Answer: "Our first figure of 0.995 was optimistic because of a weak split, which we replaced. Almost every incorrect alignment is an off-target read aligned to a single-locus graph, which low identity and coverage give away. It says nothing about whole-genome misplacement; only 96 within-locus errors exist, too few for strong claims."
 
@@ -389,7 +428,7 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 
 **Must know parameters:** default final initial `k=11`, window `6`, support `2`, anchors `12`, spacing `4.0`, weights `.35/.35/.30`, threshold `.72` (no anchor-coverage gate since `22076bc`), searched parameters `k` and `window` only, tolerance `1e-4`, max rounds `3`.
 
-**20 must-know questions:** What is a minimizer? Why paths? What is rescued? What exactly does the GPU do, and what not? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required? Where do Model A's labels come from? Why is MAPQ a weak baseline here? Why is Model B only a feasibility study? Why was the legacy ML path retired?
+**20 must-know questions:** What is a minimizer? Why paths? What is rescued? What exactly does the GPU do, and what not? How is node support counted? What is an observed edge? Is consistency circular? Q vs acceptance? What is U/D/C? Why fixed weights? What does visited do? Why best-so-far? Why was anchor coverage removed from Q? Why does the controller not retune on real data? Why is min_node_support not searched? What validates JSON? What do tests not prove? Is this PanAligner? Is minigraph proposed? What future evidence is required? Where do Model A's labels come from? Why is MAPQ a weak baseline here? Why is Model B's result negative, and why is it not an Alzheimer's classifier? Why was the legacy ML path retired?
 
 ## 19. CLAIMS I MUST NOT MAKE
 
@@ -406,7 +445,9 @@ Use the answer pattern below: **short** is the opening sentence; **deeper** is t
 | “PSEN1 is biologically worse.” | “The per-gene differences are small structural-score differences; no biological conclusion follows.” |
 | “Our model replaces MAPQ.” | “On simulated locus-scale reads it beats MAPQ when few alignments are discarded, but MAPQ 60 is about equal at its own operating point.” |
 | “Our model detects misaligned reads with 0.98 PR-AUC.” | “On simulated locus-scale reads, mostly off-target alignments; within-locus misplacements are too few (96) to judge, and whole-genome alignment is untested.” |
-| “Model B classifies disease-associated variants.” | “The labels’ origin is undocumented, they reflect variant classifications rather than patients, and no model recovers them from sequence context under leak-free CV; it is a feasibility study, not a classifier.” |
+| “Model B classifies disease-associated variants.” | “Model B tested whether sequence-derived features recover ClinVar classification direction in three genes. It did not beat simple baselines (0.734 vs 0.848 on missense), and it is a negative research finding, not a usable classifier.” |
+| “GC content is a biological signal of pathogenicity.” | “GC appears to carry regional or gene-associated signal here; that doesn’t prove sequence lacks biological information.” |
+| “Model B generalises to held-out genes.” | “Three genes cannot show generalisation, and existing test folds have been read, so further runs on them are exploratory.” |
 | “The ML predicts Alzheimer’s risk.” | “Nothing in this project is a clinical or diagnostic prediction.” |
 | “The proposed method beats PanAligner.” | “No direct biological performance comparison is established by these non-interchangeable metrics.” |
 | “Forward GFA means strand handling is solved.” | “The current GFA emits forward `+` paths/links; orientation-aware modelling is future work.” |

@@ -199,14 +199,15 @@ python3 main.py --simulate-truth-reads --source heldout   # Linux/WSL only
 python3 main.py --truth-eval --source heldout             # Linux/WSL only
 python3 main.py --ml-alignment-data --threads 8           # Linux/WSL only
 python3 main.py --ml-alignment
-python3 main.py --ml-variant
+python3 main.py --ml-variant                              # earlier Model B study, superseded
 ```
 
 - `--proposed`: the proposed alignment-free methodology (`proposed_methodology.py`)
 - `--shared-query-eval`: alignment-free comparison of the proposed and minigraph graphs on held-out haplotypes (`scripts/shared_query_eval.py`)
 - `--simulate-truth-reads`: PBSIM2 reads with true intervals (`scripts/simulate_truth_reads.py`)
 - `--truth-eval`: `paftools.js mapeval` correctness scoring of PanAligner and minigraph (`scripts/truth_eval.py`)
-- `--ml-alignment-data`, `--ml-alignment`, `--ml-variant`: the ML layer (see below and `docs/17_ml_layer.md`)
+- `--ml-alignment-data`, `--ml-alignment`: Model A, part of the ML layer (see below and `docs/17_ml_layer.md`)
+- `--ml-variant`: the earlier, superseded Model B study; the current Model B scripts run directly (`docs/17_ml_layer.md`)
 
 ## Desktop GUI
 
@@ -261,7 +262,7 @@ A normal run writes `outputs/proposed/`; `--final-proposed-evaluation` writes `o
 Two separate research tasks, described in full in `docs/17_ml_layer.md`. Install `requirements-ml.txt` first.
 
 - **Model A, alignment reliability** (`correct` / `incorrect` / `insufficient_evidence`). Labels come from simulation truth: PBSIM2 reads from the held-out haplotypes, aligned to their own and to other genes' graphs. Evaluated with folds over 20 kb windows of true position: PR-AUC for incorrect alignments is 0.979 (gradient boosting) and 0.986 (logistic) vs 0.564 (MAPQ only), falling to 0.929 and 0.956 when a whole gene is held out. The first results (0.995) used a weaker haplotype split and were optimistic. A focused second dataset with more within-locus errors (`outputs/ml_alignment_v2/`) gives gradient boosting a within-locus PR-AUC of 0.965, but it is not a replacement for MAPQ: under strict evaluation (`outputs/ml_alignment_v2/strict_targets/`) it is reliably better than MAPQ thresholds of 10–40, indistinguishable at 50, and unresolved at 60, and strict error targets below about 0.2% were not reached on held-out data. Almost all incorrect examples are off-target reads, so this is evidence for detecting off-target alignments, not for whole-genome alignment accuracy.
-- **Model B, healthy/disease-associated classification**: a feasibility study only. Each labelled sequence is the reference plus one variant, the labels' source is undocumented, though an audit found they agree with current ClinVar pathogenic and benign classes, and the labels correlate with position. Under window-grouped CV no model recovers the labels from sequence context (balanced accuracy 0.55 context-only; 0.63–0.65 for position-based baselines, falling as windows grow). It is research label recovery, not diagnosis.
+- **Model B, variant classification experiment** (negative result). A feasibility experiment, separate from Model A: can sequence-derived features recover ClinVar classification direction in APP, PSEN1 and PSEN2? The dataset has 693 variants (162 pathogenic or likely pathogenic, 531 benign or likely benign, 186 missense), after excluding `VCV001231596`, whose REF equals its ALT. Under cluster-separated evaluation with a fixed protocol, the missense model reached balanced accuracy 0.734 against 0.848 for the best baseline, and the all-variant model 0.702 against 0.969 for consequence alone. Removing GC content lowers them to 0.622 and 0.578, so GC appears to carry much regional or gene-associated signal. Only 12 pathogenic missense clusters exist, and the test folds have now been read, so further runs on them are exploratory. It is not an Alzheimer's classifier, diagnostic system or individual-risk predictor. Evidence: `outputs/model_b_training/20261030_training_01/`.
 
 The older healthy/unhealthy ML scripts (`scripts/pipeline.py`, `extract_features.py`, `train_ml.py`, `predict_ml.py`, `evaluate.py`) are legacy, leak the label, and print a warning when run.
 
@@ -408,8 +409,14 @@ The main workflow produces:
   CPU/GPU minimizer parity and minimizer-only benchmark on one laptop GPU
 - `outputs/ml_alignment/`
   Model A dataset manifest, class counts, results, plots and report. `regrouped/window/` and `regrouped/leave_one_gene_out/` hold the current evaluation; the top-level results and `sensitivity_strict/` use the weaker haplotype split. Simulated reads and the features file are regenerable and not versioned
+- `outputs/model_b_training/20261030_training_01/`
+  Model B results, predictions and verification (negative result)
+- `outputs/model_b_dataset_validation/20261030_validation_02/`
+  Model B corrected dataset, split manifest and protocol (`20261030_validation_01` is superseded)
+- `outputs/model_b_features/20261030_features_01/`, `outputs/model_b_provenance/`
+  Model B features, and the audit of the original labels
 - `outputs/ml_variant/`
-  Model B feasibility study: variant table, results and report
+  Earlier Model B study on 220 sequences, superseded
 
 ## Key generated files
 
@@ -508,4 +515,4 @@ not as:
 - a disease prediction or diagnostic framework
 - an AI pipeline whose ML results stand on their own
 
-Its ML layer is research: Model A is validated only on simulated, locus-scale reads, and Model B is a feasibility study for labels of undocumented provenance.
+Its ML layer is research: Model A is validated only on simulated, locus-scale reads, and Model B is a variant-classification experiment with a negative result, not a disease predictor.

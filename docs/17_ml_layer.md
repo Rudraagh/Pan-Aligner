@@ -1,11 +1,11 @@
 # 17. Machine-learning layer
 
-The project has two separate ML tasks. Both live in `scripts/ml/` and are reachable through `main.py`. Neither is a clinical tool.
+The project has two separate ML tasks. Both live in `scripts/ml/`. Model A and the earlier Model B study are reachable through `main.py`; the current Model B scripts run directly. Neither task is a clinical tool.
 
 | Task | Question | Status |
 |---|---|---|
 | Model A, alignment reliability | Is this alignment correct, incorrect, or is there insufficient evidence? | Trained and evaluated on simulated reads with independent truth |
-| Model B, healthy/disease-associated classification | Can the healthy/unhealthy labels be recovered from the variant? | Feasibility study only: the labels' source is undocumented, though they agree with current ClinVar classes, and no model recovers them from sequence context |
+| Model B, variant classification experiment | Can sequence-derived features recover ClinVar classification direction in APP, PSEN1 and PSEN2? | Trained once under a fixed protocol. Negative result: the model did not beat simple baselines. Not an Alzheimer's classifier |
 
 The older healthy/unhealthy ML path (`scripts/pipeline.py`, `extract_features.py`, `train_ml.py`, `predict_ml.py`, `evaluate.py`) is legacy and leaks the label; see `docs/13_current_version_implementation_status.md`. It is not part of this layer.
 
@@ -18,7 +18,7 @@ python main.py --ml-alignment                            # Model A, 20 kb window
 python main.py --ml-alignment --grouping leave_one_gene_out
 python main.py --ml-alignment --grouping haplotype --output-dir outputs/ml_alignment/sensitivity_strict --max-accept-error 0.001 --min-reject-precision 0.99
 python main.py --ml-alignment-strict                     # Model A strict targets on the v2 dataset
-python main.py --ml-variant                              # Model B feasibility study
+python main.py --ml-variant                              # Earlier Model B study (superseded; current Model B is run directly, see below)
 ```
 
 ## Model A: alignment reliability
@@ -200,53 +200,163 @@ What these results show:
 
 **Limits:** thresholds rest on only 2–4 windows per fold. Six targets were compared on one dataset, without a further untouched test set. Figures pool different folds' calibrators, and everything remains simulated, locus-scale and 75% accuracy.
 
-## Model B: feasibility study (research label recovery, not diagnosis)
+## Model B: variant classification experiment (negative result)
 
-**The data:** each of the 220 labelled sequences (110 unhealthy) is its locus's GRCh38 reference with one inserted variant: 205 SNVs, 3 multi-SNV, 4 insertions, 8 deletions. **The source, version and criteria of the healthy/unhealthy labels are unknown.** A 2026-10-30 audit found 216 of 220 sequences correspond to ClinVar records with the same alleles and no contradicted label, which does not establish origin. See `outputs/model_b_provenance/PROVENANCE_REPORT.md`. Results therefore describe recovery of these labels, never disease association.
+**Question:** can simple sequence-derived features recover the ClinVar classification direction (pathogenic or likely pathogenic, against benign or likely benign) of variants in APP, PSEN1 and PSEN2, better than simple baselines?
 
-**The study** (`scripts/ml/variant_feasibility.py`, full results in `outputs/ml_variant/REPORT.md`):
+**Answer: no, not on this evidence.** The model was trained once under a protocol fixed beforehand. This is a valid negative finding about these features and this dataset.
 
-- **Features:** each example is reduced to its variant: gene, relative position, SNV/indel, length change, transition/transversion, local GC (±50 bp) and CpG context.
-- **Splits:** StratifiedGroupKFold(5) over genomic windows (1 kb, with 5 and 20 kb as a sensitivity check), repeated with seeds 0–4.
-- **Interval:** 95% interval resampling whole windows, using the first seed's predictions.
-- **"Uncertain":** logistic models answer `uncertain` when |p − 0.5| is below a margin chosen by inner grouped CV for 80% accuracy. Their outputs are named `healthy_label` and `unhealthy_label`, because they only predict these labels.
-- **Context models** are confound diagnostics, not a classifier. No scientifically valid classifier is claimed.
+**What it is not:** an Alzheimer's disease classifier, a diagnostic system or an individual-risk predictor. Labels are database classifications of variants, not patient outcomes. Benign does not mean protective. The dataset is not limited to Alzheimer's-specific assertions, and `outputs/model_b_provenance/PROVENANCE_REPORT.md` found disease assertions in these genes are not Alzheimer-specific.
 
-Class balance is even within each gene: APP 23/23, PSEN1 78/78, PSEN2 9/9.
+### Why the dataset was replaced
 
-| Model (1 kb windows) | Balanced accuracy (mean ± SD) | 95% interval | MCC | Confident predictions (mean of 220) |
-|---|---|---|---|---|
-| Majority class | 0.481 ± 0.002 | 0.359–0.604 | −0.039 | – |
-| Nearest training variant (same gene) | 0.628 ± 0.009 | 0.505–0.752 | 0.256 | – |
-| Position vote (5 nearest, same gene) | 0.646 ± 0.014 | 0.551–0.761 | 0.338 | – |
-| Position-only logistic (linear) | 0.500 ± 0.026 | 0.406–0.645 | 0.000 | 0.0 |
-| Context-only logistic | 0.550 ± 0.015 | 0.502–0.649 | 0.103 | 0.2 |
-| Context + position logistic | 0.555 ± 0.009 | 0.483–0.648 | 0.109 | 0.4 |
+The earlier study used 220 constructed sequences, each a locus reference plus one variant. The repository holds no record of where those labels came from. An audit on 2026-10-30 found 216 of 220 correspond to ClinVar records with the same alleles and no contradicted label, but that consistency does not establish origin (`outputs/model_b_provenance/`). So a new dataset was built directly from ClinVar, with documented rules.
 
-| Gene: balanced accuracy | APP | PSEN1 | PSEN2 |
-|---|---|---|---|
-| Nearest training variant | 0.783 | 0.577 | 0.678 |
-| Position vote | 0.696 | 0.632 | 0.644 |
-| Context-only logistic | 0.470 | 0.587 | 0.433 |
+### Dataset provenance and filtering
 
-| Window kept out | Nearest training variant | Position vote | Context-only logistic |
-|---|---|---|---|
-| 1 kb | 0.628 | 0.646 | 0.550 |
-| 5 kb | 0.570 | 0.602 | 0.528 |
-| 20 kb | 0.450 | 0.591 | 0.453 |
+- **Source:** ClinVar records saved by `outputs/dataset_replacement_feasibility/20261030_audit_01/`, frozen in `outputs/model_b_task1_freeze/20261030_freeze_01/`. Retrieved 2026-10-30; label checks use the saved 2026-10-25 VCF slice. Live ClinVar will change, so only the saved records are stable.
+- **Kept:** P/LP or B/LB with at least 1 star (at least 2 stars as a sensitivity tier).
+- **Removed:** VUS, conflicting, not provided, below 1 star, any opposing submission, multi-gene records, and variants over 50 bp.
+- **Correction:** `VCV001231596` has identical REF and ALT alleles, so it asserts the reference allele and is not a variant. The freeze has 694 rows and was left unchanged. Corrected data lives in `outputs/model_b_dataset_validation/20261030_validation_02/`, which holds the final table and splits.
+- **Superseded:** `20261030_validation_01` is not the final dataset. Its APP-held-out missense validation had no benign variant.
 
-**Confounding:**
+| | APP | PSEN1 | PSEN2 | Total |
+|---|---:|---:|---:|---:|
+| Pathogenic or likely pathogenic | 23 | 132 | 7 | **162** |
+| Benign or likely benign | 249 | 132 | 150 | **531** |
+| All | 272 | 264 | 157 | **693** |
+| At least 2 stars, P / B | 9 / 91 | 51 / 38 | 2 / 55 | 62 / 184 |
+| Missense, P / B | 23 / 20 | 125 / 4 | 5 / 9 | 153 / 33 (**186**) |
 
-- **Position:** AUC of position against the label is 0.951 for PSEN2, 0.669 for APP and 0.622 for PSEN1. APP's value understates the clustering, because AUC only measures a one-directional split: its unhealthy-label variants all lie at positions 11,228–17,076, inside the healthy-label range of 153–101,774.
-- **Variant type:** deletions are 6 unhealthy to 2 healthy, and all 3 multi-SNV sequences are unhealthy; insertions are 2 and 2, and SNVs 99 and 106. Type could therefore carry some of the label, though the counts are small.
-- **The original random split leaks.** On the seed-42 per-sequence split, the nearest-training-variant rule gets 33 of 46 test labels right (balanced accuracy 0.717), because neighbouring variants fall on both sides.
+Class and consequence are closely tied. All 241 synonymous, 213 intronic and 39 UTR variants are benign, while 153 of 162 pathogenic variants are missense.
 
-**Conclusion and limits:**
+**Real sample size:** variants were grouped into 40 genomic clusters, and only 13 hold pathogenic variants (12 among missense, with 25 missense clusters in all). That, not 162, is the effective number of independent pathogenic examples. Also, 64% of records rest on one submitter.
 
-- **No model recovers the labels from sequence context.** Context-only reaches 0.550 at 1 kb and 0.453 at 20 kb, and it is at or below chance on APP (0.470) and PSEN2 (0.433), with wide intervals.
-- **The strongest signal is position, and it weakens as windows grow.** It reflects where the labelled variants were chosen rather than anything learned about variant effect.
-- **The models abstain on almost everything:** on average 0–0.4 of 220 predictions are confident, so "accuracy when confident" carries no weight.
-- **Intervals are wide and regions few**, especially for PSEN2's 18 variants.
-- **These are not real haplotypes.** Nothing here generalises to real genomes or individuals.
+### Feature engineering
 
-A meaningful Model B would need a documented label source and variant-level annotations (exon/intron, codon consequence, conservation, allele frequency), none of which are in the repository's dataset. The audit shows consequence and allele frequency differ strongly by class, so they would need treating as potential leakage.
+Built by `scripts/ml/variant_features_v2.py`, in `outputs/model_b_features/20261030_features_01/data/`. The builder reads only identity columns of the label table, and a test enforces this.
+
+| Table | Rows | Features |
+|---|---:|---|
+| `features_main.csv` | 693 | Variant type, length change, transition flag, strand-neutral substitution, trinucleotide context, CpG context, GC content (±50 and ±200 bp), homopolymer run |
+| `features_missense.csv` | 186 | Reference and alternate amino acid, BLOSUM62, change in hydropathy, volume and charge; proline, glycine and cysteine flags |
+| `baselines.csv` | 693 | Gene, position, consequence: **baselines and stratifying only, never inputs to the sequence-derived model** |
+
+Amino-acid features are in a separate table because filling them only for missense would let a pooled model read consequence from empty cells. Never used as inputs: classification, review status, stars, submitter, condition, accession, HGVS name, dates, cluster or variant ID.
+
+### Leakage-aware evaluation
+
+Code: `scripts/ml/variant_dataset_validation.py` and `scripts/ml/variant_model_v2.py`. Design: `SPLIT_DESIGN.md` and `LEAKAGE_AUDIT.md` in the validation snapshot.
+
+- **Clusters:** variants in a gene within 1,000 bp are chained together, as are variants on the same protein residue. Clusters never cross train, validation and test.
+- **Folds:** 5 folds, stratified on gene and label, seeds 0–4. Each fold is test once, the next validates and three train.
+- **Fitting:** class-weighted logistic regression first, gradient boosting second. Settings and threshold are chosen on validation only, and encoders, scaling and imputation are fitted on train only.
+- **Primary metric:** balanced accuracy pooled across test folds per seed, then averaged across seeds.
+- **Primary comparison:** missense logistic model minus the best baseline, chosen per fold on validation.
+- **Intervals:** 95%, 2,000 resamples of whole clusters, paired for differences. Seed 0 gives the headline interval.
+- **Checks:** a separate verifier recomputes the primary figures from `predictions.csv`, with 0 failures. The split audit reports no cluster, residue or within-1-kb crossings in region-safe schemes, and it caught deliberately bad inputs.
+
+The time split (`time_2024_not_region_safe`) has 31 clusters crossing roles, so it only checks against later database additions. PSEN1 and PSEN2 are paralogs, and aligned positions between them are not controlled.
+
+### Results
+
+All figures are from `outputs/model_b_training/20261030_training_01/`; means across 5 seeds unless stated.
+
+| Analysis | Balanced accuracy | Sensitivity | Specificity | ROC-AUC |
+|---|---:|---:|---:|---:|
+| **Missense, 186 variants** | | | | |
+| Logistic model | **0.734** | 0.856 | 0.612 | 0.834 |
+| Logistic, without GC | 0.622 | 0.633 | 0.612 | 0.642 |
+| Logistic, amino-acid features alone | 0.582 | 0.678 | 0.485 | 0.616 |
+| Gradient boosting | 0.699 | 0.714 | 0.685 | 0.771 |
+| Best baseline, chosen on validation | **0.848** | 0.817 | 0.879 | 0.803 |
+| Gene baseline | 0.848 | 0.817 | 0.879 | 0.793 |
+| Nearest labelled variant baseline | 0.833 | 0.980 | 0.685 | 0.833 |
+| Position vote baseline | 0.808 | 0.889 | 0.727 | 0.859 |
+| **All consequences, 693 variants** | | | | |
+| Logistic model | **0.702** | 0.717 | 0.686 | 0.713 |
+| Logistic, without GC | 0.578 | 0.625 | 0.532 | 0.629 |
+| Gradient boosting | 0.711 | 0.728 | 0.693 | 0.774 |
+| Consequence-only baseline | **0.969** | 1.000 | 0.938 | 0.965 |
+| Gene baseline | 0.783 | 0.815 | 0.751 | 0.740 |
+
+**Primary comparison:** 0.734 against 0.848, a difference of −0.114. On headline seed 0 the difference is −0.177 (95% interval −0.311 to −0.021), wholly below zero. On seeds 1–4, differences run from −0.139 to −0.078, and their intervals include zero. Seed 0 is the model's lowest seed (0.671), so it is the most negative. **Under the protocol there is no demonstrated gain.**
+
+On all consequences, the model is 0.269 below the consequence baseline on seed 0 (−0.354 to −0.175).
+
+**Why simple baselines score so high.** These are properties of the dataset, not biological insight:
+
+- **Gene (chosen in 20 of 25 folds; nearest variant in the other 5):** PSEN1 missense is 125 pathogenic to 4 benign, so "pathogenic if PSEN1" scores well. This is not a biological predictor of an individual variant. It may reflect differences in gene-specific curation and reporting.
+- **Consequence:** benign records here are mostly synonymous, intronic and UTR. This shows how the records are composed, not a way of classifying missense variants.
+- **Sequence features see neither directly.** Gene and consequence were deliberately left out of the model.
+
+### GC-content investigation
+
+| Evidence | Value |
+|---|---|
+| Removing GC, missense | 0.734 to 0.622 |
+| Removing GC, all variants | 0.702 to 0.578 |
+| Headline seed paired difference, missense | 0.023 (−0.108 to 0.176): interval includes zero, and it is the seed with the smallest gap |
+| `gc_200` logistic coefficient, missense | Largest in the model: mean −0.72, negative in all 25 folds |
+| `gc_200` variance lying between clusters | 88% |
+| `gc_200` missense AUC by gene | APP 0.05, PSEN1 0.63, PSEN2 0.78: direction reverses |
+| Mean `gc_200` by gene | APP 0.443, PSEN1 0.403, PSEN2 0.573 |
+
+| Missense, within gene (descriptive) | P / B | Model | Without GC | Amino-acid alone |
+|---|---:|---:|---:|---:|
+| APP | 23 / 20 | 0.66 | 0.46 | 0.49 |
+| PSEN1 | 125 / 4 | 0.50 | 0.64 | 0.55 |
+| PSEN2 | 5 / 9 | 0.63 | 0.73 | 0.74 |
+
+**Interpretation:** GC content appears to contribute substantial regional or gene-associated signal, mostly through APP, whose pathogenic variants sit in two low-GC clusters. By the protocol's rule, this gain is not reported as sequence signal. This is an inference from the pattern. **It does not prove that sequence holds no biological information.** The features are simple and the data are few. Grouped folds reduce this effect but cannot remove it, since a model can still learn that low-GC regions are pathogenic. The within-gene values rest on as few as 4 benign or 14 variants, and the PSEN2 amino-acid figure is an after-the-fact observation, not a finding.
+
+### Sensitivity analyses
+
+| Scheme | Model | Best baseline | Note |
+|---|---:|---:|---|
+| At least 2 stars, 246 variants | 0.706 | 0.947 | Consequence alone 0.964 |
+| PSEN1 only, all consequences | 0.631 | 0.902 | Only within-gene region test |
+| Time, reference 2024-01-07 | 0.742 | 0.955 | Not region-safe; one seed |
+| Hold out APP, all consequences | 0.719 | 0.960 | 23 P / 249 B to test |
+| Hold out PSEN1, all consequences | 0.519 | 0.985 | Sensitivity 1.000, specificity 0.038 |
+| Hold out PSEN2, all consequences | 0.497 | 0.970 | 7 P / 150 B |
+| Hold out APP, missense | 0.660 | 0.500 | Baseline cannot exceed 0.5 by construction; GC included |
+| Hold out PSEN1, missense | 0.467 | 0.500 | 4 benign to test |
+| Hold out PSEN2, missense | 0.524 | 0.500 | 5 P / 9 B |
+
+**Gene-held-out performance does not establish generalisation.** Three genes cannot show that, and test sets here are small and unbalanced.
+
+### Limitations
+
+- **Small dataset,** with only 12 pathogenic missense clusters and wide intervals.
+- **Uneven genes:** PSEN1 has 125 of 153 pathogenic missense variants and just 4 benign ones. PSEN2 has 7 pathogenic variants in total.
+- **Test folds have been examined.** Any future experiment on these folds is exploratory, not independent validation.
+- **No independent test set exists.** Genuine evaluation requires new variants or a later frozen release. The stated minimum is 20 P/LP and 20 B/LB in new clusters.
+- **Labels are not independent truth:** they share evidence and laboratories, and conservation-like signals would be partly circular with how variants get classified.
+- **Scores are not calibrated probabilities,** because the models are class-weighted.
+- **Seeds re-split the same clusters;** they are not independent samples.
+
+### Future work
+
+Each of these would be a new, separately declared analysis:
+
+- Evaluate on a later frozen ClinVar release, with the frozen model and new clusters.
+- Add more genes, to widen benign missense coverage and allow a real transfer test.
+- Add region-aware features such as protein domain, or conservation, with attention to circularity.
+- Compare with external predictors such as REVEL, CADD or AlphaMissense, as comparisons rather than inputs.
+- Control paralog similarity between PSEN1 and PSEN2, and test holding out laboratories.
+
+### Reproducing the record
+
+Do not treat a rerun as confirmatory. Both scripts refuse existing folders, so nothing preserved is overwritten. `variant_model_v2.py` also needs pandas, which `requirements-ml.txt` does not list, and with Python 3.13 and pandas 3 the code sets Python-backed strings to avoid a crash seen on this laptop.
+
+```bash
+python -B scripts/ml/variant_dataset_validation.py --output <new_folder>
+python -B scripts/ml/variant_model_v2.py --output <new_folder>
+```
+
+Tests: `tests/test_variant_features_v2.py`, `tests/test_variant_dataset_validation.py`, `tests/test_variant_model_v2.py`. They use synthetic data and test code behaviour, not scientific validity.
+
+### Earlier study (superseded)
+
+`python main.py --ml-variant` still runs the earlier study (`scripts/ml/variant_feasibility.py`, `outputs/ml_variant/REPORT.md`). It used the 220 constructed sequences, whose label source is undocumented. Under 1 kb window-grouped folds, context-only logistic reached 0.550 and the position vote 0.646, falling to 0.453 and 0.591 at 20 kb. It is kept as history and does not describe the current Model B.
