@@ -53,13 +53,17 @@ class PilotJobs(unittest.TestCase):
         for line in archives:
             self.assertIn("core.autocrlf=false", line)
 
-    def test_k8_is_executable(self):
+    @unittest.skipUnless((ROOT / ".git").exists(), "needs the Git index")
+    def test_k8_is_executable_in_git(self):
         relative = "tools/third_party/k8-bin/k8-1.2/k8-x86_64-Linux"
-        if (ROOT / ".git").exists():
-            entry = subprocess.run(["git", "ls-files", "-s", relative], cwd=ROOT, capture_output=True, text=True, check=True).stdout
-            self.assertTrue(entry.startswith("100755 "), entry)
-        else:
-            self.assertTrue(os.access(ROOT / relative, os.X_OK))
+        entry = subprocess.run(["git", "ls-files", "-s", relative], cwd=ROOT, capture_output=True, text=True, check=True).stdout
+        self.assertTrue(entry.startswith("100755 "), entry)
+
+    def test_build_makes_k8_executable_and_runs_it(self):
+        # Bundles built on Windows lose the mode when re-archived, so the node has to set it.
+        text = (ROOT / "scripts" / "hpc" / "build_tools_linux.sh").read_text(encoding="utf-8")
+        self.assertIn('chmod u+x "$K8"', text)
+        self.assertIn('"$K8" "$PAFTOOLS" version', text)
 
 
 @unittest.skipUnless(os.name == "posix", "runs the job under bash")

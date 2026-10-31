@@ -98,6 +98,13 @@ if [[ -f "$MINIMAP2_SRC/Makefile" ]]; then
 else
   echo "minimap2: source not staged, skipped" >> "$INFO"
 fi
+# k8 runs paftools.js for read simulation. Bundles built on Windows lose its mode when re-archived.
+K8="$ROOT_DIR/tools/third_party/k8-bin/k8-1.2/k8-x86_64-Linux"
+PAFTOOLS="$MINIMAP2_SRC/misc/paftools.js"
+if [[ -f "$K8" && -f "$PAFTOOLS" ]]; then
+  chmod u+x "$K8"
+  echo "paftools version under k8: $("$K8" "$PAFTOOLS" version)" >> "$INFO"
+fi
 {
   echo "minigraph --version: $("$BIN_DIR/minigraph" --version 2>&1 | head -1)"
   echo "PanAligner --version: $("$BIN_DIR/PanAligner" --version 2>&1 | head -1)"
