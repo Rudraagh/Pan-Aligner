@@ -13,6 +13,7 @@
 set -euo pipefail
 
 ROOT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/../.." && pwd)"
+source "$ROOT_DIR/scripts/hpc/hpc_env.sh"
 BUILD_ROOT="${1:-${BUILD_ROOT:-$ROOT_DIR/.hpc-build}}"
 JOBS="${JOBS:-${NCPUS:-1}}"
 SRC_DIR="$BUILD_ROOT/src"
@@ -44,7 +45,7 @@ for tool in PanAligner minigraph; do
   rm -rf "${SRC_DIR:?}/$tool"
   cp -a "$ROOT_DIR/$tool" "$SRC_DIR/$tool"
   (cd "$SRC_DIR/$tool" && make clean >/dev/null 2>&1 || true)
-  if [[ -d "$ROOT_DIR/$tool/.git" ]] && command -v git >/dev/null 2>&1; then
+  if [[ -e "$ROOT_DIR/$tool/.git" ]] && command -v git >/dev/null 2>&1; then
     echo "$tool source: $(git -C "$ROOT_DIR/$tool" rev-parse HEAD 2>/dev/null || echo unknown)" >> "$INFO"
   else
     echo "$tool source: no git metadata staged" >> "$INFO"
@@ -54,7 +55,13 @@ done
 # Use the system zlib headers when present; otherwise build the bundled zlib statically.
 ZLIB_INCLUDES=""
 ZLIB_LIBDIR=""
-if echo '#include <zlib.h>' | gcc -E - >/dev/null 2>&1; then
+# A compiler from an environment needs its own libstdc++ and libgomp at run time, without LD_LIBRARY_PATH.
+RPATH=""
+if [[ -d "$HPC_TOOLCHAIN/lib" ]]; then
+  RPATH="-Wl,-rpath,$HPC_TOOLCHAIN/lib"
+  echo "rpath: $HPC_TOOLCHAIN/lib" >> "$INFO"
+fi
+if printf '#include <zlib.h>\nint main(void) { return zlibVersion() == 0; }\n' | gcc -x c - -lz -o "$BUILD_ROOT/.zlib_check" >/dev/null 2>&1; then
   echo "zlib: system" >> "$INFO"
 else
   if [[ ! -f "$ROOT_DIR/zlib/configure" ]]; then
@@ -69,8 +76,8 @@ else
   echo "zlib: bundled static ($ZLIB_PREFIX)" >> "$INFO"
 fi
 
-(cd "$SRC_DIR/minigraph" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR -lz -lpthread -lm")
-(cd "$SRC_DIR/PanAligner" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR -lz -lpthread -lm -fopenmp")
+(cd "$SRC_DIR/minigraph" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR $RPATH -lz -lpthread -lm")
+(cd "$SRC_DIR/PanAligner" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR $RPATH -lz -lpthread -lm -fopenmp")
 
 cp "$SRC_DIR/minigraph/minigraph" "$SRC_DIR/PanAligner/PanAligner" "$BIN_DIR/"
 
@@ -80,7 +87,7 @@ if [[ -f "$PBSIM_SRC/configure" ]]; then
   rm -rf "${SRC_DIR:?}/pbsim2"
   cp -a "$PBSIM_SRC" "$SRC_DIR/pbsim2"
   # Git export order leaves autotools timestamps arbitrary; stop make trying to regenerate them.
-  (cd "$SRC_DIR/pbsim2" && touch aclocal.m4 configure config.h.in && find . -name Makefile.in -exec touch {} + && sh ./configure >/dev/null && make -j"$JOBS" >/dev/null)
+  (cd "$SRC_DIR/pbsim2" && touch aclocal.m4 configure config.h.in && find . -name Makefile.in -exec touch {} + && LDFLAGS="$RPATH" sh ./configure >/dev/null && make -j"$JOBS" >/dev/null)
   cp "$SRC_DIR/pbsim2/src/pbsim" "$BIN_DIR/"
   rm -rf "${BUILD_ROOT:?}/pbsim2_data"
   cp -a "$PBSIM_SRC/data" "$BUILD_ROOT/pbsim2_data"
@@ -92,7 +99,7 @@ MINIMAP2_SRC="$ROOT_DIR/tools/third_party/minimap2"
 if [[ -f "$MINIMAP2_SRC/Makefile" ]]; then
   rm -rf "${SRC_DIR:?}/minimap2"
   cp -a "$MINIMAP2_SRC" "$SRC_DIR/minimap2"
-  (cd "$SRC_DIR/minimap2" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR -lm -lz -lpthread" >/dev/null)
+  (cd "$SRC_DIR/minimap2" && make -j"$JOBS" INCLUDES="$ZLIB_INCLUDES" LIBS="$ZLIB_LIBDIR $RPATH -lm -lz -lpthread" >/dev/null)
   cp "$SRC_DIR/minimap2/minimap2" "$BIN_DIR/"
   echo "minimap2 --version: $("$BIN_DIR/minimap2" --version 2>&1 | head -1)" >> "$INFO"
 else

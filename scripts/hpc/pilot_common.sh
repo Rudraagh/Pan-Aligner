@@ -4,9 +4,10 @@
 #   PROJECT_DIR  extracted bundle folder (default: PBS submit directory)
 #   PILOT_DIR    pilot data and results (default: $PROJECT_DIR/pilot_data); put this on scratch
 #   MODULES      space-separated modules to load, e.g. "gcc11" (names from pbs_env_probe.sh)
-#   PYTHON_BIN   Python >= 3.10 (default: .hpc-venv from pbs_setup_venv.sh)
+#   PYTHON_BIN   Python >= 3.10 (default: .hpc-venv from pbs_setup_venv.sh, then the one named by hpc_env.sh)
 
 PROJECT_DIR="${PROJECT_DIR:-${PBS_O_WORKDIR:-$(pwd)}}"
+source "$PROJECT_DIR/scripts/hpc/hpc_env.sh"
 PILOT_DIR="${PILOT_DIR:-$PROJECT_DIR/pilot_data}"
 MODULES="${MODULES:-}"
 BIN_DIR="${BIN_DIR:-$PROJECT_DIR/.hpc-build/bin}"
@@ -29,7 +30,7 @@ if [[ -n "${MODULES// /}" ]]; then
     module load "$mod" || { echo "ERROR: module load $mod failed" >&2; exit 2; }
   done
 fi
-PYTHON_BIN="${PYTHON_BIN:-python3}"
+PYTHON_BIN="${PYTHON_BIN:-$HPC_PYTHON}"
 if ! "$PYTHON_BIN" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)'; then
   echo "ERROR: $PYTHON_BIN is not Python >= 3.10." >&2
   exit 3
@@ -43,7 +44,13 @@ pilot_start() {
   cd "$PROJECT_DIR" || exit 2
   mkdir -p "$RUN_DIR"
   exec > >(tee -a "$RUN_DIR/job.log") 2>&1
-  COMMIT="$(head -1 "$PROJECT_DIR/scripts/hpc/STAGED_COMMIT" 2>/dev/null || echo unknown)"
+  # A git checkout, or the STAGED_COMMIT file filled in by `git archive`.
+  if command -v git >/dev/null 2>&1 && git -C "$PROJECT_DIR" rev-parse HEAD >/dev/null 2>&1; then
+    COMMIT="$(git -C "$PROJECT_DIR" rev-parse HEAD)"
+  else
+    COMMIT="$(head -1 "$PROJECT_DIR/scripts/hpc/STAGED_COMMIT" 2>/dev/null || echo unknown)"
+    [[ "$COMMIT" == '$Format'* ]] && COMMIT=unknown
+  fi
   {
     echo "stage: $STAGE"
     echo "commit: $COMMIT"

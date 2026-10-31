@@ -14,15 +14,17 @@
 #
 # Configure via environment (or edit here):
 #   PROJECT_DIR  extracted bundle folder (default: PBS submit directory)
-#   MODULES      space-separated modules that provide Python >= 3.10 (from pbs_env_probe.sh)
-#   PYTHON_BIN   base Python >= 3.10 (default: first python3.13..python3.10/python3 that qualifies)
+#   MODULES      space-separated modules to load (from pbs_env_probe.sh)
+#   PYTHON_BIN   base Python (default: HPC_PYTHON from hpc_env.sh; the batch python3 is never used)
+#   HPC_PYTHON_VERSION  version it must report (default: 3.11)
 set -uo pipefail
 
 PROJECT_DIR="${PROJECT_DIR:-${PBS_O_WORKDIR:-$(pwd)}}"
+source "$PROJECT_DIR/scripts/hpc/hpc_env.sh"
 MODULES="${MODULES:-}"
 JOB_TAG="${PBS_JOBID:-local}"
 VENV="$PROJECT_DIR/.hpc-venv"
-IMPORT_CHECK='import Bio, matplotlib, networkx; print("biopython", Bio.__version__, "matplotlib", matplotlib.__version__, "networkx", networkx.__version__)'
+IMPORT_CHECK='import numpy, Bio, matplotlib, networkx; print("numpy", numpy.__version__, "biopython", Bio.__version__, "matplotlib", matplotlib.__version__, "networkx", networkx.__version__)'
 
 cd "$PROJECT_DIR" || { echo "ERROR: cannot cd to PROJECT_DIR=$PROJECT_DIR" >&2; exit 2; }
 RUN_DIR="$PROJECT_DIR/hpc_runs/$(date +%Y%m%d_%H%M%S)_setup_venv_${JOB_TAG%%.*}"
@@ -53,16 +55,10 @@ if [[ -n "$MODULES" ]]; then
   done
 fi
 
-if [[ -z "${PYTHON_BIN:-}" ]]; then
-  for candidate in python3.13 python3.12 python3.11 python3.10 python3 python; do
-    if command -v "$candidate" >/dev/null 2>&1 && "$candidate" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' 2>/dev/null; then
-      PYTHON_BIN="$candidate"
-      break
-    fi
-  done
-fi
-[[ -n "${PYTHON_BIN:-}" ]] || fail "no Python >= 3.10 found on PATH; set MODULES or PYTHON_BIN (see pbs_env_probe.sh output)" 3
-"$PYTHON_BIN" -c 'import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)' || fail "$PYTHON_BIN is $("$PYTHON_BIN" --version 2>&1); need >= 3.10" 3
+PYTHON_BIN="${PYTHON_BIN:-$HPC_PYTHON}"
+command -v "$PYTHON_BIN" >/dev/null 2>&1 || fail "base Python not found: $PYTHON_BIN; set HPC_TOOLCHAIN or PYTHON_BIN" 3
+found="$("$PYTHON_BIN" -c 'import sys; print("%d.%d" % sys.version_info[:2])')"
+[[ "$found" == "$HPC_PYTHON_VERSION" ]] || fail "$PYTHON_BIN is Python $found; need $HPC_PYTHON_VERSION" 3
 
 tag="$("$PYTHON_BIN" -c 'import sys; print("py%d%d" % sys.version_info[:2])')"
 WHEELS="$PROJECT_DIR/wheelhouse/$tag"
@@ -84,4 +80,4 @@ echo "$MODULES" > "$VENV/MODULES_USED"
 "$VENV/bin/python" -m pip freeze > "$RUN_DIR/pip_freeze.txt"
 cp "$VENV/ENV_READY.txt" "$RUN_DIR/"
 cat "$VENV/ENV_READY.txt"
-echo "OK: now submit scripts/hpc/pbs_cpu_smoke.sh from $PROJECT_DIR (it uses .hpc-venv automatically)"
+echo "OK: .hpc-venv is ready; the pilot jobs use it automatically. Next: pilot_preflight.sh (docs/18_hpc_git_deployment.md)"

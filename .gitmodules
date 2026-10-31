@@ -1,0 +1,15 @@
+[submodule "PanAligner"]
+	path = PanAligner
+	url = https://github.com/at-cg/PanAligner
+[submodule "minigraph"]
+	path = minigraph
+	url = https://github.com/lh3/minigraph.git
+[submodule "zlib"]
+	path = zlib
+	url = https://github.com/madler/zlib.git
+[submodule "tools/third_party/pbsim2"]
+	path = tools/third_party/pbsim2
+	url = https://github.com/yukiteruono/pbsim2.git
+[submodule "tools/third_party/minimap2"]
+	path = tools/third_party/minimap2
+	url = https://github.com/lh3/minimap2.git

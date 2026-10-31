@@ -6,10 +6,6 @@ __pycache__/
 .venv/
 venv/
 
-PanAligner/
-minigraph/
-zlib/
-
 scripts/__pycache__/
 data/**/*.pyc
 outputs/**/*.pyc
@@ -23,6 +19,9 @@ outputs/**/*.pyc
 /hpc_runs/
 /hpc_staging/
 /.hpc-venv/
+/.hpc-venv.broken_*/
+/.hpc-build-login/
+/pilot_data/
 
 # Laptop builds of helper tools (e.g. pbsim2 for truth-labelled reads).
 /.local-build/

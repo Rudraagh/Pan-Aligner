@@ -6,6 +6,8 @@ The laptop holds the authoritative Git repository. The university cluster (`hpcc
 
 Nothing in this document has been verified on the cluster yet. Queue access, memory units, module names and the Python environment are **unverified** until the steps below produce real output.
 
+**For the Model A pilot, use the Git route in `docs/18_hpc_git_deployment.md`.** Bundles remain the fallback if the cluster cannot reach GitHub.
+
 ## 0. Before the first job — confirm with the HPC administrator
 
 - [ ] The account you log in with is your own, authorized account.

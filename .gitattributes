@@ -2,6 +2,12 @@
 *.sh text eol=lf
 *.py text eol=lf
 *.pbs text eol=lf
+*.sha256 text eol=lf
+.gitmodules text eol=lf
+
+# Wheels and their list stay byte-identical.
+*.whl binary
+wheelhouse/py*/WHEELS.txt -text
 
 # `git archive` writes the exported commit hash/date here for HPC run manifests.
 scripts/hpc/STAGED_COMMIT export-subst text eol=lf
