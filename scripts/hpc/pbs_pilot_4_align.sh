@@ -16,7 +16,14 @@ for dir in "$PILOT_DIR"/sim/acc*; do
   setting="$(basename "$dir")"
   gaf="$dir/$ALIGNER.gaf"
   [[ -s "$gaf" ]] && { echo "done already: $gaf"; continue; }
-  [[ -s "$dir/all.reads.fa" ]] || cat "$dir"/mat.reads.fa "$dir"/pat.reads.fa > "$dir/all.reads.fa"
+  if [[ ! -s "$dir/mat.reads.fa" || ! -s "$dir/pat.reads.fa" ]]; then
+    status=1
+    echo "ERROR: reads missing for $setting; check the simulate job"
+    continue
+  fi
+  if [[ ! -s "$dir/all.reads.fa" ]]; then
+    cat "$dir"/mat.reads.fa "$dir"/pat.reads.fa > "$dir/all.reads.fa.partial.$$" && mv "$dir/all.reads.fa.partial.$$" "$dir/all.reads.fa" || { status=1; echo "ERROR: could not combine reads for $setting"; continue; }
+  fi
   if timed "${ALIGNER}_$setting" "$BIN_DIR/$ALIGNER" -t "$THREADS" -cx lr "$PILOT_DIR/prepared/graph.gfa" "$dir/all.reads.fa" > "$gaf.partial" 2> "$gaf.log"; then
     mv "$gaf.partial" "$gaf"
   else

@@ -2,7 +2,11 @@
 
 from __future__ import annotations
 
+import os
 import re
+import subprocess
+import sys
+import tempfile
 import unittest
 from pathlib import Path
 
@@ -48,6 +52,52 @@ class PilotJobs(unittest.TestCase):
         self.assertEqual(len(archives), 2)
         for line in archives:
             self.assertIn("core.autocrlf=false", line)
+
+    def test_k8_is_executable(self):
+        relative = "tools/third_party/k8-bin/k8-1.2/k8-x86_64-Linux"
+        if (ROOT / ".git").exists():
+            entry = subprocess.run(["git", "ls-files", "-s", relative], cwd=ROOT, capture_output=True, text=True, check=True).stdout
+            self.assertTrue(entry.startswith("100755 "), entry)
+        else:
+            self.assertTrue(os.access(ROOT / relative, os.X_OK))
+
+
+@unittest.skipUnless(os.name == "posix", "runs the job under bash")
+class AlignJobReads(unittest.TestCase):
+    def run_job(self, pilot: Path, bin_dir: Path) -> subprocess.CompletedProcess:
+        env = {**os.environ, "PROJECT_DIR": str(ROOT), "PILOT_DIR": str(pilot), "BIN_DIR": str(bin_dir), "PYTHON_BIN": sys.executable, "ALIGNER": "minigraph", "NCPUS": "1"}
+        return subprocess.run(["bash", str(ROOT / "scripts" / "hpc" / "pbs_pilot_4_align.sh")], env=env, capture_output=True, text=True)
+
+    def setup_tools(self, root: Path) -> Path:
+        bin_dir = root / "bin"
+        bin_dir.mkdir()
+        aligner = bin_dir / "minigraph"
+        aligner.write_text('#!/bin/sh\nprintf "read\\t1\\n"\n', encoding="ascii", newline="\n")
+        aligner.chmod(0o755)
+        return bin_dir
+
+    def test_missing_reads_fail_and_leave_no_gaf(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            setting = root / "pilot" / "sim" / "acc95_len10000"
+            setting.mkdir(parents=True)
+            (setting / "mat.reads.fa").write_text(">a\nACGT\n", encoding="ascii")
+            result = self.run_job(root / "pilot", self.setup_tools(root))
+            self.assertNotEqual(result.returncode, 0, result.stdout)
+            self.assertFalse((setting / "minigraph.gaf").exists())
+            self.assertFalse((setting / "all.reads.fa").exists())
+
+    def test_reads_from_both_haplotypes_are_aligned(self):
+        with tempfile.TemporaryDirectory() as folder:
+            root = Path(folder)
+            setting = root / "pilot" / "sim" / "acc95_len10000"
+            setting.mkdir(parents=True)
+            (setting / "mat.reads.fa").write_text(">a\nACGT\n", encoding="ascii")
+            (setting / "pat.reads.fa").write_text(">b\nACGT\n", encoding="ascii")
+            result = self.run_job(root / "pilot", self.setup_tools(root))
+            self.assertEqual(result.returncode, 0, result.stdout)
+            self.assertTrue((setting / "minigraph.gaf").exists())
+            self.assertEqual((setting / "all.reads.fa").read_text(encoding="ascii"), ">a\nACGT\n>b\nACGT\n")
 
 
 if __name__ == "__main__":
